@@ -1,0 +1,216 @@
+\documentclass[12pt]{article}
+\usepackage[]{graphicx}
+\usepackage{wrapfig}
+\usepackage[]{color}
+\usepackage{alltt}
+\usepackage[a4paper,width=160mm,top=35mm,bottom=30mm,bindingoffset=0mm]{geometry}
+\usepackage[utf8]{inputenc}
+\usepackage{amsthm}     
+\usepackage{ragged2e}
+\usepackage[dvipsnames]{xcolor}
+\usepackage{float}
+%\usepackage[round, comma]{natbib}
+\usepackage{multirow}
+\usepackage[ngerman]{babel}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{fancyhdr}
+\usepackage{datetime}
+\newcommand{\changefont}{\fontsize{8}{11}\selectfont}
+\usepackage{hyperref}
+\usepackage{enumitem}
+\usepackage{enumerate}  
+\usepackage{verse}
+\newtheorem{theorem}{Theorem}[section]
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{\textcolor{NavyBlue}{Definition}}
+\newtheorem{lemma}[theorem]{\textcolor{RoyalBlue}{Satz}}
+\hypersetup{colorlinks = true,linkcolor = black,urlcolor = black,citecolor = black}
+%\usepackage[backend=biber,style=alphabetic, ]{biblatex}
+\usepackage[backend=biber,style=authoryear]{biblatex}
+
+
+\bibliography{../Literaturverzeichnis/Literatur_01.bib}
+
+\newcommand{\attrib}[1]{%
+\nopagebreak{\raggedleft\footnotesize #1\par}}
+\newcommand{\PaperType}{Bachelorarbeit}
+\newcommand{\PaperTitle}{Räumliche Analyse von Feinstaubmessungen}
+%\newcommand{\PaperAuthor}{André Betat}
+\newcommand{\PaperAuthor}{Bruce Wayne}
+\newcommand{\PaperInstitution}{Institut für Statistik}
+%\newcommand{\PaperSupervisor}{Prof.\,Dr.\,Volker Schmid}
+\newcommand{\PaperSupervisor}{Prof.\,Dr.\,Ludwig Fahrmeir}
+
+\pagestyle{fancy}
+\fancyhead{}
+\fancyhead[R]{\changefont{\PaperTitle}}
+%\fancyhead[L]{\changefont{\today\ \currenttime}}
+%\fancyfoot{}
+%\fancyfoot[R]{\thepage}
+
+\setlength{\headheight}{14.5pt}
+\setlength{\parindent}{0pt}
+\interfootnotelinepenalty = 10000
+
+\graphicspath{ {./Bilder/} }
+
+% MAIN -------------------------------------------------------------------------
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\begin{document}
+
+% FRONT PAGE -------------------------------------------------------------------
+\begin{titlepage}
+
+\begin{center}
+
+\vspace{40mm}
+{\Large \textbf{\PaperType}} \\
+
+\vspace{5mm}
+
+\hrulefill\\
+\vspace{2.5mm}
+{\Large  \textbf{\PaperTitle}\\}
+\vspace{1mm}
+\hrulefill\\
+\end{center}
+\vspace{2mm}
+\begin{center}
+{\large \textbf{Autor}}\\
+\vspace{2mm}
+{\large \PaperAuthor}\\
+\vspace{10mm}
+{\large \textbf{Betreuer}}\\
+\vspace{2mm}
+{\large \PaperSupervisor}\\
+\vspace{0.5mm}
+{\large \PaperInstitution}\\
+
+\end{center}
+
+\begin{figure}[h!]
+\centering
+\includegraphics[width=7cm]{sigillum.png}
+\end{figure}
+
+\begin{center}
+{\large \PaperInstitution\\
+\vspace{1 mm}
+Ludwig-Maximilians-Universität München\\
+\vspace{3 mm}
+München, 30. Juli 2026}\\
+\end{center}
+\end{titlepage}
+
+% CONTENTS ---------------------------------------------------------------------
+\pagenumbering{Roman}
+\newpage
+%\begin{abstract}
+%\input{Kapitel/Zusammenfassung}
+%\end{abstract}
+\newpage
+
+\tableofcontents
+\newpage
+
+% CHAPTERS ---------------------------------------------------------------------
+\pagenumbering{arabic}
+    
+\section{Einleitung}
+\label{KapitelEinleitung}
+\input{Kapitel/BA_Einleitung}
+\newpage
+
+\section{Theoretische Grundlagen}
+\label{KapitelTheorie}
+\input{Kapitel/BA_Theorie_Kernidee}
+\input{Kapitel/BA_Theorie_Grundlagen}
+\input{Kapitel/BA_Theorie_Variogramm}
+\input{Kapitel/BA_Theorie_Kriging}
+\input{Kapitel/BA_Theorie_Anisotropie}
+\newpage
+
+\section{Analyse der Feinstaubdaten}
+\label{KapitelDatenanalyse}
+\input{Kapitel/BA_Analyse_Einführung}
+\input{Kapitel/BA_Analyse_Datenbereinigung}
+\newpage
+
+\section{Datenauswertung}
+\label{KapitelDatenauswertung}
+%\input{Kapitel/BA_Auswertung_Ergebnisse_Einleitung}
+%\input{Kapitel/BA_Auswertung_Ergebnisse_Variogramm}
+\input{Kapitel/BA_Auswertung_Ergebnisse_Kriging}
+\input{Kapitel/BA_Auswertung_VerwandteArbeiten}
+\newpage
+
+\section{Diskussion und Ausblick}
+\input{Kapitel/BA_Diskussion_Ausblick}
+\newpage
+
+%
+%% APPENDIX ---------------------------------------------------------------------
+\pagenumbering{Roman}
+
+\setcounter{page}{51} % CHANGE
+
+\appendix
+%
+\section{Anhang}
+\label{Appendix}
+\input{Kapitel/BA_Anhang}
+\newpage
+\input{Kapitel/BA_Anhang_Hilfestellung}
+\newpage
+
+\section{Elektronischer Anhang}
+\label{ElektronischerAppendix}
+Daten, Programm-Code and die gezeigten Bilder sind in 
+elektronischer Form hier verfügbar
+$\rightsquigarrow$
+\href{https://github.com/AndreBetat266/Bachelorarbeit_Betat/tree/main}
+{GitHub Public Repo}
+\newpage
+    
+% BIBLIOGRAPHY -----------------------------------------------------------------
+\RaggedRight
+\pagebreak
+\section{Literaturverzeichnis}
+\printbibliography[heading=none]
+%\bibliographystyle{dcu}
+\newpage
+
+% ------------------------------------------------------------------------------
+% DECLARATION OF AUTHORSHIP-----------------------------------------------------
+% ------------------------------------------------------------------------------
+
+\Large
+\noindent
+\textbf{Declaration of authorship} 
+\vspace{0.5cm}
+\noindent
+\normalsize
+
+I hereby declare that the thesis submitted is my own unaided work. All direct 
+or indirect sources used are acknowledged as references. I am aware that the 
+Thesis in digital form can be examined for the use of unauthorized aid and in 
+order to determine whether the report as a whole or parts incorporated in it may 
+be deemed as plagiarism. For the comparison of my work with existing sources I 
+agree that it shall be entered in a database where it shall also remain after 
+examination, to enable comparison with future Theses submitted. Further rights 
+of reproduction and usage, however, are not granted here. This paper was not 
+previously presented to another examination board and has not been published.
+\\
+
+\vspace{0.5cm}
+\textcolor{orange}{Location, date} \\
+
+\vspace{3cm}
+
+%\includegraphics[scale=0.85]{Signature_BETAT.jpg}
+\noindent\rule{0.5\textwidth}{0.4pt} \\
+
+\textcolor{orange}{Name}
+
+\end{document}
