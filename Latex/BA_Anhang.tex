@@ -1,0 +1,182 @@
+% Stand 17. Juli 2026
+%\subsection{Porträtfoto: Vorhersage durch lineare Regression}
+%\label{AnhangPorträtfotoVorhersageRegression}
+%\begin{figure}[H] 
+%\centering
+%\includegraphics[scale = 0.6]{Illustration_Kriging 40Prz Ergebnis OLS m Interaktion} 
+%\caption{\small{Die \glqq Realität\grqq\ (links); durch Stichproben-Erhebungen gewonnene Kenntnis dieser
+%\glqq Wahrheit\grqq\ (mittig); aus dem Halbwissen mittels lin.\,Regression
+%gewonnene Vorhersage (rechts)}}
+%\label{Abb_Illustration_Kriging 40Prz Ergebnis OLS m Interaktion}
+%\end{figure} 
+%
+%Abb.\,(\ref{Abb_Illustration_Kriging 40Prz Ergebnis OLS m Interaktion}) zeigt die vergleichsweise deutlich weniger
+%aussagekräftigen Ergebnisse einer multiplen linearen 
+%Regression unter Berücksichtigung von Interaktionen, bei der 
+%im Wesentlichen nur die globalen Mittelwerte einfließen und
+%nachbarschaftliche Ähnlich\-keits\-be\-zie\-hun\-gen unberücksichtigt 
+%bleiben. 
+%
+%\newpage
+
+\subsection{Weitere Kovarianz-Funktionen}
+\label{AnhangWeitereKovarianzFunktionen}
+$\circ$ \underline{Stable Modell}
+\begin{equation}
+\rho_{stb}(r;\ell) :=  \exp\left( -\left( \frac{r}{\ell}\right)^\alpha \right),\ \alpha 
+\in (0,\,2],
+\end{equation}
+wobei $\ell \in \mathbb{R}_+ \setminus \lbrace 0 \rbrace$.
+
+\begin{figure}[H] 
+\centering
+\includegraphics[scale = 0.44]
+{TheoModelle_Stabil_drei_verschiedene.png} 
+\caption{\small{Korrelations-Funktion des 
+stabilen Modells für verschiedene Parameter $\ell$}}
+\label{Abb_StabilesModell_dreiLängen}
+\end{figure} 
+
+\begin{figure}[H] 
+\centering
+\includegraphics[scale = 0.5]{TheoModelle_Stabil_Zufallsfeld.png} 
+\caption{\small{Realisierung eines isotropen, schwach stationären
+Gauß'schen Zufallsfelds mit stabilem Modell (links) und das zugehörige Korrelogramm (rechts)}}
+\label{Abb_StabilesModell_GRF}
+\end{figure} 
+
+Das Stable Modell spezifiziert wiederum eine ganze Modell Familie.
+Insbesondere gilt (vgl.\,z.\,B.\,\cite[S.\,25]{Montero2015}):
+\begin{itemize}[topsep=2pt,parsep=1pt,itemsep=0.5pt]
+\item[$\bullet$] für $\alpha=1$ entspricht das Stable Modell dem 
+exponentiellen Modell;
+\item[$\bullet$] für $\alpha=2$ entspricht das Stable Modell dem 
+Gauß'schen Modell.
+\end{itemize}
+
+%$\circ$ \underline{Exponentielles Modell}
+%\begin{equation}
+%\label{Gl_ExponentiellesModell}
+%\rho_{exp}(r; \ell) :=  \exp\left( -\frac{r}{\ell} \right),\ 
+%\ell \in \mathbb{R}_+ \setminus \lbrace 0 \rbrace
+%\end{equation}
+%
+%\begin{figure}[H] 
+%\centering
+%\includegraphics[scale = 0.44]
+%{TheoModelle_Exponentiell_drei_verschiedene.png} 
+%\caption{\small{Korrelations-Funktion des 
+%exponentiellen Modells für verschiedene Parameter $\ell$}}
+%\label{Abb_ExponentiellesModell_dreiLängen}
+%\end{figure} 
+%
+%\begin{figure}[H] 
+%\centering
+%\includegraphics[scale = 0.5]{TheoModelle_Exponentiell_Zufallsfeld.png} 
+%\caption{\small{Realisierung eines isotropen, schwach stationären
+%Gauß'schen Zufallsfelds mit exponentiellem Modell (links) und das zugehörige Korrelogramm (rechts)}}
+%\label{Abb_ExponentiellesModell_GRF}
+%\end{figure} 
+
+\vspace*{10pt}
+
+$\circ$ \underline{Gauß'sches Modell}
+\begin{equation}
+\label{Gl_GaussModell}
+\rho_{gau}(r; \ell) := \exp\left( -\frac{r^2}{\ell^2} \right),\ \ell \in \mathbb{R}_+ \setminus \lbrace 0 \rbrace
+\end{equation}
+
+\begin{figure}[H] 
+\centering
+\includegraphics[scale = 0.44]
+{TheoModelle_Gauss_drei_verschiedene.png} 
+\caption{\small{Korrelations-Funktion des 
+Gauß'schen Modells für verschiedene Parameter $\ell$}}
+\label{Abb_GaussModell_dreiLängen}
+\end{figure} 
+
+\begin{figure}[H] 
+\centering
+\includegraphics[scale = 0.5]{TheoModelle_Gauss_Zufallsfeld.png} 
+\caption{\small{Realisierung eines isotropen, schwach stationären
+Gauß'schen Zufallsfelds mit Gauß'schen Modell (links) und das zugehörige Korrelogramm (rechts)}}
+\label{Abb_GaussModell_GRF}
+\end{figure} 
+
+
+$\circ$ \underline{Matérn Modell}
+\begin{equation}
+\rho_{mat}(r; \ell, \nu ) := \frac{1}{\Gamma(\nu)2 ^{\nu -1}}
+\left( \frac{\sqrt{2\nu}}{\ell} r \right)^\nu
+\mathrm{K}_\nu \left( \frac{\sqrt{2\nu}}{\ell} r \right),
+\end{equation}
+wobei 
+\begin{itemize}[topsep=2pt,parsep=1pt,itemsep=0.5pt]
+\item[$\bullet$] $\Gamma(\cdot)$ die Gamma-Funktion,
+\item[$\bullet$] $\mathrm{K}_\nu(\cdot)$ die hyperbolische Bessel-Funktion 
+zweiter Art $\rightsquigarrow$ \href{https://en.wikipedia.org/wiki/Bessel_function#Modified_Bessel_functions}
+{Wiki: Bessel function}
+\item[$\bullet$] $\ell,\nu \in \mathbb{R}_+ \setminus \lbrace 0 \rbrace$
+ Modell-Parameter
+\end{itemize}
+bezeichnen.\\
+
+\begin{figure}[H] 
+\centering
+\includegraphics[scale = 0.44]
+{TheoModelle_Matern_drei_verschiedene.png} 
+\caption{\small{Korrelations-Funktion des 
+Matérn-Modells für verschiedene Parameter $\ell$}}
+\label{Abb_MaternModell_dreiLängen}
+\end{figure} 
+
+\begin{figure}[H] 
+\centering
+\includegraphics[scale = 0.5]{TheoModelle_Matern_Zufallsfeld.png} 
+\caption{\small{Realisierung eines isotropen, schwach stationären
+Gauß'schen Zufallsfelds mit Matérn Modell (links) und das zugehörige Korrelogramm (rechts)}}
+\label{Abb_MaternModell_GRF}
+\end{figure} 
+
+Im Limes $\nu \rightarrow \infty$
+konvergiert das Matérn Modell gegen das Gauß'sche
+Modell, das heißt, 
+das Gauß'sche Modell ist Teil der Matérn Modell Familie (vgl.\,z.\,B.\,\cite[S.\,84f]{Rasmussen2006}).\\
+
+\newpage
+
+\subsection{Ergänzende Analysen der Datenauswertung}
+\label{AnhangErgänzendeAnalysenDatenauswertung}
+\begin{figure}[H] 
+\centering
+\includegraphics[scale = 0.45]{Datenauswertung_P25MessungenApr2026DirektionaleSemivarianzBeispielFit340_NoConstraints} 
+\caption{\small{Anpassung der Kovarianz-Funktion 
+(\textcolor{NavyBlue}{\rule[1mm]{3mm}{0.5mm}}) an die
+direktionale ($\vartheta=340^\circ$) empirische Semivarianz 
+(\textcolor{Sepia}{$\bullet$});
+oberhalb der empirischen Semivarianz sind die Umfänge 
+des Lags vermerkt; der obere Wert der Beschränkung für den Range 
+beträgt $100\,km$ }}
+\label{Abb_Datenauswertung_P25MessungenApr2026DirektionaleSemivarianzBeispielFit340_NoConstraints}
+\end{figure} 
+
+\begin{figure}[H] 
+\centering
+\includegraphics[scale = 0.45]{Datenauswertung_P25MessungenApr2026VariogrammRoseRange_NoConstraints} 
+\caption{\small{Direktionale Variogramm-Karte für den 
+Range basierend auf den gemittelten 
+$\mathrm{P}_{2.5}$- Messwerten für April 2026; der obere Wert der Beschränkung für den Range 
+beträgt $100\,km$  }}
+\label{Abb_Datenauswertung_P25MessungenApr2026VariogrammRoseRange_NoConstraints}
+\end{figure} 
+
+\begin{figure}[h]
+\begin{center}
+\includegraphics[width=0.44\textwidth]{Datenauswertung_P25_Apr2026_VariogrammKarte_Sill_Matern}
+\includegraphics[width=0.44\textwidth]{Datenauswertung_P25_Jul2025_VariogrammKarte_Sill_Matern}
+\end{center}
+\caption{\small{Direktionale Variogramm-Karte für den 
+Sill basierend auf den gemittelten 
+$\mathrm{P}_{2.5}$- Messwerten für April 2026 (links) und Juli 2025 (rechts)}}
+\label{Abb_Datenauswertung_P25_Apr2026Jul2025_VariogrammKarte_Sill_Matern}
+\end{figure}

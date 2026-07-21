@@ -1,0 +1,197 @@
+%Stand 18. Juli 29026
+\subsection{Anisotropie}
+\label{KapitelTheorieAnisotropie}
+In Kapitel \ref{KapitelTheorieGrundlagen} wurde bereits erwähnt,
+dass ein Semivariogramm \textit{anisotrop} genannt wird, falls 
+seine Form nicht nur vom Betrag des 
+Abstandsvektors $\Vert s_1 - s_2\Vert$, sondern zusätzlich auch 
+von dessen Richtung abhängt.\\
+Da sich die mathematische Behandlung einfacher gestaltet, 
+ist die Annahme der Isotropie ein sinnvoller Startpunkt, die in realen Anwendungen aber oftmals 
+verletzt wird.\\
+Gründe hierfür sind beispielsweise
+\begin{itemize}[topsep=2pt,parsep=1pt,itemsep=0.5pt]
+\item[$\circ$] geologische Strukturen (Hügel, Flussläufe),
+\item[$\circ$] bauliche Gegebenheiten (Häuser, Straßen),
+\item[$\circ$] unterschiedliche Vegetation (Wälder, Ödland) oder
+\item[$\circ$] meteorologische Einflüsse (Windströmungen, Regenwahrscheinlichkeit).
+\end{itemize}
+\vspace*{1mm}
+
+Man unterscheidet zwischen geometrischer und zonaler Anisotropie 
+(vgl.\,Abb.\,(\ref{Abb_Anisotropie})).
+
+\begin{figure}[H] 
+\centering
+\includegraphics[scale = 0.5]
+{Abb_Anisotropie.jpg} 
+\caption{\small{Illustration der geometrischen Anisotropie (links) 
+mit den beiden unterschiedlichen Werten des Sill (\textcolor{red}{\rule[1mm]{3mm}{0.5mm}}) $a_1$, $a_2$ und der zonalen Anisotropie (rechts)}}
+\label{Abb_Anisotropie}
+\end{figure} 
+
+$\circ$ \underline{Geometrische Anisotropie}\\
+Die geometrische Anisotropie wird dadurch charakterisiert, dass richtungsabhängige 
+Variogramme des Zufallsfelds dieselbe Höhe des Sill aufweisen, der Sill aber bei
+unterschiedlichen Reichweiten (Ranges) erreicht wird.
+
+Die Korrelation nimmt also in verschiedenen Richtungen unterschiedlich schnell ab.\\
+
+$\circ$ \underline{Zonale Anisotropie}\\
+Bei zonaler Anisotropie besitzen die richtungsabhängigen Variogramme
+unterschiedliche Sill-Werte, während die Reichweite nahezu identisch bleibt. 
+Zonale Anisotropie tritt in Reinform bei realen Phänomenen eher selten 
+auf, sondern meist in Kombination mit geometrischer Anisotropie 
+(hybride Anisotropie). Anders als die 
+geometrische Anisotropie lässt sich die zonale Anisotropie 
+\textit{nicht} auf einfache Weise in eine isotrope Struktur 
+überführen (vgl.\,hierzu z.\,B.\,\cite[Kap.\,2.5.2]{Chiles1999}, 
+\cite[Kap.\,6]{Schmid2025}). \\ 
+
+Um eine mögliche Anisiotropie aufzudecken, wird das Variogramm 
+für unterschiedliche  Richtungen berechnet. 
+Das Vorgehen zur Schätzung dieser 
+\underline{direktionalen Semivarianz} ist der Schätzung 
+der empirischen Semivarianz (vgl.\,
+Kapitel \ref{KapitelTheorieVariogrammSchätzung}) sehr 
+ähnlich. Lediglich findet die Einteilung in 
+die Distanzklassen (\textit{Lags}) hier nur für die
+ Beobachtungen statt, die sich in einer bestimmten
+ Winkelbereich $\vartheta \pm \Delta \vartheta$ befinden.\\
+Das genaue Vorgehen ist detaillierter z.\,B.\,in 
+\cite[S.\,72ff]{Webster2007}, \cite[S.\,54f]{Montero2015} 
+beschrieben. \\
+
+Beispielhaft zeigt 
+Abb.\,(\ref{Abb_TheoAnisotropie_Beispiel_XY_Variogramme}) die
+Variogramme in X- bzw.\,Y-Richtung des simulierten 
+Zufallsfelds aus Abb.\,(\ref{Abb_TheoAnisotropie_BeispielGRF}).
+
+\begin{figure}[H] 
+\centering
+\includegraphics[scale = 0.48]
+{TheoAnisotropie_Beispiel_XY_Variogramme.png} 
+\caption{\small{Variogramm in X-Richtung (links) und Y-Richtung
+ (rechts) eines geometrisch anisotropen Zufallsfelds}}
+\label{Abb_TheoAnisotropie_Beispiel_XY_Variogramme}
+\end{figure} 
+
+\begin{figure}[H] 
+\centering
+\includegraphics[scale = 0.46]
+{TheoAnisotropie_BeispielGRF.png} 
+\caption{\small{Stichprobe eines geometrisch anisotropen 
+Gauß'schen Zufallsfelds ($\lambda=6$)}}
+\label{Abb_TheoAnisotropie_BeispielGRF}
+\end{figure} 
+
+Liefert das richtungsabhängige Variogramm Hinweise auf eine
+geometrische Anisotropie, so kann das zugrundeliegende
+Zufallsfeld möglicherweise mittels einer Koordinatentransformation in ein
+isotropes Zufallsfeld überführt werden. 
+Die für die Umrechnung benötigten Größen sind aus 
+Abb.\,(\ref{Abb_Anisotropie_Ellipse}) ersichtlich. 
+
+\begin{figure}[H] 
+\centering
+\includegraphics[scale = 0.45]
+{Abb_Anisotropie_Ellipse.jpg} 
+\caption{\small{Skizze der für die Transformation der geometrischen
+ Anisotropie verwendeten Größen $a_1$, $a_2$ und $\beta$}}
+\label{Abb_Anisotropie_Ellipse}
+\end{figure} 
+
+Die Orientierung der Anisotropie $\beta$ wird durch 
+den Winkel zwischen der Hauptachse der Ellipse und der
+$y$-Achse bestimmt. 
+Das Verhältnis der beiden Reichweiten
+
+\begin{equation*}
+\lambda =
+\frac{a_2}{a_1},\ \lambda > 1,
+\end{equation*}
+mit 
+\begin{itemize}[topsep=2pt,parsep=1pt,itemsep=0.5pt]
+\item[$\circ$] der kleineren Reichweite $a_1$ und
+\item[$\circ$] der größere Reichweite $a_2$,
+\end{itemize}
+wird \underline{Anisotropieverhältnis} genannt und ist ein Maß 
+für die Richtungsabhängigkeit:
+Je größer $\lambda$, desto ausgeprägter ist diese.\\
+
+Zur Modellierung geometrischer Anisotropie wird das 
+Koordinatensystem so transformiert, dass die Ellipse in einen Kreis
+ überführt wird. Die Zielsetzung der Transformation besteht darin,
+die Anisotropie vollständig in die Koordinaten zu verlagern,
+sodass anschließend ein isotropes Kovarianz-Modell verwendet werden 
+kann.\\
+
+Dies geschieht in zwei Schritten:
+\begin{itemize}
+\item[ 1)] \underline{Rotation} \\
+Zunächst werden die Koordinaten um den Winkel $\beta$
+rotiert.
+\begin{equation*}
+\begin{pmatrix}
+x'\\
+y'
+\end{pmatrix}
+=
+\begin{pmatrix}
+\cos(\beta) & -\sin(\beta)\\
+\sin(\beta) & \cos(\beta)
+\end{pmatrix}
+\begin{pmatrix}
+x\\
+y
+\end{pmatrix}.
+\end{equation*}
+
+\item[ 2) ] \underline{Skalierung}\\
+Anschließend wird entlang der kurzen Ellipsenachse skaliert:
+\begin{equation*}
+\begin{pmatrix}
+\tilde{x} \\
+\tilde{y}
+\end{pmatrix}
+=
+\begin{pmatrix}
+1&0\\
+0&\lambda
+\end{pmatrix}
+\begin{pmatrix}
+x'\\
+y'
+\end{pmatrix}.
+\end{equation*}
+\end{itemize}
+
+Fasst man beide Schritte zusammen, so erhält man als
+Transformationsvorschrift
+
+\begin{equation}
+\begin{aligned}
+\tilde{x}
+&=
+x\cos(\beta) - y\sin(\beta)\\
+\tilde{y}
+&=
+\lambda x\sin(\beta) +\lambda y\cos(\beta)
+\end{aligned}
+\end{equation}
+
+wodurch die Ellipse in einen Kreis überführt wird.\\
+
+Im transformierten Koordinatensystem kann anschließend 
+ein gewöhnliches isotropes Variogrammmodell verwendet werden.
+Bei den im Kapitel \ref{KapitelTheorieKovarianzFunktionen}
+eingeführten Kovarianz- und Korrelationsmodellen 
+wird Anisotropie dementsprechend durch das Hinzufügen der zwei 
+oben eingeführten Parameter modelliert: dem Anisotropieverhältnis
+$\lambda$ und dem Winkel $\beta$ der Orientierung. \\
+
+Abschließend sei angemerkt, dass ein richtungsabhängiges 
+Variogramm nicht \textit{zwangsläufig} durch Anisotropie verursacht 
+sein muss. Auch Verletzungen der Stationaritätsannahme können zu 
+einem ähnlichen Verhalten führen (vgl.\,z.\,B.\,\cite[Kap.\,3.7]{Montero2015},
+\cite[Kap.\,5]{Kitanidis1997}).

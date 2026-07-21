@@ -1,0 +1,83 @@
+%% Stand 18. Juli 2026
+Dieses Kapitel ist wie folgt strukturiert:
+\begin{itemize}[topsep=2pt,parsep=1pt,itemsep=0.5pt]
+\item[$\circ$] Im Kapitel \ref{KapitelTheorieKernidee} wird das
+Grundprinzip des Kriging als einer Methode der Vorhersage von
+Zufallsvariablen im Rahmen der räumlichen Statistik erläutert.
+\item[$\circ$] Das Kapitel \ref{KapitelTheorieGrundlagen} stellt 
+die notwendigen Begriffe und Zusammenhänge für das weitere Verständnis bereit.
+\item[$\circ$] Das Variogramm ist das zentrale Werkzeug der Modellierung
+im Zuge des Kriging und wird Kapitel \ref{KapitelTheorieVariogramm}
+erläutert.
+\item[$\circ$] Das Variogramm seinerseits dient als
+Schätzfunktion für Kovarianz-Funktionen, welche die
+Verbundenheit der Zufallsvariablen charakterisieren. Die 
+gebräuchlichsten Koavrianz-Funktionen werden in
+Kapitel \ref{KapitelTheorieKovarianzFunktionen} behandelt, bevor 
+dann  
+\item[$\circ$] in Kapitel \ref{KapitelTheorieKriging} 
+die Kriging Gleichungen motiviert und aufgeführt werden.  
+\item[$\circ$] Abschließend wird in Kapitel \ref{KapitelTheorieAnisotropie} 
+das praxisrelevante Thema der Anisotropie hinsichtlich 
+Phänomenologie, Detektion und Handhabung besprochen.  
+\end{itemize}
+
+\subsection{Grundidee des Kriging}
+\label{KapitelTheorieKernidee}
+Das von dem Geografen Waldo Tobler formulierte erste 
+Gesetz\footnote{Ob es sich hierbei im strengen Sinne um ein Gesetz handelt
+oder um eine in der Geophysik bewährte Heuristik wird 
+z.\,B.\,in \cite{Miller2004} thematisiert. Die Antwort auf diese Frage ist
+allerdings für die weiteren Überlegungen unerheblich.} der Geografie lautet 
+(vgl.\,\cite[S.\,236]{Tobler1970}):
+\begin{quote}
+\glqq \textit{Everything is related to everything else, but near things are more related than distant things.}\grqq
+\end{quote}
+
+Diese Aussage wurde von Matheron (vgl.\,\cite{Matheron1971}) folgendermaßen in die Sprache
+der Mathematik übersetzt:
+\begin{itemize}[topsep=2pt,parsep=1pt,itemsep=0.5pt]
+\item[a)] unter \textit{Dingen} (als Übersetzung für \glqq everything\grqq )
+werden numerische Größen in Räumen verstanden, die mit einer Metrik 
+versehen sind, beispielsweise also Messwerte an Orten auf 
+der Erdoberfläche;
+\item[b)] diese Größen werden als Realisierungen 
+von Zufallsvariablen interpretiert;
+\item[c)] die \textit{Verbundenheit} (als Übersetzung für 
+\glqq related to\grqq ) dieser Zufallsvariablen wird durch 
+Beziehungen ihrer Erwartungswerte und Kovarianzen ausgedrückt.
+\end{itemize}
+
+Kriging ist eine Methode zur Vorhersage von Werten an Orten, 
+an denen \textit{keine} Beobachtungen vorliegen.  
+Um den Vorhersageprozess mathematisch handhabbar zu machen, 
+beschränkt Kriging die Klasse der Prädiktoren auf 
+\textit{lineare Funktionen} der beobachteten Werte,
+wodurch das Anpassungsproblem auf die Bestimmung einer endlichen
+Anzahl von Koeffizienten reduziert wird. \\
+
+Das dahinterstehende Optimierungsproblem wird durch die
+Festlegung folgender Nebenbedingungen definiert:
+
+\begin{itemize}[topsep=2pt,parsep=1pt,itemsep=0.5pt]
+\item[1) ] der mittlere quadratische Vorhersagefehler sollte minimiert werden, das heißt, der Prädiktor sollte \textit{präzise} sein; 
+\item[2) ] der Prädiktor sollte im Durchschnitt dem wahren Wert
+entsprechen, das heißt, er sollte \textit{unverzerrt} sein.
+\end{itemize}
+
+Diese Anforderungen führen schließlich auf ein lineares Gleichungssystem mit 
+einer \textit{eindeutigen} Lösung. 
+Der resultierende Prädiktor wird daher als \textbf{B}est 
+\textbf{L}inear \textbf{U}nbiased \textbf{P}redictor oder auf
+deutsch \glqq bester linearer unverzerrter Prädiktor\grqq\ (kurz BLUP)
+bezeichnet.\\
+Eine Voraussetzung für die Bestimmung der optimalen Gewichte des
+Gleichungssystems besteht darin, die 
+räumliche Abhängigkeit der Beobachtungen quantitativ zu beschreiben. 
+Genau hierzu dienen die im folgenden Kapitel eingeführten 
+Kovarianz-Funktionen und die Semivarianz.\\
+
+Das skizzierte Grundprinzip des Kriging wird in Kapitel 
+\ref{KapitelTheorieKriging} näher ausgearbeitet.
+
+

@@ -1,0 +1,200 @@
+%% Stand 18. Juli 2026
+\subsection{Grundlegende Begriffe}
+\label{KapitelTheorieGrundlagen}
+Das Fundament der nachfolgenden Überlegungen bildet die 
+Annahme, dass die räumlichen Beobachtungen Realisierungen 
+eines Zufallsfeldes sind.\\
+Im Folgenden bezeichne $(\Omega, \mathcal{F}, \mathbb{P})$ einen Wahrscheinlichkeitsraum, wobei
+\begin{itemize}[topsep=2pt,parsep=1pt,itemsep=0.5pt]
+\item[$\circ$] $\Omega$ eine beliebige Menge 
+\item[$\circ$] $\mathcal{F}$ eine $\sigma$-Algebra auf $\Omega$
+\item[$\circ$] $\mathbb{P}$ ein Wahrscheinlichkeitsmaß 
+auf $\mathcal{F}$
+\end{itemize}
+bezeichnet.
+
+Des Weiteren sei $E$ ein vollständiger und separabler metrischer Raum
+mit Borel'scher $\sigma$-Algebra $\mathcal{B}(E)$ und 
+$\mathcal{S} \subset \mathbb{R}^d$ eine abzählbare Teilmenge 
+mit $d \in\mathbb{N},\ d \geq 2$.
+
+\begin{definition} \textbf{Zufallsfeld} \\
+Eine Familie von Zufallsvariablen 
+$\mathrm{Z}_\mathcal{S}:=\lbrace \mathrm{Z}(s),\ s \in \mathcal{S}\rbrace$
+auf $(­\Omega, \mathcal{F},\mathbb{P})$ heißt
+\underline{Zufallsfeld} oder \underline{stochastischer Prozess}.
+Insbesondere sind die einzelnen Zufallsvariablen messbare Abbildungen:
+$\mathrm{Z}: \Omega \times \mathcal{S} \longrightarrow \mathbb{R}$
+(vgl.\,z.\,B.\,\cite[S.\,322]{Spodarev2015}, \cite[S.\,7]{Adler2007}).
+\end{definition}  
+
+Es ist wichtig zu betonen, dass die einzelnen Zufallsvariablen 
+$\mathrm{Z}(s)$, die ein Zufallsfeld $\mathrm{Z}_\mathcal{S}$ konstituieren,
+\textit{nicht stochastisch unabhängig} sind, sondern entsprechend dem
+Aspekt der Verbundenheit des Tobler'schen Gesetzes (vgl.\,Punkt c) der
+Auflistung in Kap.\,\ref{KapitelTheorieKernidee} oben) sehr wohl miteinander 
+in Beziehung stehen.\\
+
+Durch die folgende Einschränkung ergibt sich aus der Definition eines 
+Zufallsfeldes die Definition eines Gauß'schen Zufallsfeldes:
+
+\begin{definition} \textbf{Gauß'sches Zufallsfeld} \\
+Ein Zufallsfeld  
+$\mathrm{Z}_\mathcal{S}$ auf 
+einem Wahrscheinlichkeitsraum $(\Omega, \mathcal{F}, \mathbb{P})$ heißt
+\underline{Gauß'sches Zufallsfeld}\footnote{Gauß`sche Zufallsfelder werden 
+in Lehrbüchern der Stochastik synonym auch als Gauß-Prozesse bezeichnet 
+(vgl.\,z.\,B.\,\cite[S.\,462]{Schmidt2011}, 
+\cite[S.\,344]{Meintrup2005}).\\}, 
+wenn für \textit{alle} endlichen, 
+nicht-leeren Teilmengen $\mathcal{J} \subset \mathcal{S}$ der Mächtigkeit 
+$\#\mathcal{J} = n \in \mathbb{N}$ der Zufallsvektor 
+\begin{equation}
+\label{Gl_Def_Gaußfeld_1}
+\mathrm{Z}_\mathcal{J} :=\left( \mathrm{Z}_j\right)_{j \in \mathcal{J}}=
+\left(\mathrm{Z}_{j_1}, \mathrm{Z}_{j_2}, ..., \mathrm{Z}_{j_n}\right) 
+\end{equation}
+eine multivariate Normal-Verteilung besitzt 
+(vgl.\,z.\,B.\,\cite[S.\,46f]{Diggle2007}, \cite[S.\,13]{Montero2015}).
+Ausgeschrieben ist Gl.\,(\ref{Gl_Def_Gaußfeld_1}) gleichbedeutend zu
+\begin{equation}
+\label{Gl_Def_Gaußfeld_2}
+\left(\mathrm{Z}_{j_1}, \mathrm{Z}_{j_2}, ..., \mathrm{Z}_{j_n}\right) =
+\left(\mathrm{Z}(s_{j_1}), \mathrm{Z}(s_{j_2}), ..., 
+\mathrm{Z}(s_{j_n})\right) \sim
+\mathcal{N}_n\left(\mu, \mathbf{\Sigma}\right),
+\end{equation}
+mit den bekannten Parametern der n-dimensionale Normal-Verteilung
+$\mathcal{N}_n$
+\begin{itemize}[topsep=2pt,parsep=1pt,itemsep=0.5pt]
+\item[$\circ$] dem Erwartungswert-Vektor $\mu$
+\item[$\circ$] einer symmetrischen, positiv semi-definiten 
+Kovarianz-Matrix $\mathbf{\Sigma}$.
+\end{itemize}
+\end{definition}  
+
+Nun existiert in der Realität meist nur eine einzige Realisation 
+$z(s)$ der Zufallsvariablen $\mathrm{Z}(s)$. Aus nur \textit{einer}
+bekannten Merkmalsausprägung je Ort können ohne weitere
+ Annahmen aber weder Erwartungswert noch Kovarianz geschätzt 
+werden. Dies resultiert daraus, dass es nicht möglich ist, die
+wahrscheinlichkeitstheoretischen Eigenschaften
+eines Zufallsfeldes zu bestimmen, wenn nur eine einzige
+Realisierung vorliegt (dies wäre vergleichbar mit einer 
+Schätzung basierend auf einer Stichprobe vom Umfang eins).
+Um konsistente Inferenz zu ermöglichen, sind hingegen viele
+Realisierungen notwendig.\\
+Darüber hinaus ist selbst von dieser einen Realisierung nur ein Teil
+bekannt, nämlich die Werte an den Punkten der Stichproben-Ziehung.\\
+
+Die Lösung für diese Schwierigkeit besteht darin, geeignete
+Annahmen bezüglich der räumlichen Homogenität oder
+ \textit{Stationärität} zu treffen.\\ 
+Die Idee hinter dieser Annahme besteht darin,
+Wiederholungen der (nicht zugänglichen) Realisierungen an
+\textit{einem} Ort durch Wiederholungen im Raum zu ersetzen.
+Das bedeutet, dass Werte, die an verschiedenen Orten
+im untersuchten Gebiet beobachtet werden, dieselben Eigenschaften
+besitzen und mathematisch als Realisierungen desselben 
+Zufallsfeldes betrachtet werden können.
+Die Stationaritätshypothese impliziert somit, dass die 
+gemeinsamen Verteilungen des Zufallsfeldes 
+translationsinvariant ist.\\
+
+Die folgenden Ausführungen zu Stationarität und Isotropie
+finden sich auch z.\,B.\,in 
+\cite[S.\,52-53]{Cressie1993}, \cite[S.\,16-17]{Chiles1999},
+\cite[S.\,14-16]{Montero2015}, \cite[S.\,107]{Benndorf2023},
+\cite[S.\,52-57]{Schmid2025}.
+
+\begin{definition} \textbf{Strenge Stationarität} \\
+Das Zufallsfeld $\mathrm{Z}_\mathcal{S}$ heißt 
+\underline{streng stationär}, wenn für alle $k \in \mathbb{N}$ 
+die Familien von Zufallsvariablen
+\begin{equation*}
+\lbrace \mathrm{Z}(s_1), \mathrm{Z}(s_2), \ldots, \mathrm{Z}(s_k)
+\rbrace
+\end{equation*}
+und
+\begin{equation*}
+\lbrace \mathrm{Z}(s_1+h), \mathrm{Z}(s_2+h), \ldots,\mathrm{Z}(s_k+h)
+\rbrace
+\end{equation*}
+für beliebige Punkte $s_1, s_2, \ldots, s_k \in \mathcal{S}$
+und jeden Translationsvektor $h \in \mathbb{R}^d$,
+deren verschobene Punkte noch im Gebiet $\mathcal{S}$ liegen,
+dieselbe gemeinsame Verteilungsfunktion besitzen.
+
+Anders ausgedrückt:
+Die gemeinsame Verteilungsfunktion
+\begin{equation*}
+F_\mathrm{Z}(z)\left( \mathrm{Z}(s_1), \mathrm{Z}(s_2), \ldots, \mathrm{Z}(s_k) \right):= \mathbb{P}\left(
+\mathrm{Z}(s_1) \leq z_1, \mathrm{Z}(s_2) \leq z_2, \ldots, 
+\mathrm{Z}(s_k) \leq z_k\right)
+\end{equation*}
+der Familie $\lbrace \mathrm{Z}(s_1), \mathrm{Z}(s_2), \ldots, 
+\mathrm{Z}(s_k)\rbrace$ wird durch eine Translation um eine 
+beliebigen Vektor $h$ nicht verändert.
+\end{definition}
+
+Hierbei handelt es sich um eine sehr restriktive Bedingung.
+Aus diesem Grund wird diese Forderung meist gelockert 
+und durch die der schwachen Stationarität ersetzt, die nur die 
+ersten beiden Momente des Zufallsfeldes involviert.
+
+\begin{definition} \textbf{Schwache Stationarität,
+stationäre Kovarianz-Funktion} \\
+Das Zufallsfeld $\mathrm{Z}_\mathcal{S}$ heißt
+\underline{schwach stationär}, wenn es die folgenden 
+Bedingungen erfüllt:
+
+\begin{itemize}[topsep=2pt,parsep=1pt,itemsep=0.5pt]
+\item[$\circ$] Der Erwartungswert existiert und ist konstant; 
+er hängt also nicht vom Ort $s$ ab:
+\begin{equation}
+\label{Gl_Def_schwach_stationär_Erwartungswert}
+\mathbb{E}\left( \mathrm{Z}(s) \right) = \mu(s) = \mu.
+\end{equation}
+\item[$\circ$] Die Kovarianz existiert für jedes Paar von
+Zufallsvariablen $\mathrm{Z}(s)$ und $\mathrm{Z}(s+h)$ und 
+hängt \textit{nur} vom Verschiebungsvektor $h$ ab, der die 
+Orte $s$ und $(s+h)$ verbindet, jedoch nicht von deren 
+konkreten Lage innerhalb des betrachteten Raums $\mathcal{S}$:
+\begin{equation}
+\label{Gl_Def_schwach_stationär_Kovarianz}
+\mathrm{Cov} \left( \mathrm{Z}(s), \mathrm{Z}(s+h) \right) =:
+C(h),\quad \forall s \in \mathcal{S} \textrm{ und } h \in \mathbb{R}^d.
+\end{equation}
+\end{itemize}
+Die Funktion $C(\cdot): \mathbb{R}^d \rightarrow \mathbb{R}$ 
+wird als \underline{stationäre Kovarianz-Funktion} bezeichnet.
+\end{definition}
+
+Da nach Voraussetzung die Kovarianz eines schwach stationären 
+Zufallsfeldes nur vom Verschiebungsvektor $h$ abhängt, folgt daraus, 
+dass die Varianz eines solchen Zufallsfeldes existiert und konstant 
+ist, denn:
+\begin{equation}
+\label{Gl_VarianzZF_schwach_stationär}
+\mathrm{Var} \left( \mathrm{Z}(s) \right) = 
+\mathrm{Cov} \left( \mathrm{Z}(s), \mathrm{Z}(s) \right) = C(0) =: 
+\sigma^2 \in \mathbb{R}_+\setminus \lbrace 0 \rbrace.
+\end{equation}
+
+\begin{definition} \textbf{Isotropie/Anisotropie} \\
+Falls die Kovarianz-Funktion $C(\cdot)$ eines stationären Zufallsfeld 
+rotationsinvariant ist, d.\,h.\,nur von der Distanz 
+$\Vert s_1 - s_2\Vert$ zwischen den betrachteten 
+Punkten $s_1$ und $s_2$ abhängt aber \textit{nicht} von der Richtung 
+des Differenzvektors $(s_1 - s_2)$, dann wird das
+Zufallsfeld als \underline{isotrop} bezeichnet, andernfalls 
+als \underline{anisotrop}.
+\end{definition}
+
+Unter bestimmten Umständen lässt sich der Fall eines anisotropen
+Zufallsfeldes durch Koordinaten-Transformation auf den eines 
+isotropen Zufallsfeldes zurückführen. Die Handhabung von Anisotropie wird detailliert in Kap.\,\ref{KapitelTheorieAnisotropie} behandelt.\\
+
+Kovarianzfunktionen beschreiben die räumliche Abhängigkeit vollständig.
+In der Praxis arbeitet die räumlichem Statistik meist mit der eng 
+verwandten Semivarianz und deren grafischen Darstellung, dem Variogramm.  

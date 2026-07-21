@@ -1,0 +1,386 @@
+% Stand 18. Juli 2026
+Dieses Kapitel ist wie folgt strukturiert:
+\begin{itemize}[topsep=2pt,parsep=1pt,itemsep=0.5pt]
+\item[$\circ$] Das Kapitel
+\ref{KapitelDatenanalyseHintergrundInfoFeinstaub}
+stellt die wesentlichen Informationen rund um das Thema Feinstaub
+bereit. Hierbei werden die grundlegenden Definitionen eingeführt,
+die möglichen Feinstaub-Quellen beschrieben und in kompakter
+Form die Bedeutung von  Feinstaub für die menschliche Gesundheit 
+erläutert.
+\item[$\circ$] Im Kapitel 
+\ref{KapitelDatenanalyseDatenHerkunft} wird zunächst die Herkunft 
+der für die Analyse herangezogenen Messdaten aufgezeigt und anschließend
+\item[$\circ$] im Kapitel 
+\ref{KapitelDatenanalyseDatenStruktur} deren struktureller
+Aufbau und die deskriptiv statistischen Charakteristika herausgearbeitet.
+\item[$\circ$] Ein wesentlicher Schritt jeder Datenanalyse ist die
+Datenbereinigung, die im Kapitel
+\ref{KapitelDatenanalyseDatenbereinigung}
+beschrieben wird.
+\end{itemize}
+
+\subsection{Feinstaub: Definition, Entstehung und Bedeutung für die Gesundheit}
+\label{KapitelDatenanalyseHintergrundInfoFeinstaub}
+
+Feinstaub bezeichnet feste und flüssige Schwebeteilchen in der Luft,
+ die aufgrund ihrer geringen Größe über längere Zeit in der Atmosphäre
+verbleiben können.\\
+Unter vereinfachenden Annahmen lässt sich für die Sinkgeschwindigkeit 
+$v_s$ von kugel\+för\-migen Partikeln mit Durchmesser $d$  aus der 
+Stokes-Gleichung eine quadratische Abhän\-gig\+keit $v_s \propto d^2$ herleiten 
+(vgl.\,z.\,B.\,\cite[Kap.\,20]{Landau1987}), was für $d = 2,5\mu m$ zu
+ Sinkgeschwindigkeiten im Bereich von Zentimetern pro Stunde und 
+ dementsprechend langen atmosphärischen Verweildauern führt.
+Insbesondere besitzen kleinere Partikel wesentlich längere
+Verweildauern in der Atmosphäre und können daher 
+über größere Entfernungen transportiert werden.
+
+\begin{figure}[H] 
+\centering
+\includegraphics[scale = 0.65]
+{Datenanalyse_Einführung_Kategorien Feinstaub.jpg} 
+\caption{\small{Atemwegs-Gängigkeit von Feinstaub\protect\footnotemark}}
+\label{Abb_Datenanalyse_Einführung_Kategorien Feinstaub}
+\end{figure} 
+
+\footnotetext{\textit{Bild entnommen aus}: 
+Leitfaden zur Norm ISO 16890 für Luftfiltration der 
+Firma \textsc{Mann+Hummel}}
+Die von Feinstaub ausgehende Gesundheitsgefährdung hängt maßgeblich davon 
+ab, wie weit dieser über den Atemweg 
+Nase$\rightarrow$Hals$\rightarrow$Lunge$\rightarrow$Blutkreislauf 
+vordringen kann. Diese Atemwegs-Gängigkeit wiederum wird von der Partikelgröße 
+des Feinstaubs bestimmt.
+Generell gilt: je kleiner die Partikel sind, desto 
+tiefer können sie in die Atemwege und die Lunge eindringen 
+(vgl.\,Abb.\,\ref{Abb_Datenanalyse_Einführung_Kategorien Feinstaub}).\\
+
+Mit Blick auf empirisch gestützte Studien, in denen die von Feinstaub 
+ausgehenden Gesundheitsrisiken aufgegriffen wurden, war es zuerst die
+US-amerikanische Umweltschutzbehörde \textbf{E}nvironmental \textbf{P}rotection
+\textbf{A}gency, welche den Feinstaub in verschiedene Kategorien einteilte:
+\begin{itemize}[topsep=2pt,parsep=1pt,itemsep=0.5pt]
+\item[$\circ$] Grobstaub: Partikel mit einem Durchmesser $d$
+von $d > 10\mu m$;
+\item[$\circ$] $\mathrm{PM}_{10}$: Partikel mit einem
+ Durchmesser $d$ von $d \leq 10\mu m$;
+\item[$\circ$] $\mathrm{PM}_{2.5}$: Partikel mit einem
+ Durchmesser $d$ von $d \leq 2,5\mu m$;
+\item[$\circ$] $\mathrm{PM}_{0.1}$: Partikel mit einem
+ Durchmesser $d$ von $d \leq 0,1\mu m$\footnote{Da Partikel mit einem Durchmesser 
+$d \leq 2,5\mu m$ auch die Bedingung 
+$d \leq 10\mu m$ erfüllen, ist der $\mathrm{PM}_{10}$-Wert 
+stets größer-gleich dem $\mathrm{PM}_{2.5}$-Wert. Analog folgt, dass 
+$\mathrm{PM}_{0.1} \leq \mathrm{PM}_{2.5}$ gilt.}.
+\end{itemize}
+\vspace*{3mm}
+
+Diese Kategorisierung wurde von der Europäischen Union übernommen 
+und die Bestimmung der $\mathrm{PM}_{10}$ und $\mathrm{PM}_{2.5}$ 
+Konzentrationen in einer Norm der
+\textbf{I}nternational \textbf{S}tandarization 
+\textbf{O}rganization festgelegt.\\
+%Diese ISO-Norm schreibt zur Bestimmung
+%der beiden Feinstaub-Fraktionen die Verwendung eines 
+%sog.\,Kaskadenimpaktors vor, dessen \glqq größenselektierender Lufteinlass 
+%für Partikel mit einen aerodynamischen Durchmesser von 10 (PM10) bzw. 2,5 (PM2,5) 
+%Mikrometer ($\mu m$) eine Abscheidewirksamkeit von 50 Prozent 
+%aufweist\grqq\ ($\rightsquigarrow$ 
+%\href{https://www.umweltbundesamt.de/service/glossar/pm10}
+%{Umweltbundeamt Glossar PM10/PM2,5}).\\
+
+Eine detaillierte Einführung in den Aspekt der Entstehung und
+der gesundheitlichen Bedeutung von Feinstaub findet sich 
+beispielsweise in den Reports der \textbf{W}orld \textbf{H}ealth 
+\textbf{O}rganization \cite{WHO_AirQuality2021} oder des 
+\textbf{H}ealth \textbf{E}ffects \textbf{I}nstitute \cite{HEI_2025}, auf die 
+sich die nachfolgenden Ausführungen stützen.\\
+Feinstaub kann einserseits aus natürlichen Vorgängen hervorgehen 
+(z.\,B.\,Waldbrände, aufgewirbelten Bodenstaub).
+Gerade in städtischen Gebieten resultiert der größte Teil der Feinstaubbelastung aus menschliche Aktivitäten: 
+Reifen- und Bremsabrieb, Verbrennungsprozesse in Motoren, Industrieanlagen sowie Heizungen.\\
+Für die menschliche Gesundheit besitzt Feinstaub eine hohe Bedeutung,
+da die Partikel über die Atemluft aufgenommen werden. Gröbere Partikel 
+werden häufig bereits in Nase oder Rachen abgefangen, während kleinere 
+Partikel bis in die Bronchien und Lungenbläschen gelangen können. 
+Ultrafeine Partikel sind sogar in der Lage, die Blutbahn zu erreichen. Langfristig wird Feinstaub mit einem erhöhten Risiko für 
+Herz-Kreislauf-Erkrankungen, chronische Lungenerkrankungen und einer 
+verminderten Lebenserwartung in Verbindung gebracht.
+Der Report \cite[S.\,5]{HEI_2025} schätzt, dass im Jahr 2023
+gesamthaft durch Luftverschmutzung mehr Todesfälle verursacht wurden
+als durch Tabakkonsum.
+ Aus diesem Grund
+zählt die Reduzierung von Feinstaubemissionen zu den wichtigen Zielen 
+des Umwelt- und Gesundheitsschutzes.\\
+     
+Das Bayerische Landesamt für Umwelt und das Umwelt-Ressort der 
+Stadt München tragen der großen Bedeutung von Feinstaub für den 
+Umwelt- und Gesundheitsschutz dahingehend Rechnung, dass 
+landesweit mehrere Messstationen  unterhalten und überwacht werden
+($\rightsquigarrow$ \href{https://www.lfu.bayern.de/luft/immissionsmessungen/messwerte/index.htm}
+{Aktuelle Messwerte der Luftmess­stati­onen}), hiervon auch vier
+Messstationen für Feinstaub (Stand: Juni 2026) im Raum München. \\
+Die an diesen vier Stationen erhobenen Messwerte sind \textit{nur} 
+als stündliche Mittelwerte verfügbar. 
+Abb.\,(\ref{Abb_Datenanalyse_Monatsverlauf_042026_Sensoren_LUA_Stacchus})
+zeigt beispielhaft den Verlauf der $\mathrm{PM}_{\mathrm{10}}$- und 
+$\mathrm{PM}_{\mathrm{2.5}}$-Messungen an der Messstation am Karlsplatz (Stacchus). 
+
+\begin{figure}[H] 
+\centering
+\includegraphics[scale = 0.55]
+{Datenanalyse_Monatsverlauf_042026_Sensoren_LUA_Stacchus.png} 
+\caption{\small{Verlauf der Stunden-Mittelwerte der $\mathrm{PM}_{\mathrm{10}}$- und 
+$\mathrm{PM}_{\mathrm{2.5}}$-Messwerte im April 2026 an der Messstation
+Karlsplatz (Stacchus) und der festgesetzte Jahresgrenzwert 
+(\textcolor{red}{\rule[1mm]{3mm}{0.5mm}})}}
+\label{Abb_Datenanalyse_Monatsverlauf_042026_Sensoren_LUA_Stacchus}
+\end{figure} 
+
+In Abb.\,(\ref{Abb_Datenanalyse_Monatsverlauf_042026_Sensoren_LUA_Stacchus})
+ist zusätzlich der per 
+\glqq Verordnung über Luftqualitätsstandards 
+und Emissions\-höchst\-mengen\grqq\ 
+(\textit{kurz}: BImSchV)\footnote{$\rightsquigarrow$
+\href{https://www.lfu.bayern.de/luft/immissionsmessungen/doc/grenzwerte.pdf}
+{Grenz- und Zielwerte, kritische Werte, Informations- und Alarmschwellen
+nach der 39. BImSchV}}
+festgesetzte Jahresgrenzwert für $\mathrm{PM}_{2.5}$ 
+von $25\mu g/ m^3$ eingezeichnet 
+(\textcolor{red}{\rule[1mm]{3mm}{0.5mm}}).\\
+
+Wie in Kap.\,\ref{KapitelTheorieVariogrammSchätzung} dargelegt, 
+können aus $n$ Messpunkten maximal $n\cdot(n-1)/2$ paarweise 
+verschiedene Distanzen gebildet werden. 
+Mithilfe der vier vom Bayerischen Landesamt für Umwelt in München 
+unterhaltenen Messstationen ergeben sich daher nur 6 verschiedene
+Distanzen. Dies ermöglicht keine aussagekräftige Schätzung der 
+Variogramme, so dass in Folge auch keine Kriging-Analyse basierend 
+allein auf diesen Daten möglich ist.  
+
+\subsection{Herkunft und Qualität der Daten}
+\label{KapitelDatenanalyseDatenHerkunft}
+Untersucht werden Feinstaub-Messungen im Großraum München, die als frei verfügbare 
+Daten über das globale Sensor-Netzwerk \textsc{SensorCommunity} 
+($\rightsquigarrow$ \href{https://sensor.community/de/}{Sensor Community Home})
+zur Verfügung gestellt werden.\\
+Die auf dem Portal verfügbaren Sensor-Messungen stammen von 
+Nutzern aus über 70 Ländern (Stand 2026) ohne kommerzielle Interessen, 
+welche nach einer einmaligen Registrierung die mittels ihrer 
+\textit{eigenen} Sensoren erhobenen Messdaten auf das Netzwerk 
+hochladen können. \\
+Eine Validierung der von den Nutzern hochgeladenen Daten 
+oder eine Überprüfung der Qualität der verwendeten 
+Sensoren findet \textit{nicht} statt.\\
+
+Die auf \textsc{SensorCommunity} verfügbaren Daten decken die beiden Bereiche
+\begin{itemize}[topsep=2pt,parsep=1pt,itemsep=0.5pt]
+\item[a) ] Wetter-Bedingungen, also Temperatur, Luftdruck, Luftfeuchtigkeit und
+\item[b) ] Feinstaub-Belastung
+\end{itemize}
+ab. Darüber hinaus finden sich einige Messdateien der radioaktiven 
+Umgebungsstrahlung und der Lärmentwicklung. \\
+Die historischen Daten sind im Archivbereich 
+($\rightsquigarrow$ \href{https://archive.sensor.community/}
+{Sensor Community Archiv}) in einer  zeitlich geordneten Struktur in
+Komma separierten Format als Messdateien abgelegt 
+und werden für unterschiedliche Zeitpunkte für die nachfolgenden Analysen
+ herangezogen.
+ 
+Um die typische Anzahl der verfügbaren Messungen zu illustrieren und damit 
+die nachfolgenden Überlegungen zu motivieren, seien
+hier beispielhaft für den 2.\,April 2026 die Mengenverhältnisse aufgeführt. 
+Im Archiv der \textsc{SensorCommunity} sind für diesen Tag 
+\begin{itemize}[topsep=2pt,parsep=1pt,itemsep=0.5pt]
+\item[$\circ$] insgesamt 19796 Messdateien; davon
+\item[$\circ$] 156 Dateien mit zugehörigem Sensor im Großtraum München; davon
+\item[$\circ$] 86 Dateien, die Feinstaub-Messungen beinhalten,  
+\end{itemize}
+verfügbar.\\
+
+Als Mess-Sensor für die Feinstaub-Messungen kommt der SDS011 
+($\rightsquigarrow$ \href{https://cdn-reichelt.de/documents/datenblatt/X200/SDS011-DATASHEET.pdf}{SDS011 Datenblatt})
+zum Einsatz, der für etwa 30\,EUR erhältlich ist (Stand Juni 2026). 
+Hierbei handelt es sich um einen Staubsensor, der die Konzentration des
+Feinstaubs in der Luft über die Beeinflussung der Lichtstreuung einer
+in den Bausatz integrierten Laserdiode detektiert.\\
+Der SDS011 Laser-Staubsensor 
+kann Partikel mit einem Durchmesser von mehr als 0,3$\mu m$ erkennen und 
+ist ausgelegt für die größen-fraktionierende Detektion von 
+\begin{itemize}[topsep=2pt,parsep=1pt,itemsep=0.5pt]
+\item[$\circ$] Partikeln mit einem Durchmesser $d \leq 2,5\mu m$ und 
+\item[$\circ$] Partikeln mit einem Durchmesser $d \leq 10\mu m$.
+\end{itemize}
+Die Messungen erfolgen in der Einheit $\mu g/m^3$ und haben gemäß
+der Herstellerangabe einen relativen Fehler von 15\%. Als mechanisches Bauteil enthält der SDS011 des Weiteren einen Ventilator, der die
+Umgebungsluft ansaugt und zur Lasereinheit leitet. \\
+
+Während nach Herstellerangaben der Mess-Sensor SDS011 in der Lage sein sollte, die beiden Feinstaub-Fraktionen 
+$\mathrm{PM}_{10}$ und $\mathrm{PM}_{2.5}$ zu messen, 
+zeigten sich bei Vergleichsmessungen mit professionellen
+Feinstaub-Messgeräten unter realen Bedingungen Diskrepanzen 
+(vgl.\,\cite{Clements2017}, \cite{Patwardhan2021}): 
+die Messergebnisse des Messsensors SDS011 korrelieren mit 
+den professionell ermittelten $\mathrm{PM}_{x}$
+Werte, aber unterschätzen diese tendenziell. 
+Nach den Untersuchungen in \cite{Laquai2017} fällt diese
+Abweichung bei den $\mathrm{PM}_{10}$
+Messwerten größer aus als bei $\mathrm{PM}_{2.5}$
+ Messdaten.\\ 
+Positiv hingegen fiel in diesen Studien die geringe
+Variabilität der SDS011 Sensoren auf.\\
+Die zuständige Behörde des australischen Bundesstaates 
+New South Wales bezeichnet kostengünstige Feinstaub-Sensoren
+wie etwa den SDS011 daher als \glqq indicative air quality
+instrument\grqq\ (vgl.\,\cite{NSWDepartment2021}).  \\
+
+Da es in dieser Arbeit primär um die \textit{räumliche Analyse} der 
+Daten geht und nicht um deren Interpretierbarkeit im Kontext
+anderer Studienergebnisse bedeutet diese Messungenauigkeit 
+\textit{keine Einschränkung}.\\
+Dennoch, um eventuellen
+Fehlinterpretationen der im folgenden präsentierten Ergebnisse
+mit anderen, gemäß der Norm durchgeführten Feinstaub-Messungen
+vorzubeugen, wird im weiteren Verlauf die Notation 
+$\mathrm{P}_{10}$ und $\mathrm{P}_{2.5}$ verwendet für Messwerte,
+die mit dem $\mathrm{PM}_{10}$ bzw.\,$\mathrm{PM}_{2.5}$ Messwerte
+korrelieren. \\
+
+Die in der Arbeit \cite{Patwardhan2021} erwähnte Unterschätzung
+der professionell ermittelten $\mathrm{PM}_x$ durch die 
+SDS011 Mess-Sensoren kann auch beim Vergleich der Datenreihen 
+der vier Messstationen des Landesumweltamtes mit den Messungen 
+von in der Nähe befindlichen SDS011 Sensoren festgestellt werden 
+(vgl.\,Abb.\,\ref{Abb_Datenanalyse_Vergleich_PM2x5_Messstation_mit_SDS011_Sensoren}). 
+
+\begin{figure}[H] 
+\centering
+\includegraphics[scale = 0.55]
+{Datenanalyse_Vergleich_PM2x5_Messstation_mit_SDS011_Sensoren.png} 
+\caption{\small{Vergleich der stündlichen $\mathrm{PM}_{2.5}$ Mittelwerte  
+der Messstation an der Landshuter Allee mit den $\mathrm{P}_{2.5}$
+ Mittelwerten von SDS011 Sensoren in rund 500m Entfernung}}
+\label{Abb_Datenanalyse_Vergleich_PM2x5_Messstation_mit_SDS011_Sensoren}
+\end{figure} 
+
+Es ist deutlich zu erkennen, dass die für eine einstündige Zeitspanne 
+ermittelten $\mathrm{PM}_{2.5}$ Mittelwerte 
+(\textcolor{orange}{\rule[1mm]{3mm}{0.5mm}})
+der Messstation des Landesumweltamts recht deutlich und durchgängig 
+oberhalb der ebenfalls über eine Stunde gemittelten $\mathrm{P}_{2.5}$
+ Messungen von drei SDS011 Sensoren verlaufen, die in in einer Distanz von 
+ etwa 500m positioniert sind. \\
+  Diese Diskrepanz zeigt sich auch beim Vergleich der übrigen drei vom
+ Landesumweltamt betriebenen Messstationen mit den Daten von in der Nähe
+ befindlichen SDS011 Sensoren, die durch eine systematische Abweichung der 
+ SDS011 Messungen erklärt werden könnte. \\
+Erwähnenswert mit Blick auf 
+Abb.\,(\ref{Abb_Datenanalyse_Vergleich_PM2x5_Messstation_mit_SDS011_Sensoren}) 
+ist die geringe Variabilität der drei SDS011 Sensoren untereinander; alle drei
+Zeitreihen liegen sehr dicht beieinander, was aufgrund ihrer räumlichen 
+Nähe zu erwarten sein sollte (erstes Gesetz der Geografie; vgl.\,Kap.\,(\ref{KapitelTheorieKernidee})).
+
+
+\subsection{Struktur der Daten}  
+\label{KapitelDatenanalyseDatenStruktur}  
+Die Daten sind in den Messdateien im Wide-Format abgelegt, im Einzelnen:
+\begin{itemize}[topsep=2pt,parsep=1pt,itemsep=0.5pt]
+\item[$\circ$] \texttt{sensor\_id}: ein natürliche Zahl zur eindeutigen
+Identifikation des Sensors;
+\item[$\circ$] \texttt{sensor\_type}: eine Zeichenfolge zur Spezifikation
+ des verwendeten Sensor-Typs; bei den nachfolgend betrachteten 
+ Feinstaub-Messungen ist dies ausnahmslos ein Sensor vom Typ SDS011;
+\item[$\circ$] \texttt{location}: eine natürliche Zahl die zur Bestimmung 
+der Position des Sensors genutzt werden kann; 
+\item[$\circ$] \texttt{lat}: die geodätische Breite (Breitengrad, 
+engl.\,\textit{latitude}) angegeben als Gleitkommazahl zur Bestimmung des Winkels 
+der räumlichen Position gemessen als Winkel zur Äquatorebene; 
+\item[$\circ$] \texttt{lon}: die geodätische Länge (Längengrad, 
+engl.\,\textit{longitude}) angegeben als Gleitkommazahl zur Bestimmung des Winkels 
+der räumlichen Position bezogen auf den Nullmeridian (0°); 
+\item[$\circ$] \texttt{timestamp}: eine Zeichenfolge im Format
+YYYY-MM-DDThh:mm:ss zur Bestimmung von Jahr (YYYY), Monat (MM), Tag (DD),
+Stunde (hh), Minute (mm) und Sekunde (ss) der Messung;
+\item[$\circ$] \texttt{P1}: der $\mathrm{P}_{10}$ Messwert 
+(indikativer $\mathrm{PM}_{10}$ Messwert) angegeben in $\mu g/m^3$;
+\item[$\circ$] \texttt{durP1}: eine Gleitkommazahl, die bei keiner der Messungen 
+mit dem Sensor SDS011 belegt ist; 
+\item[$\circ$] \texttt{ratioP1}: eine Gleitkommazahl, die bei keiner der Messungen 
+mit dem Sensor SDS011 belegt ist; 
+\item[$\circ$] \texttt{P2}: der $\mathrm{P}_{2.5}$ Messwert 
+(indikativer $\mathrm{PM}_{2.5}$ Messwert) angegeben in $\mu g/m^3$;
+\item[$\circ$] \texttt{durP2}: eine Gleitkommazahl, die bei keiner der Messungen 
+mit dem Sensor SDS011 belegt ist; 
+\item[$\circ$] \texttt{ratioP2}: eine Gleitkommazahl, die bei keiner der Messungen 
+mit dem Sensor SDS011 belegt ist; 
+\end{itemize}
+ Die beiden geodätischen Koordinaten
+Breitengrad und Längengrad sind hierbei nicht im Sexagesimalsystem, also in
+Grad (°), Minuten (') und Sekunden ('') angegeben, sondern als Dezimalgrad mit 
+drei Nachkommastellen. Dies entspricht einer Granularität von 111m
+(vgl.\,z.\,B.\,$\rightsquigarrow$ 
+\href{https://wiki.openstreetmap.org/wiki/DE:Genauigkeit_von_Koordinaten}
+{Wikipedia: Genauigkeit von Koordinaten}).\\
+
+In Tab.\,(\ref{Tab_Statistsiche_Analyse_Sensor_20260402}) ist beispielhaft 
+für eine Messreihe vom 2.\,April 2026 die Struktur-Analyse aufgeführt. Hierbei
+fällt mit Blick auf die Zähl-Spalte der NA-Werte (3.\,Spalte) auf, dass für 
+alle der insgesamt 569 Messungen an diesem Tag die Einträge
+\texttt{durP1}, \texttt{ratioP1}, \texttt{durP2}, \texttt{ratioP2} nicht 
+belegt sind. Diese vier Größen werden daher nachfolgend \underline{nicht}
+weiter betrachtet. \\
+Die Spannweite (engl.\,\textit{span}) gibt die obere und untere Grenze 
+(gleichsam das kleinste und größte der Quartile) des beobachteten
+Intervalls der Messgröße an. In 
+Tab.\,(\ref{Tab_Statistsiche_Analyse_Sensor_20260402}) erfolgt die Angabe des Modus (engl.\,\textit{mode})
+im Format häufigster Wert und in Klammern dahinter, wie oft dieser Wert beobachtet wurde. Die Anzahl der verschiedenen beobachteten Werte ist in 
+der Spalte \glqq \#Classes\grqq\ wiedergegeben. 
+Für metrisch skalierte Variablen sind der arithmetische Mittelwert (engl.\,\textit{mean}) und
+Median (engl.\,\textit{median}) angegeben.
+
+\begin{table}[H]
+\begin{tabular}{cccccccc}
+\hline
+Column      & Type   &   \#NA &    Mean &   Median & Span & Mode &   \#Classes \\
+\hline \hline
+\texttt{sensor\_id} & int & 0 & 6117 &  6117 & [6117,6117] & 6117 (569) & 1 \\
+\texttt{sensor\_type} & string & 0 &  nan & nan & [nan,nan] & SDS011 (569) & 1 \\
+\texttt{location} & int & 0 & 3089 & 3089 & [3089,3089] & 3089 (569) & 1 \\
+\texttt{lat} & float & 0 & 48.20 & 48.20 & [48.20,48.20] & 48.20 (569) & 1 \\
+\texttt{lon} & float & 0 & 11.51 & 11.51 & [11.51,11.51] & 11.51 (569) & 1 \\
+\texttt{timestamp} & string & 0 & nan &   nan & [nan,nan] & 2026-04... (1) & 569 \\
+\texttt{P1} & float  & 0 & 10.64 & 10.27 & [5,20] & 9.80 (9) & 237 \\
+\texttt{durP1} & float  & 569 & nan & nan & [nan,nan] & nan (569) & 1 \\
+\texttt{ratioP1} & float  & 569 &  nan & nan & [nan,nan] & nan (569) & 1 \\
+\texttt{P2} & float  & 0 & 5.01 & 4.9  & [3,8] & 4.80 (15) & 120 \\
+\texttt{durP2} & float  & 569 & nan & nan & [nan,nan] & nan (569) & 1 \\
+\texttt{ratioP2} & float  & 569 & nan & nan & [nan,nan] & nan (569) & 1 \\
+\hline
+\end{tabular}
+\caption{Statistische Struktur-Analyse beispielhaft für die
+Datenreihe eines SDS011 Sensor vom 2.\,April 2026. 
+\glqq nan\grqq\ (engl.\,\textit{not a number}) bezeichnet
+nicht verfügbare Angaben.}
+\label{Tab_Statistsiche_Analyse_Sensor_20260402}
+\end{table}
+
+Die Häufigkeits-Analyse der $\mathrm{P}_{10}$-Messwerte desselben Sensors
+für den 2.\,April 2026 ist in 
+Abb.\,(\ref{Abb_Datenstruktur_Häufigkeitsanalyse_P1_Sensor6117}) 
+wiedergegeben.
+
+\begin{figure}[H] 
+\centering
+\includegraphics[scale = 0.55]
+{Datenstruktur_P1_Verteilung_Sensor6117.png} 
+\caption{\small{Häufigkeits-Analyse der $\mathrm{P}_{10}$ Messwerte des SDS011 Sensors (ID 6117)}}
+\label{Abb_Datenstruktur_Häufigkeitsanalyse_P1_Sensor6117}
+\end{figure} 
+  
+Hier bestätigt das erkennbar links-steile Histogramm die aus dem 
+Vergleich von Median und arithmetischen Mittelwert der 
+Tab.\,(\ref{Tab_Statistsiche_Analyse_Sensor_20260402})
+genährte Vermutung einer nicht symmetrischen Verteilung der Messwerte.\\ 
+Das Histogramm der $\mathrm{P}_{2.5}$-Messwerte zeichnet für diesen Sensor qualitativ das 
+gleiche Bild.

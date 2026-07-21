@@ -1,0 +1,210 @@
+% Stand 21. Juli 2026
+Die zentralen, im Zuge dieser Arbeit zu adressierenden Fragen
+lauten:
+\begin{itemize}[topsep=2pt,parsep=1pt,itemsep=0.5pt]
+\item[a) ] liefern die betrachteten Feinstaubdaten für den Großraum München 
+Hinweise auf eine mögliche Anisotropie und
+\item[b) ] können die Feinstaubdaten unter Nutzung eines entsprechenden
+Kovarianz-Modells mithilfe des Kriging hinreichend gut 
+beschrieben werden.
+\end{itemize}
+
+\vspace*{6pt}
+Es ist wichtig, sich zu vergegenwärtigen, dass die Frage nach der
+Gültigkeit der (in ihren mathematischen Konsequenzen angenehmeren) 
+Isotropie-Annahme zu klären ist, \textit{bevor} man die Methode 
+des Kriging anwendet: die Wahl des am besten geeigneten
+Kovarianz-Modells für den Kriging Algorithmus beinhaltet 
+neben der Modell-Funktion auch die Vorentscheidung hinsichtlich 
+einer isotropen oder anisotropen Struktur der Daten, sowie 
+ggf.\,die Modellierung der Anisotropie 
+(vgl.\,Kapitel \ref{KapitelTheorieAnisotropie}). 
+
+Auf diesem Hintergrund werden nachfolgend 
+\begin{itemize}[topsep=2pt,parsep=1pt,itemsep=0.5pt]
+\item[$\circ$ ] im Kapitel 
+\ref{KapitelDatenauswertung_Ergebnisse_Beobachtungen}
+zunächst allgemeine Beobachtung bzgl.\,räumlicher und 
+statistischer Verteilung der Messdaten herausgearbeitet.
+\item[$\circ$ ] Im Kapitel
+\ref{KapitelDatenauswertung_Ergebnisse_Variogramme}
+werden die Daten mittels 
+direktionaler Variogramme analysiert,
+welche die Standardmethode der Geostatistik zur 
+Aufdeckung einer möglichen anisotropen Datenstruktur
+darstellen.
+\item[$\circ$ ] Anschließend wird in 
+Kapitel \ref{KapitelDatenauswertung_Ergebnisse_Kriging} 
+die Frage nach einer möglichen 
+Anisotropie mithilfe von 
+konstruierten anisotropen Kovarianz-Modellen unter Nutzung 
+des Kriging Interpolationsverfahren beleuchtet bevor 
+\item[$\circ$] abschließend in Kapitel 
+\ref{KapitelDatenauswertung_VerwandteArbeiten} die 
+gewonnenen Einsichten in den 
+Kontext ähnlicher Arbeiten zum Thema der räumlichen 
+Analyse von Feinstaubmessungen gestellt werden.
+\end{itemize} 
+
+\subsection{Ergebnisse}
+\label{KapitelDatenauswertung_Ergebnisse}
+Alle nachfolgend gezeigten Auswertungen und Grafiken
+wurden in der Programmiersprache \texttt{Python} erstellt. 
+Hierbei wurden die Analysen zu ungerichteten und direktionalen
+Variogrammen mithilfe der Bibliothek \texttt{Scikit GStat}
+($\rightsquigarrow$ \href{https://scikit-gstat.readthedocs.io/en/latest/index.html}{Scikit GStat Home}) und Analysen mit 
+Bezug zu Kovarianz-Modellen und Kriging mithilfe der 
+Bibliothek \texttt{GSTools} 
+($\rightsquigarrow$ 
+\href{https://geostat-framework.readthedocs.io/projects/gstools/en/stable/index.html}{GSTools Quickstart}) vorgenommen.\\
+%Es wurde ausschließlich die Variante des ordinary Kriging
+%(vgl.\,Kapitel \ref{KapitelTheorie_OrdinaryKriging})
+%für die Auswertungen herangezogen.
+
+Insgesamt standen für die Auswertung die täglichen, 
+bereits bereinigten Daten und an verschiedenen Orten 
+positionierter Sensoren für 
+die Monate Juli 2025 (96 Sensoren), November 2025 (87 Sensoren)
+ und April 2026 (83 Sensoren) zur
+Verfügung.\\
+Die erratisch anmutende Auswahl der betrachteten Monate rührt daher, dass 
+anfänglich auch der \textit{saisonale Einfluss} auf die Modellierung der
+Feinstaubdaten untersucht und daher ein
+exemplarischer Vertreter aller vier Jahreszeiten einbezogen 
+werden sollte. Aus Zeitgründen wurde kein Winter-Monat mehr 
+berücksichtigt und diese Untersuchungen als 
+Perspektive in Kapitel \ref{KapitelDatenauswertung_Diskussion} aufgenommen.  \\   
+
+Den typischen Verlauf der $\mathrm{P}_{2.5}$-Daten
+eines einzelnen Sensors am 1.11.2025
+zeigt Abb.\,(\ref{Abb_Datenauswertung_Sensor4430_P25TagesMessungNov2025}); 
+der Verlauf desselben Sensors für den gesamten 
+November ist in 
+Abb.\,(\ref{Abb_Datenauswertung_Sensor4430_P25MonatsMessungNov2025})
+dargestellt. 
+
+\begin{figure}[H] 
+\centering
+\includegraphics[scale = 0.45]{Datenauswertung_Sensor4430_P25TagesMessungNov2025} 
+\caption{\small{Tagesverlauf der $\mathrm{P}_{2.5}$-Messungen des 
+Sensors (ID 4430) am 1.\,November 2025; 
+eingezeichnet der Mittelwert (\textcolor{NavyBlue}{\rule[1mm]{3mm}{0.5mm}})
+und der Median (\textcolor{CarnationPink}
+{\rule[1mm]{3mm}{0.5mm}})}}
+\label{Abb_Datenauswertung_Sensor4430_P25TagesMessungNov2025}
+\end{figure} 
+
+\begin{figure}[H] 
+\centering
+\includegraphics[scale = 0.45]{Datenauswertung_Sensor4430_P25MonatsMessungNov2025} 
+\caption{\small{Monatsverlauf der $\mathrm{P}_{2.5}$-Messungen des 
+Sensors (ID 4430) im November 2025; 
+eingezeichnet der Mittelwert (\textcolor{NavyBlue}{\rule[1mm]{3mm}{0.5mm}})
+und der Median (\textcolor{CarnationPink}
+{\rule[1mm]{3mm}{0.5mm}})}}
+\label{Abb_Datenauswertung_Sensor4430_P25MonatsMessungNov2025}
+\end{figure} 
+
+Da in beiden Abbildungen eine hohe Schwankungsbreite
+erkennbar ist, wurden für die nachfolgenden Betrachtungen die
+monatlichen arithmetischen Mittelwerte und der monatliche Median 
+pro Sensor betrachtet\footnote{Ein typischer 
+Sensor nimmt pro Tag etwa 580 Messungen 
+(jeweils für $\mathrm{P}_{10}$ und $\mathrm{P}_{2.5}$ ) auf, so dass 
+für die Berechnung des Mittelwerts bzw.\,des Medians 
+rund $30\cdot 580=17400$ Werte herangezogen werden.}.
+
+\subsubsection{Allgemeine Beobachtungen}
+\label{KapitelDatenauswertung_Ergebnisse_Beobachtungen}
+Abb.\,(\ref{Abb_Datenauswertung_VerteilungMesspunkteApr2026}) 
+zeigt beispielhaft für den April 2026 die Verteilung der 83 
+Sensoren innerhalb der Stadtgrenzen von München. Hierbei 
+symbolisieren die braun eingezeichneten Linien primäre 
+und sekundäre Straßen gemäß der
+\texttt{OpenStreetMap} Einteilung
+($\rightsquigarrow$ \href{https://www.openstreetmap.org/relation/62428}
+{OSM: Munich}).
+
+\begin{figure}[H] 
+\centering
+\includegraphics[scale = 0.52]{Datenauswertung_VerteilungMesspunkteApr2026} 
+\caption{\small{Räumliche Verteilung der für die Analyse der $\mathrm{P}_{2.5}$-Messungen 
+im April 2026 berücksichtigten Sensoren (\textcolor{ForestGreen}{$\bullet$}); Zentrum der
+azimuthalen Projektion ist der Marienplatz 
+(\textcolor{gray}{$\boldsymbol{\mathrm{X}}$})}}
+\label{Abb_Datenauswertung_VerteilungMesspunkteApr2026}
+\end{figure} 
+ 
+\begin{figure}[H] 
+\centering
+\includegraphics[scale = 0.52]{Datenauswertung_P25MessungenApr2026} 
+\caption{\small{Arithmetischer Mittelwert der $\mathrm{P}_{2.5}$-Messungen 
+im April 2026; Zentrum der azimuthalen Projektion ist der 
+Marienplatz (\textcolor{gray}{$\boldsymbol{\mathrm{X}}$})}}
+\label{Abb_Datenauswertung_P25MessungenApr2026}
+\end{figure} 
+
+In 
+Abb.\,(\ref{Abb_Datenauswertung_P25MessungenApr2026}) 
+sind farbkodiert die arithmetischen Mittelwerte der 
+$\mathrm{P}_{2.5}$-Messungen dieser Sensoren wiedergegeben.
+Bei der Betrachtung erkennt man, dass die Sensoren auf
+ einer Fläche von 
+überschlagen etwa $20\,km$ Ausdehnung in Ost-West-Richtung und 
+$15\,km$ 
+Ausdehnung in Nord-Süd-Richtung verteilt sind.
+Daraus ergibt sich 
+die Abschätzung, dass die Verteilung der paarweisen Distanzen nach 
+oben durch einen Wert von etwa $\sqrt{20^2 + 15^2}= 25\,km$ beschränkt
+sein sollte. 
+
+\begin{figure}[H] 
+\centering
+\includegraphics[scale = 0.45]{Datenauswertung_VerteilungDistanzenApr2026} 
+\caption{\small{Häufigkeits-Verteilung der paarweisen Distanzen 
+$R$ der 
+83 Sensoren im April 2026}}
+\label{Abb_Datenauswertung_VerteilungDistanzenApr2026}
+\end{figure} 
+
+Diese Abschätzung wird durch die 
+Abb.\,(\ref{Abb_Datenauswertung_VerteilungDistanzenApr2026})  
+bestätigt, in der die Häufigkeits-Verteilung der 
+paarweisen Distanzen $R$ dargestellt ist und die ein 
+Maximum der euklidischen Distanzen bei rd.\,$7\,km$ 
+aufweist. Des Weiteren fällt auf, dass die Anzahl 
+der Distanz-Paare für Werte größer als dieses 
+Häufigkeits-Maximums bis hin zum maximalen Wert bei etwa 
+$R_{max}=22\,km$ sehr schnell abfällt. Daher müssen die \textit{absoluten Häufigkeiten}, 
+die bei den nachfolgenden Schätzungen der Semivarianz
+einfließen, insbesondere für diese Distanz-Klassen 
+genau betrachtet 
+werden. Die in der Abbildung ausgewiesene Anzahl $N$ 
+der in der Zählung berücksichtigten Paare 
+errechnet sich gemäß $N = n\cdot (n-1)/2$, also 
+$83\cdot(83-1)/2=3403$ 
+(vgl.\,Kapitel \ref{KapitelTheorieVariogrammSchätzung}). \\
+
+Abb.\,(\ref{Abb_Datenauswertung_VerteilungP25MesswerteApr2026}) 
+verdeutlicht, dass -wie bei den Einzelmessungen 
+(vgl.\,Abb.\,(\ref{Abb_Datenstruktur_Häufigkeitsanalyse_P1_Sensor6117}))- 
+auch für die arithmetisch gemittelten Messwerte eine 
+Normalverteilungs-Annahme ungerechtfertigt erscheint.
+
+\begin{figure}[H] 
+\centering
+\includegraphics[scale = 0.45]{Datenauswertung_VerteilungP25MesswerteApr2026} 
+\caption{\small{Häufigkeits-Verteilung der $\mathrm{P}_{2.5}$ Messwerte 
+im April 2026}}
+\label{Abb_Datenauswertung_VerteilungP25MesswerteApr2026}
+\end{figure} 
+
+
+
+
+
+
+
+
+
+

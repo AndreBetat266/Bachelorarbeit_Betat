@@ -1,0 +1,274 @@
+% Stand 18. Juli 2026
+\subsubsection{Analyse der direktionalen Variogramme}
+\label{KapitelDatenauswertung_Ergebnisse_Variogramme}
+Analog zu der in Kapitel \ref{KapitelTheorieVariogramm} 
+eingeführten ungerichteten empirischen Semivarianz 
+erfordert auch die Untersuchung der richtungsabhängigen 
+empirischen  Semivarianz eine Vorauswahl hinsichtlich 
+Schätzfunktion und Kovarianz-Modell.\\
+Ein guter Startpunkt für die zu treffende Wahl 
+sind die Schätzfunktion nach Cressie-Hawkins
+und das Matérn Kovarianz-Modell: ersteres, da es sich in
+Voruntersuchungen als  besonders robust erwiesen 
+hat; letzteres, da dessen funktionale Beschreibung durch den
+zusätzlichen Parameter $\nu$ ein hohe Flexibilität besitzt.\\
+Die Anpassung (\textit{engl.:} \glqq fit\grqq ) der Schätzungen an das Parameter-Tupel 
+(Sill, Range, Nugget) der theoretischen 
+Kovarianz-Funktion erfolgt mithilfe eines 
+Optimierungs-Verfahren\footnote{Es wird der 
+\glqq \textbf{T}rust \textbf{R}egion
+\textbf{R}eflective\grqq\ Optimierungs-Algorithmus verwendet,
+welches oft für die nicht-lineare Kurvenanpassung zum Einsatz kommt.}, dem ein beschränkendes Intervall für 
+den anzupassenden Parameter übergeben wird.\\
+Für den Range Parameter wird dieses Intervall mit
+$\mathcal{J}^{(R)}_{fit}=
+[0\,m,\,R_{max}]$ festgelegt, wobei der \textit{obere} 
+Wert $R_{max}$ durch die maximale paarweise
+euklidische Distanz der
+betrachteten Sensoren vorgegeben ist 
+(z.\,B.\,wäre in 
+Abb.\,(\ref{Abb_Datenauswertung_VerteilungDistanzenApr2026})
+$R_{max}=22\,km$).\\
+
+Aus rein mathematischer Perspektive ist die Beschränkung des
+Range Parameters durch $R_{max}$ \textit{nicht} notwendig.
+Die Begründung hierfür hat eher numerische Gründe und berührt Fragen 
+des wissenschaftlichen Stils:
+\begin{itemize}[topsep=2pt,parsep=1pt,itemsep=0.5pt]
+\item[a) ] falls der \glqq wahre\grqq\ Range die beobachteten Entfernungen 
+überschreitet, kann es dazu kommen, dass viele Modelle mit großen 
+geschätzten Werten für den Range nahezu identische Residuen 
+aufweisen: das Optimierungs-Problem ist in diesem Falle schlecht konditioniert.
+\item[b) ] Wenn der Sill innerhalb der beobachteten Entfernungen nicht erreicht wird,
+enthalten die Daten nicht genügend Information, um den \glqq wahren\grqq\ Range 
+zu schätzen. Die Angabe der größten beobachteten Distanz $R_{max}$ als Schätzung für 
+den Range erscheint unter diesem Blickwinkel \glqq aufrichtiger\grqq als
+der Rückgabewert einer unbeschränkten und möglicherweise unplausiblen
+ numerischen Anpassung.
+\end{itemize}
+
+\vspace*{5pt}
+
+Mithilfe dieser Vorauswahl und mit einer Winkel-Schrittweite von 
+$20^\circ$ werden die direktionalen Semivarianzen geschätzt 
+und an das festgelegte Kovarianz-Modell angepasst.\\
+
+\begin{figure}[H] 
+\centering
+\includegraphics[scale = 0.45]{Datenauswertung_P25MessungenApr2026DirektionaleSemivarianzBeispielFit340} 
+\caption{\small{Anpassung der Kovarianz-Funktion 
+(\textcolor{NavyBlue}{\rule[1mm]{3mm}{0.5mm}}) an die
+direktionale ($\vartheta=340^\circ$) empirische Semivarianz 
+(\textcolor{Sepia}{$\bullet$});
+oberhalb der empirischen Semivarianz sind die Umfänge 
+des Lags vermerkt}}
+\label{Abb_Datenauswertung_P25MessungenApr2026DirektionaleSemivarianzBeispielFit340}
+\end{figure} 
+
+\begin{figure}[H] 
+\centering
+\includegraphics[scale = 0.45]{Datenauswertung_P25MessungenApr2026DirektionaleSemivarianzBeispielFit140} 
+\caption{\small{Anpassung der Kovarianz-Funktion 
+(\textcolor{NavyBlue}{\rule[1mm]{3mm}{0.5mm}}) an die
+direktionale ($\vartheta=140^\circ$) empirische Semivarianz 
+(\textcolor{Sepia}{$\bullet$});
+oberhalb der empirischen Semivarianz sind die Umfänge 
+des Lags vermerkt}}
+\label{Abb_Datenauswertung_P25MessungenApr2026DirektionaleSemivarianzBeispielFit140}
+\end{figure} 
+
+Die 
+Abb.\,(\ref{Abb_Datenauswertung_P25MessungenApr2026DirektionaleSemivarianzBeispielFit340}) 
+und 
+(\ref{Abb_Datenauswertung_P25MessungenApr2026DirektionaleSemivarianzBeispielFit140})
+zeigen zwei typische Ergebnisse dieser Anpassung der
+Matérn Kova\-ri\-anz-Funktion an die richtungsabhängig geschätzten Semivarianzen
+basierend auf den gemittelten 
+$\mathrm{P}_{2.5}$-Messwerten für April 2026.\\
+Drei Dinge fallen an diesen Abbildungen auf:
+\begin{itemize}[topsep=2pt,parsep=1pt,itemsep=0.5pt]
+\item[1)] Die größten Distanzklassen (\textit{Lags}) 
+der Semivarianz-Schätzung (\textcolor{Sepia}{$\bullet$}) enthalten
+erheblich weniger Distanzpaare als die kleinsten 
+(die Anzahl der Paare in den Lags ist in Klammern
+ oberhalb der Symbole vermerkt). Dies ist deswegen 
+erwähnenswert, weil gerade die größten Lags maßgeblich zur
+ Bestimmung des Range des theoretischen Modells beitragen 
+ und geringe Umfänge der Distanzklassen die Stabilität der Schätzung 
+ nachteilig beeinflussen.
+\item[ 2) ] Die empirische Semivarianz erreicht in keiner der 
+beiden Winkelrichtungen das Sill-Plateau, wie es bei hinreichend 
+großer Wahl des Lags stattfinden sollte. 
+\item[3) ] Als Folge davon war es in
+Abb.\,(\ref{Abb_Datenauswertung_P25MessungenApr2026DirektionaleSemivarianzBeispielFit340})
+für den Algorithmus optimal, den Range auf den größten, möglichen Wert 
+von $R_{max}$ des beschränkenden Intervalls $\mathcal{J}^{\mathrm{(R)}}_{fit}$ 
+zu setzen. Bei der Anpassung in
+Abb.\,(\ref{Abb_Datenauswertung_P25MessungenApr2026DirektionaleSemivarianzBeispielFit140})
+wurde der Range etwa in die Mitte des Intervalls
+$\mathcal{J}^{\mathrm{(R)}}_{fit}$ gesetzt, so dass links und rechts, 
+bzw.\, ober- und unterhalb der angepassten Werte für Range und Sill etwa 
+gleich viele der geschätzten empirischen Semivarianzen liegen.
+\end{itemize}
+
+Diese Tendenzen gelten auch für andere, mögliche 
+Kombinationen  von Schätzfunktion der Semivarianz und 
+Kovarianz-Modell, weshalb die getroffenen
+ Beobachtungen mit großer Wahrscheinlichkeit nicht durch eine
+ungünstige Wahl von Schätzer und theoretischem Modell verursacht
+sind, sondern aus der versuchsbedingten, räumlichen Verteilung 
+der Sensoren resultieren. 
+
+\begin{figure}[H] 
+\centering
+\includegraphics[scale = 0.45]{Datenauswertung_P25_Apr2026_VariogrammKarte_Range_Matern} 
+\caption{\small{Direktionale Variogramm-Karte für den 
+Range basierend auf den gemittelten 
+$\mathrm{P}_{2.5}$- Messwerten für April 2026}}
+\label{Abb_Datenauswertung_P25_Apr2026_VariogrammKarte_Range_Matern}
+\end{figure} 
+
+In Abb.\,(\ref{Abb_Datenauswertung_P25_Apr2026_VariogrammKarte_Range_Matern}) 
+ist die direktionale Variogramm-Karte wiedergegeben, die 
+sich aus allen 18 richtungsabhängigen Schätzungen der Semivarianz zusammensetzt.
+Diese Art der Darstellung, bei der die 
+Anpassungen an theoretische Kovarianz-Modelle für
+richtungsabhängige Schätzungen der Semivarianz dargestellt
+sind, orientiert sich an den Rosen-Diagrammen und wird 
+\,z.\,B.\,in \cite[Kap.\,8.1]{Agterberg2014} verwendet.\\
+Die Winkelangaben der 
+Abb.\,(\ref{Abb_Datenauswertung_P25_Apr2026_VariogrammKarte_Range_Matern}) 
+beziehen sich auf die Drehung im Uhrzeigersinn
+gegen die Ost-West-Achse. Die $360^\circ / 20^\circ=18$ blauen
+Punkte (\textcolor{CornflowerBlue}{$\bullet$}) kennzeichnen 
+die Parame\-ter-Anpassungen der geschätzten Semivarianz in die 
+angegeben Winkelrichtung. Die Parameter-Anpassungen sind durch
+eine Linie miteinander verbunden und der sich ergebende
+Polygonzug ist bläulich 
+(\textcolor{CornflowerBlue}{\rule[-0.3mm]{3mm}{3mm}}) 
+eingefärbt. Hierdurch lassen sich eventuelle
+Abweichungen von der Rotations-Symmetrie 
+(was einem Kreis entspräche) besonders leicht 
+erkennen. \\
+Bei Betrachtung der 
+Abb.\,(\ref{Abb_Datenauswertung_P25_Apr2026_VariogrammKarte_Range_Matern})
+wird eine Besonderheit sichtbar, die bereits im Kontext 
+der Diskussion der 
+Abb.\,(\ref{Abb_Datenauswertung_P25MessungenApr2026DirektionaleSemivarianzBeispielFit340}) 
+und 
+(\ref{Abb_Datenauswertung_P25MessungenApr2026DirektionaleSemivarianzBeispielFit140})
+aufgezeigt wurde: bei der Anpassung des Parameters Range 
+\glqq klebt\grqq\ der Algorithmus oft an der oberen Schranke fest, 
+sodass der in diesen Fällen durch die Anpassung ermittelte Wert für
+ den Range mit hoher Wahrscheinlichkeit ein Artefakt 
+der Optimierung aber nicht den \glqq wahren\grqq\ Wert widerspiegelt.\\
+
+Dieses Verhalten wurde für alle drei der verfügbaren, 
+monatlich gemittelten Daten beobachtet, sowohl für die Messungen der
+Konzentration von $\mathrm{P}_{2.5}$ wie auch von 
+$\mathrm{P}_{10}$. Setzt man den oberen Wert des Intervalls 
+$\mathcal{J}^{\mathrm{(R)}}_{fit}$ für die Range Anpassung 
+auf den unrealistischen Wert von $100\,km$ zeigt sich dasselbe
+Verhalten bei Betrachtung der Variogramm-Karte: der 
+Optimierungs-Algorithmus setzt den Range-Parameter 
+auf diesen maximal zulässigen Wert fest. 
+Ein Beispiel der Anpassung der Kovarianz-Funktion an die
+direktionale empirische Semivarianz sowie die direktionale
+Variogramm-Karte unter dieser Nebenbedingung  
+befinden sich im Anhang 
+(Abb.\,(\ref{Abb_Datenauswertung_P25MessungenApr2026DirektionaleSemivarianzBeispielFit340_NoConstraints})
+und
+Abb.\,(\ref{Abb_Datenauswertung_P25MessungenApr2026VariogrammRoseRange_NoConstraints})
+). 
+
+Abb.\,(\ref{Abb_Datenauswertung_P25_Apr2026_VariogrammKarte_Range_Matern})
+allein lässt somit keine Aussage über eine mögliche Anisotropie
+oder der darauf aufbauenden Unterscheidung geometrische versus zonale Anisotropie zu.\\
+
+\begin{figure}[H] 
+\centering
+\includegraphics[scale = 0.45]{Datenauswertung_P25_Nov2025_VariogrammKarte_Sill_Matern} 
+\caption{\small{Direktionale Variogramm-Karte für den 
+Sill basierend auf den gemittelten 
+$\mathrm{P}_{2.5}$- Messwerten für November 2025}}
+\label{Abb_Datenauswertung_P25_Nov2025_VariogrammKarte_Sill_Matern}
+\end{figure} 
+
+Interessanterweise zeigt die direktionale Variogramm-Karte 
+für den Sill\footnote{Zur Erinnerung: Der Sill bezeichnet das Niveau, auf welches die 
+Semivarianz für große Entfernungen 
+konvergiert. Insbesondere beinhaltet der Sill den ggf.\,vorhandenen Nugget-Effekt.} eine ausgeprägtere Bevorzugung einer Richtung auf, wie aus der
+Abb.\,(\ref{Abb_Datenauswertung_P25_Nov2025_VariogrammKarte_Sill_Matern}) 
+hervorgeht.
+
+In dieser Abbildung wurde zusätzlich die Achse eingezeichnet, 
+entlang der der größte Wert für den Sill
+ermittelt wurde (\textcolor{RubineRed}{\rule[0.4mm]{3mm}{1mm}}), sowie
+senkrecht dazu eine Achse derselben Länge. Durch diese 
+Konstruktion soll die visuelle Abschätzung 
+der Asymmetrie erleichtert werden. 
+So ist der Wert des Sill entlang der Achse 
+$40^\circ \leftrightarrow 220^\circ$ in
+Abb.\,(\ref{Abb_Datenauswertung_P25_Nov2025_VariogrammKarte_Sill_Matern})
+um den Faktor 2-3 höher als in der senkrecht dazu
+stehenden Richtung.\\
+Diese Asymmetrie fällt für die Daten der Monate April 2026 und 
+Juli 2025 deutlich schwächer aus; die zugehörige Abbildung 
+befindet sich im Anhang 
+(vgl.\,Abb.\,(\ref{Abb_Datenauswertung_P25_Apr2026Jul2025_VariogrammKarte_Sill_Matern})). \\
+
+Nun stellen direktionale Variogramm-Karten des Sill 
+keine Standardmethode zur 
+Detektion einer möglichen Anisotropie dar,
+welche sich ja vorrangig in der Richtungsabhängigkeit des
+Range offenbart. Andererseits charakterisieren Sill und
+Range denselben 
+ausgezeichneten Punkt in der Variogramm-Analyse: 
+sie bezeichnen die $y$- und $x$-Koordinate des Punktes,
+an dem das Variogramm in das Plateau der Unkorreliertheit 
+einmündet.\\ 
+Diese Korrelation lässt sich 
+anschaulich verstehen: 
+Für viele der theoretischen Kovarianz-Modelle hat die
+isotrope Semivarianz die Form (vgl.\,Gl.\,(\ref{Gl_Semivarianz_isotroperFall}))
+\begin{equation}
+\gamma(r) = c_0 + \sigma^2 f\left( \frac{r}{a}\right),
+\end{equation} mit
+\begin{itemize}[topsep=2pt,parsep=1pt,itemsep=0.5pt]
+\item[$\circ$] dem Nugget $c_0$,
+\item[$\circ$] dem Sill $\sigma^2$,
+\item[$\circ$] dem Range $a$ und
+\item[$\circ$] einer Funktion $f$ mit $f(0) = 0$ und 
+$\displaystyle \lim_{r \longrightarrow \infty} f(r)=1$.
+\end{itemize}
+Damit folgt
+\begin{equation}
+\gamma'(r) := \frac{\mathrm{d}\gamma(r)}{\mathrm{d}r}=
+\frac{\sigma^2}{a}\cdot f'(r)
+\end{equation}
+Wenn der Sill noch nicht klar erreicht wird und somit die Daten im Wesentlichen nur den 
+anfänglichen Anstiegsbereich gut abbilden, dann bestimmt die Anpassung vorrangig 
+das Verhältnis $\frac{\sigma^2}{a}$ aber nicht die Einzelgrößen $\sigma^2$ und $a$. 
+Eine Erhöhung von $a$ muss somit zu einem Anwachsen von $\sigma^2$ führen, damit die 
+Kurvenanpassung weiterhin zu den beobachteten Punkten passt. 
+Das führt zu einer positiven Korrelation der beiden Größen Sill und Range. 
+Theoretisch fundiert lässt sich weitergehend sogar zeigen, dass unter bestimmten 
+Voraussetzungen Sill und Range \textit{nicht} konsistent unabhängig voneinander geschätzt werden 
+können (vgl.\,\cite{Zhang2004}). 
+
+
+Somit \textit{könnte} ein winkelabhängige Asymmetrie des Sill 
+auf eine Winkelabhängigkeit des Range und somit indirekt auf eine 
+Anisotropie hindeuten. \\
+
+Da die Analyse der Variogramm-Karten \textit{indirekt} Hinweise auf mögliche 
+Anisotropie liefert, wird im folgenden 
+Kapitel \ref{KapitelDatenauswertung_Ergebnisse_Kriging} untersucht, 
+ob sich diese Indizien auch in der Vorhersagequalität des Kriging 
+widerspiegeln. Hierzu wurden anisotrope Kovarianz-Modelle konstruiert 
+und mittels einer Variante des Cross Validation bewertet.
+
+
+
+
+ 

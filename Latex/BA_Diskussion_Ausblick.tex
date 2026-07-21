@@ -1,0 +1,133 @@
+% Stand 19. Juli 2026
+\label{KapitelDatenauswertung_Diskussion}
+Zielsetzung dieser Arbeit war die Untersuchung, ob die betrachteten
+Feinstaubmessungen Hinweise auf eine räumliche Anisotropie 
+liefern und ob sich diese bei der Modellierung mittels Kriging
+berücksichtigen lässt.\\
+Die Untersuchungen in dieser Arbeit liefern Indizien für das Vorliegen einer 
+anisotropen Verteilung der Feinstaub-Messungen in der 
+Stadt München aber keinen nach wissenschaftlichen Maßstäben
+haltbaren Beweis. Insbesondere kann die Frage nach dem
+Vorliegen einer  geometrischen oder zonalen Anisotropie 
+nicht geklärt werden. \\
+Die Ergebnisse des Kriging unter der Anisotropie-Annahme
+liefern plausible Ergebnisse.\\
+
+Die Variogramm-Karten für den Range als 
+Standard-Methode zur Detektion von räum\-li\-cher Anisotropie 
+liefern unplausible Ergebnisse:
+der Range wird mittels einer restringierten 
+numerischen Anpassung an ein theoretisches 
+Kovarianz-Modell bestimmt, wobei der Range-Parameter nach oben 
+durch die die maximale, paarweise Distanz der untersuchten
+Sensoren beschränkt ist, die bei etwa $21-24\,k m$ liegt.\\
+Da die Schätzungen der empirischen Semivarianz vielfach 
+nicht die zu erwartende Sättigung in das Sill-Plateau bei
+großen Werten des Lag aufweisen
+(vgl.\,z.\,B.\,Abb.\,(\ref{Abb_Datenauswertung_P25MessungenApr2026DirektionaleSemivarianzBeispielFit340}))
+kommt es bei der Anpassung zu numerischen Artefakten: der 
+Range der Anpassung 
+wird als die maximale, paarweise Distanz geschätzt.\\
+%Die Untersuchung von \cite{Jang2023} oder \cite{Kim2014} deuten
+% darauf hin, dass die Reichweiten mit $20-60\,km$ deutlich 
+% höher liegen.\\
+ 
+Für den Sill als einem weiteren Parameter der numerischen Anpassung
+gibt es keine vorgegebene Beschränkung des Fit-Intervalls. 
+Interessanterweise zeigen die Variogramm-Karten für den Sill eine bevorzugte
+Richtung, in der der Sill deutlich höhere Werte annimmt als in einer 
+senkrecht dazu stehenden Richtung. 
+%Bei einer der drei Datensätze war es
+%die Richtung $40^\circ \leftrightarrow 220^\circ$ bei den anderen beiden
+%die Achse $160 \leftrightarrow 340^\circ$. 
+Das ist kein stringenter 
+Beweis für eine räumliche Anisotropie der Daten, könnte aber ein Indiz sein:
+Sill und Range charakterisieren als $y$- und $x$-Koordinate denselben
+ausgezeichneten Punkt des Übergangs vom ansteigenden
+Ast hin zum Plateau, welches den Bereich der räumlichen Unkorreliertheit
+der Zufallsvariablen einleitet. Dieser Zusammenhang führt zu einer 
+Korrelation beider Parameter, solange 
+die Beobachtungen im ansteigenden Ast der Semivarianz liegen. \\
+
+Im letzten Teil der Arbeit werden Kriging-Vorhersagen für
+anisotrop konstruierte Ko\-va\-ri\-anz-Modelle betrachtet, 
+deren Parametrisierungen mit den vorherigen Beobachtungen 
+konsistent sind. Diese mithilfe einer Leave-One-Out Cross-Validation
+durchgeführten Analysen weisen auf eine ausgezeichnete Richtung hin,
+welche in allen drei Sätzen der gemittelten Messungen gesehen wird. 
+Die Aussagekraft dieser Analyse ist aufgrund der beschriebenen Einschränkungen und der hohen Varianz der
+ermittelten Werte begrenzt. \\
+%
+%\begin{table}[H]
+%\centering
+%\begin{tabular}{ccc}
+%\hline
+%Datensatz & Vorzugsachse Sill-Karte & Vorzugsachse Kriging \\
+%\hline \hline
+%Juli 2025 & $160^\circ \leftrightarrow 340^\circ$ & 
+%$40^\circ \leftrightarrow 220^\circ$ \\
+%November 2025 & $40^\circ \leftrightarrow 220^\circ$ & 
+%$40^\circ \leftrightarrow 220^\circ$ \\
+%April 2026 & $60^\circ \leftrightarrow 240^\circ$ & 
+%$40^\circ \leftrightarrow 220^\circ$ \\
+%\end{tabular}
+%\caption{Übersicht der explorativ gefundenen Vorzugsrichtungen}
+%\label{Tab_Grenzwerte_Feinstaub_Landesamt}
+%\end{table}
+
+\textcolor{red}{Geometrsixhw Besonderheiten der Sensor-Positionen?}
+
+Folglich wurden Ursachen dieser möglichen Anisotropie systematisch \textit{nicht} weiter untersucht.
+Ein paar erste Vermutungen lassen sich aber anstellen:
+auf Grundlage der vorliegenden Daten erscheint eine 
+Erklärung anhand einer vorherrschenden Windrichtung wenig plausibel:
+die betrachteten Datensätze beschreiben die monatlichen Mittelwerte von 
+Sensoren, welche eine Fläche von überschlägig $20\,km \cdot 15\,km=300\,km^2$
+abdecken und darüber hinaus noch unterschiedlichen Jahreszeiten zuzuordnen sind. \\
+Wahrscheinlicher erscheinen zeitlich unveränderliche bauliche
+oder vegetative Gegebenheiten als mögliche Erklärung.\\
+% So
+%würde beispielsweise der Englische Garten als eine große Grünfläche 
+%mit einer ausgeprägten Längenstreckung in Richtung von etwa $58^\circ$
+%eine höhere Reichweite der Korrelation des Feinstaubs entlang dieser 
+%Achse erklären können (vgl.\,Abb.\,(\ref{Abb_Winkelposition_Englischer_Garten})).
+%\begin{figure}[H] 
+%\centering
+%\includegraphics[scale = 0.44]{Abb_Winkelposition_Englischer_Garten} 
+%\caption{\small{Stadtgrenzen von München und grün umrandet der Englische Garten; Zentrum der
+%azimuthalen Projektion ist der Marienplatz 
+%(\textcolor{gray}{$\boldsymbol{\mathrm{X}}$})}}
+%\label{Abb_Winkelposition_Englischer_Garten}
+%\end{figure} 
+
+
+Zusammenfassend sprechen die Ergebnisse dafür, dass anisotrope Modelle bei
+der räumlichen Analyse der betrachteten Feinstaubdaten eine sinnvolle
+Erweiterung isotroper Modelle darstellen können. Für eine belastbare
+Bestätigung wären jedoch umfangreichere Datensätze und weiterführende
+ Untersuchungen erforderlich.\\
+
+Als weitere Untersuchungen würden sich anbieten:
+\begin{itemize}[topsep=2pt,parsep=1pt,itemsep=0.5pt]
+\item[$\circ$] Untersuchung eines größeren Untersuchungsgebietes 
+bei vergleichbarer Sensordichte.
+\item[$\circ$] Die Betrachtung deutlich längerer Zeiträume,
+wie sie in verwandten Arbeiten durchgeführt wurde, könnte
+ebenfalls die Aussagekraft der Analysen deutlich erhöhen.
+\item[$\circ$] Da die Messdaten nicht normal-verteilt sind, 
+wäre es aufschlussreich, die Auswirkungen einer 
+vorherigen Transformation der schiefen Daten zu testen.
+\item[$\circ$] Die Untersuchung möglicher saisonaler Einflüsse 
+ist ein guter Einstieg in eine mög\-licher\-wei\-se noch
+detailliertere raum-zeitliche Modellierung der 
+Feinstaubdaten.    
+\item[$\circ$] Die Verwendung der Kriging Methode mit externem Drift 
+(universal Kriging) in Kombination mit anisotropen Kovarianz-Modellen wäre 
+eine weitere vielversprechenden Analyse.
+\end{itemize}
+
+
+
+
+
+

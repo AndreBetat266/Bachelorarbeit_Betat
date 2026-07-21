@@ -1,0 +1,101 @@
+% Stand 25. Juni 2026
+\subsection{Datenbereinigung}
+\label{KapitelDatenanalyseDatenbereinigung}
+Die pro Tag für den Großraum München verfügbaren Datenreihen
+unterschiedlicher Sensoren und damit unterschiedlicher räumlicher
+Position weisen eine stark heterogene Qualität auf. 
+Aufgrund der pro Tag mit 80-100 Dateien 
+(vgl.\,Kap.\,\ref{KapitelDatenanalyseDatenHerkunft}) eher geringen
+Anzahl von Fein\-staub-Messungen ist es ratsam, möglichst
+viele der Dateien nach einer eventuellen Datenbereinigung für 
+die weiteren Analysen verwenden zu können und so wenig wie möglich 
+Dateien zu verwerfen.
+
+Die Messreihen der unterschiedlichen Sensoren lassen sich 
+hinsichtlich Qualität grob in fünf Kategorien einteilen:
+\begin{itemize}[topsep=2pt,parsep=1pt,itemsep=0.5pt]
+\item[a)] die Messreihen weisen größere zeitliche Unterbrechungen auf;
+\item[b)] die Messreihen weisen NA-Werte auf;
+\item[c)] die Messreihen weisen im Vergleich zu Messreihen der übrigen Sensoren  
+auffallend wenige verschiedene Messwerte auf;
+\item[d)] die Messreihen weisen für den PM2.5- und/oder den PM10-Messwert 
+\textit{aufeinanderfolgend} hohe Werte auf, die oberhalb der gesetzlichen Grenzwerte liegen;
+\item[e)] die Messreihen sind von guter Qualität.
+\end{itemize}
+
+\begin{figure}[H] 
+\centering
+\includegraphics[scale = 0.51]{Datenaufbereitung_P1_Verlauf_mit_Toleranzband_Sensor1785} 
+\caption{\small{Verlauf der $\mathrm{P}_{10}$ Messwerte eines Sensors am 2.\,April 2026. 
+Etwa zwischen 10 und 14\,Uhr gab es eine Sequenz 
+der Länge 92 von Messwerten zwischen $600-1100\mu g/m^3$ und damit deutlich oberhalb des Schwellwertes (\textcolor{red}{\rule[1mm]{3mm}{0.5mm}})}}
+\label{Abb_Verlauf_mit_Toleranzband_Sensor1785_über_Schwellwert}
+\end{figure} 
+
+Abb.\,(\ref{Abb_Verlauf_mit_Toleranzband_Sensor1785_über_Schwellwert}) 
+zeigt ein Beispiel der Kategorie d), 
+Abb.\,(\ref{Abb_Verlauf_mit_Toleranzband_Sensor23496_mit_Unterbrechung}) 
+ein Beispiel der Kategorie a).
+
+\begin{figure}[H] 
+\centering
+\includegraphics[scale = 0.51]{Datenaufbereitung_P1_Verlauf_mit_Toleranzband_Sensor23496} 
+\caption{\small{Verlauf der $\mathrm{P}_{10}$ Messwerte eines Sensors am 24.\,April 2026. 
+Etwa von 9 bis 11\,Uhr gab es eine Unterbrechung der Mess-Aufzeichnung von insgesamt 103 Minuten Dauer}}
+\label{Abb_Verlauf_mit_Toleranzband_Sensor23496_mit_Unterbrechung}
+\end{figure} 
+
+In beiden Abbildungen sind neben den Messwerten (\textcolor{brown}{$\bullet$}), 
+noch der zentrierte gleitende Durchschnitt 
+(\textcolor{NavyBlue}{\rule[1mm]{3mm}{0.5mm}}) 
+und das Toleranzband
+(\textcolor{YellowGreen}{\rule[-0.5mm]{3mm}{3mm}})  
+eingezeichnet. Hierbei wird das Toleranzband durch das Intervall
+$[\mathrm{gleitender\ Durchschnitt}\pm 2\cdot\mathrm{Standardabweichung\ der\ Messreihe}]$ definiert und dient wie auch der gleitende
+Durchschnitt ausschließlich der visuellen Erkennung von
+eventuellen Auffälligkeiten der Messereihe.\\
+
+Mit Messreihen der Kategorien a) bis d) wurde folgendermaßen
+verfahren:
+
+\begin{itemize}[topsep=2pt,parsep=1pt,itemsep=0.5pt]
+\item[a)] Messreihen mit Unterbrechungen der Mess-Aufzeichnung
+von mehr als 180 Minruten Länge wurden für die weiteren Analysen
+\textit{nicht} berücksichtigt.
+\item[b)] Bei den Messdateien, in denen NA-Werte auftraten, 
+handelt es sich um zeilenweise erratisch eingefügte
+Messungen mit einer validen Zeitangabe aber fehlenden 
+Messwerten. 
+Nach der Entfernung dieser fehlerhaften Zeilen war 
+die verbleibende Messreihe unauffällig und wurde für die
+weiteren Auswertungen verwendet.  
+\item[c)] Messreihen, die weniger als 20 verschiedene 
+Messwerte pro Tag aufweisen, wurden \textit{nicht} weiter berücksichtigt. 
+Vermutlich handelt es sich hier um einen Defekt oder eine 
+Fehlkonfiguration des D/A-Wandlers des SDS011 Sensors.
+\item[d)] Messreihen, bei denen mehr als 120 \textit{nacheinander folgende} 
+Messwerte (Definition einer Sequenz der Länge 120) oberhalb 
+eines Schwellwertes von
+$100\mu g/m^3$ liegen, wurden \textit{nicht} weiter berücksichtigt. 
+Andernfalls hätten solche Messungen die anschließend durchgeführten
+Mittelwertbildungen und die darauf aufsetzenden Auswertungen stark 
+verzerrt.
+\end{itemize}
+
+Für die getroffenen Festsetzungen gibt es keine wissenschaftliche 
+Rechtfertigung; sie sind das Ergebnis einer Abwägung 
+der antagonistischen Ziele einer möglichst großen Datenbasis 
+einerseits und einer guten Datenqualität andererseits. \\
+
+Durch diese Schritte der Datenbereinigung der täglichen 
+Messdaten wurde die Anzahl der im weiteren Verlauf 
+betrachteten, täglichen Messreihen um etwa 2-4 Stück, also grob
+weniger als 5\% verkleinert. \\
+
+Nach Abschluss der reproduzierbaren Datenbereinigung liegt
+nunmehr ein konsistenter Datensatz vor, der im folgenden 
+Kapitel zur Untersuchung der räumlichen Abhängig\-keits\-struk\-tur
+verwendet wird.
+  
+
+

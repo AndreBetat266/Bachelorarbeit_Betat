@@ -1,0 +1,298 @@
+%% Stand 12. Juli 2026
+\subsection{Kriging-Gleichungen}
+\label{KapitelTheorieKriging}
+
+Unter Kriging subsummiert man eine Klasse geostatistischer
+Schätzverfahren, deren Ziel die möglichst genaue Vorhersage
+einer räumlichen (oder als Erweiterung auch raum-zeitlichen) 
+Zufallsvariable an nicht beobachteten Orten ist. 
+Im Gegensatz zu anderen Interpolationsverfahren werden 
+hierbei sowohl die räumliche Korrelation als auch die
+Unsicherheit der Schätzung explizit berücksichtigt.
+
+Die Herleitung der Kriging-Gleichungen basiert auf drei grundlegenden Prinzipien:
+\begin{itemize}[topsep=2pt,parsep=1pt,itemsep=0.5pt]
+\item[$\circ$] Die Vorhersage erfolgt als lineare Kombination der Beobachtungen.
+\item[$\circ$] Die Schätzung soll \underline{erwartungstreu} 
+sein. Das heißt für einen Schätzer $\theta$ der gesuchten 
+Größe $T$
+soll $\mathbb{E}\left( \theta\right) = T$ gelten. \\
+Dies ist gleichbedeutend zu der Forderung einer 
+\underline{unverzerrten} Schätzung,
+d.\,h.\,mit $b_{\theta} = (\mathbb{E}\left( \theta \right) - T)$ soll gelten, dass 
+$b_{\theta} = 0$ erfüllt ist
+(vgl.\,z.\,B.\,\cite[S.\,235]{Henze2019}).
+\item[$\circ$] Unter allen unverzerrten linearen Schätzern wird
+diejenige gewählt, deren Fehlervarianz minimal ist.
+\end{itemize}
+
+Die verschiedenen Kriging-Verfahren unterscheiden sich im Wesentlichen durch 
+die Annahmen über den Erwartungswert des zugrunde liegenden Zufallsfeldes. 
+Im Folgenden werden zunächst die gemeinsame Grundidee und anschließend die 
+Herleitung der drei Varianten Simple, Ordinary und Universal Kriging erläutert.
+
+\subsubsection{Methodik des Kriging}
+Es sei eine Zufallsvariable $\mathrm{Z}(s)$ mit 
+$s\in \mathcal{S}$ gegeben. Gesucht ist eine Vorhersage 
+am Ort $s_0$.
+
+Die Kriging-Schätzung wird als gewichtete Summe der Beobachtungen angesetzt:
+\begin{equation}
+\hat{\mathrm{Z}}(s_0) =
+\sum_{i=1}^{n}\lambda_i \mathrm{Z}(s_i),
+\end{equation}
+wobei $\lambda_i$ die noch unbekannten Gewichte darstellen.\\
+Intuitiv sollen die Gewichte so gewählt werden, 
+dass Beobachtungen mit hoher räumlicher Ähnlichkeit stärker berücksichtigt werden 
+als weiter entfernte Beobachtungen mit geringerer Ähnlichkeit.
+Gleichzeitig sollen Redundanzen vermieden werden: 
+Liegen mehrere Messpunkte sehr dicht beieinander, liefern sie nur
+begrenzte zusätzliche Information und erhalten daher geringere
+ Einzelgewichte.\\
+Die Bestimmung der Gewichte erfolgt über ein Optimierungsproblem. 
+Hierzu wird die mittlere quadratische Vorhersageabweichung
+\begin{equation}
+\sigma_{\mathrm{opt}} =
+\mathrm{Var}
+\left(
+\hat{\mathrm{Z}}(s_0)- \mathrm{Z}(s_0)\right)
+\end{equation}
+minimiert, wobei zusätzlich die Bedingung der Erwartungstreue 
+erfüllt werden muss.
+
+Die Varianz des Schätzfehlers hängt ausschließlich von der
+Kovarianzstruktur beziehungsweise äquivalent von der Semivarianz 
+des Zufallsfeldes ab. Dadurch fließen die räumlichen 
+Abhängigkeiten unmittelbar in die Berechnung der Gewichte ein.
+
+\subsubsection{Simple Kriging}
+Beim \underline{Simple Kriging} wird angenommen, dass der Erwartungswert des Zufallsfeldes 
+bekannt und im gesamten Untersuchungsgebiet konstant ist,
+
+\begin{equation}
+\mathbb{E}\left( \mathrm{Z}(s) \right)=m.
+\end{equation}
+
+Diese Annahme vereinfacht die Herleitung erheblich, da keine zusätzlichen Bedingungen 
+an die Gewichte notwendig sind.\\
+Die resultierende Schätzung kann geschrieben werden als:
+\begin{equation}
+\hat{\mathrm{Z}}(s_0) = m + \sum_{j=1}^{n} \lambda_j
+\left( \mathrm{Z}(s_j)- m \right),
+\end{equation}
+wobei $n$ die Anzahl der Beobachtungen bezeichnet.\\ 
+Somit werden nicht die absoluten Beobachtungswerte interpoliert, sondern deren 
+Abweichungen vom bekannten Mittelwert $m$.
+
+Die Gewichte werden so gewählt, dass die Varianz des Schätzfehlers minimal wird. 
+Da der Mittelwert bekannt ist, genügt hierfür die Lösung eines linearen Gleichungssystems, 
+welches ausschließlich die Kovarianzen zwischen den Beobachtungspunkten sowie 
+die Kovarianzen zum Vorhersageort enthält.
+
+Formal ergibt sich das Gleichungssystem
+\begin{equation}
+\mathbf{C}\cdot \lambda = c,
+\end{equation}
+wobei
+
+\begin{itemize}[topsep=2pt,parsep=1pt,itemsep=0.5pt]
+\item[$\circ$] $\mathbf{C}$ die Kovarianzmatrix der Beobachtungen,
+\item[$\circ$] $c$ der Kovarianzvektor zwischen Beobachtungen 
+und Vorhersageort sowie
+\item[$\circ$] $\lambda$ der Vektor der unbekannten Gewichte
+\end{itemize}
+symbolisieren. Für eine eindeutige Lösbarkeit des
+Gleichungssystems ist es erforderlich, dass die Kovarianzmatrix $\mathbf{C}$ positiv definit sein muss.\\
+
+Simple Kriging besitzt damit die mathematisch einfachste Form aller Kriging-Verfahren. 
+In praktischen Anwendungen ist die Voraussetzung eines bekannten globalen 
+Mittelwertes allerdings selten erfüllt. Aus diesem Grund wird Simple Kriging 
+vergleichsweise selten eingesetzt und dient hauptsächlich als 
+theoretischer Ausgangspunkt.
+
+\subsubsection{Ordinary Kriging}
+\label{KapitelTheorie_OrdinaryKriging}
+In den meisten Anwendungen ist der Mittelwert des Prozesses unbekannt. 
+Stattdessen wird lediglich angenommen, dass dieser innerhalb einer zu
+spezifizierenden Nachbarschaft $N\subset \mathcal{S}$ konstant ist, also
+\begin{equation}
+\mathbb{E}\left( \mathrm{Z}(s) \right) = m,\ s \in N,
+\end{equation}
+wobei $m$ unbekannt bleibt.\\
+Die große Bedeutung der
+Nachbarschaft wird z.\,B.\,in \cite[Kap.\,8.5]{Webster2007} 
+diskutiert, wo auch empirische Regeln zu deren Festlegung 
+aufgeführt sind. \\
+Da der Mittelwert nicht bekannt ist, muss verhindert werden, dass die 
+Schätzung systematisch verzerrt wird. Dies führt unmittelbar zur 
+Nebenbedingung
+
+\begin{equation}
+\sum_{j=1}^{n}\lambda_j = 1.
+\end{equation}
+
+Diese Bedingung stellt sicher, dass sich der unbekannte 
+Mittelwert bei der Bildung des Erwartungswertes herauskürzt 
+und die Schätzung unverzerrt bleibt.
+
+Die Optimierung erfolgt wiederum über die Minimierung der
+Schätzfehlervarianz. Aufgrund der zusätzlichen Nebenbedingung 
+ kann das Optimierungsproblem jedoch nicht mehr direkt gelöst 
+werden. Stattdessen wird die Methode der Lagrange-Multiplikatoren
+verwendet.\\
+Hierzu wird die Zielfunktion $L$ um den Lagrange-Multiplikator 
+$\xi$ erweitert:
+
+\begin{equation}
+L = \sigma_{\mathrm{opt}} + 2\xi \left( \sum_j\lambda_j - 1 \right).
+\end{equation}
+
+Durch Ableiten nach allen Gewichten und dem Lagrange-Multiplikator 
+$\xi$ entsteht das Kriging-Gleichungssystem
+
+\begin{equation}
+\begin{bmatrix}
+\mathbf{C} & \mathbf{1}\\
+\mathbf{1}^T & 0
+\end{bmatrix}
+\begin{bmatrix}
+\lambda\\
+\xi
+\end{bmatrix}
+=
+\begin{bmatrix}
+c\\
+1
+\end{bmatrix}.
+\end{equation}
+
+Im Vergleich zum Simple Kriging wird somit lediglich eine zusätzliche Gleichung 
+ergänzt, welche die Unverzerrtheit garantiert.
+
+Ordinary Kriging stellt den am häufigsten verwendeten Kriging-Ansatz dar, da 
+keine Kenntnis des globalen Mittelwertes erforderlich ist und dennoch 
+optimale lineare Schätz\-un\-gen erzeugt werden.
+
+\subsubsection{Universal Kriging}
+Während Ordinary Kriging einen lokal konstanten Mittelwert voraussetzt, reicht 
+diese Annahme in vielen Anwendungen nicht aus.\\ 
+Universal Kriging zerlegt den Prozess daher in einen 
+deterministischen Trend und einen räumlich korrelierten Restprozess 
+$\epsilon(s)$,
+also
+\begin{equation}
+\mathrm{Z}(s) = m(s) + \varepsilon(s).
+\end{equation}
+
+Dabei wird der Trend als Linearkombination bekannter 
+Basisfunktionen beschrieben
+\begin{equation}
+m(s) = \sum_{k=1}^{p} \beta_k f_k(s),
+\end{equation}
+wobei
+\begin{itemize}[topsep=2pt,parsep=1pt,itemsep=0.5pt]
+\item[$\circ$] $f_k(s)$ bekannte Trendfunktionen  (z.\,B.\,Polynomfunktionen) und
+\item[$\circ$] $\beta_k$ unbekannte Regressionsparameter
+\end{itemize}
+bezeichnen. Der Trend wird also durch ein multiples lineares 
+Regressionsmodell beschrieben. 
+Die Schätzbedingung lautet weiterhin
+
+\begin{equation}
+\label{Gl_Schätzbedinung_UniversalKriging}
+\hat{\mathrm{Z}}(s_0) = \sum_{j=1}^n \lambda_j \mathrm{Z}(s_j),
+\end{equation}
+
+jedoch müssen nun zusätzlich die $p$ Trendfunktionen reproduziert 
+werden. Daraus ergeben sich die Nebenbedingungen
+
+\begin{equation}
+\sum_j \lambda_j f_k(s_j) =
+f_k(s_0), \qquad 1 \leq k \leq p.
+\end{equation}
+
+Im Vergleich zum Ordinary Kriging existiert somit nicht 
+nur eine, sondern mehrere Nebenbedingungen.
+
+Auch hier erfolgt die Herleitung über Lagrange-Multiplikatoren. Das resultierende 
+lineare Gleichungssystem besitzt die Form
+
+\begin{equation}
+\begin{bmatrix}
+\mathbf{C} & \mathbf{F}\\
+\mathbf{F}^T & \mathbf{0}
+\end{bmatrix}
+\begin{bmatrix}
+\lambda\\
+\xi
+\end{bmatrix}
+=
+\begin{bmatrix}
+c\\
+\mathbf{f}(s_0)
+\end{bmatrix},\ \xi \in \mathbb{R}^{(p+1)},
+\end{equation}
+
+wobei $\mathbf{F}$ die Matrix der Trendfunktionen enthält.
+
+Universal Kriging kann daher als Verallgemeinerung des Ordinary Kriging 
+verstanden werden. Während Ordinary Kriging lediglich einen konstanten 
+Mittelwert zulässt, erlaubt Universal Kriging beliebige lineare Trends.
+
+\subsubsection{Zusammenfassender Überblick}
+Alle drei Methoden fußen auf denselben 
+Grundanahmen einer linearen, erwartungstreuen und
+varianzminimalen Prädiktion mit zunehmend allgemeineren 
+Annahmen an den Mittelwert.
+
+\begin{itemize}[topsep=2pt,parsep=1pt,itemsep=0.5pt]
+\item[$\circ$] Simple Kriging: 
+\begin{itemize}[topsep=2pt,parsep=1pt,itemsep=0.5pt]
+\item[$\triangleright $] $m$ bekannt und konstant; 
+\item[$\triangleright $] keine Nebenbedingung; 
+\item[$\triangleright $] unrestringierte Optimierung.
+\end{itemize}
+\item[$\circ$] Ordinary Kriging: 
+\begin{itemize}[topsep=2pt,parsep=1pt,itemsep=0.5pt]
+\item[$\triangleright $] $m$ unbekannt, aber regional konstant;
+\item[$\triangleright $] eine Nebenbedingung ($\sum_j \lambda_j = 1$) und somit
+\item[$\triangleright $] ein Lagrange-Multiplikator.
+\end{itemize}
+\item[$\circ$] Universal Kriging: 
+\begin{itemize}[topsep=2pt,parsep=1pt,itemsep=0.5pt]
+\item[$\triangleright $] $m(s)$ unbekannt und variabel (Trendfunktion); 
+\item[$\triangleright $] $(p+1)$ Nebenbedingungen und somit 
+\item[$\triangleright $] $(p+1)$ Lagrange-Multiplikatoren.
+\end{itemize}
+\end{itemize}
+
+Diese Hierarchie erklärt zugleich, warum sich die drei Verfahren in ihrer 
+mathematischen Struktur so ähnlich sind: Das jeweilige Kriging-System 
+entsteht stets durch dieselbe Lagrange-Konstruktion, lediglich die Anzahl 
+und Form der Nebenbedingungen wächst mit der Komplexität der an
+den Mittelwert gestellten Annahmen und erhöht folglich die Dimension 
+des zu lösenden Gleichungssystems.
+%Anhand der Gl.\,(\ref{Gl_Schätzbedinung_UniversalKriging})
+%erkennt man relativ leicht, warum Kriging zur Klasse der
+%\textit{Interpolationsverfahren} gehört. Angenommen, es sei $s_0 = s_j$ für ein 
+%$1 \leq j \leq n$.\\
+%Dann folgt, dass
+%\begin{equation}
+%\hat{\mathrm{Z}}(s_j) = \sum_{k=1}^n \lambda_k \mathrm{Z}(s_k) 
+%\ \mathrm{mit\ } \lambda_j =1\ \wedge\ \lambda_k = 0\,
+%\forall\,k \neq j
+%\end{equation}
+%eine \textit{mögliche} Lösung darstellt, welche die
+%Nebenbedingungen erfüllt. Da unter der Voraussetzung einer
+%positiv definiten Kovarianz-Matrix die Lösung der 
+%Kriging-Gleichungen eindeutig ist, folgt, dass 
+%$\hat{\mathrm{Z}}(s_j)= \mathrm{Z}(s_j)$ gelten muss.
+%Einschränkend sei bemerkt, dass im  Falle der Einbeziehung 
+%eines Nugget-Effekts die obige Beweis-Skizze \underline{nicht} mehr
+%gilt; in diesem Fall ist der Kriging-Prädiktor kein perfekter Interpolator
+%mehr.
+%\\
+%Im raum-zeitlichen Kontext überträgt sich diese Systematik unmittelbar, 
+%indem die Ko\-va\-ri\-anz-Funktion sowie gegebenenfalls die Trendfunktionen 
+%$f_k$ als Funktionen des kombinierten Raum-Zeit-Index $\mathbf{x} = (s,t)$ 
+%definiert werden.
