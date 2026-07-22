@@ -56,20 +56,19 @@ werden können, ist das skizzierte Vorgehen methodisch eher als eine
 Art plausbilisiertes Raten zu bezeichnen und stellt 
 sicher \textit{keine} saubere Analyse dar.\\
 
-Es erweist sich, dass die Standardabweichung 
-der von $e_{\mathrm{MSE}}$ typischerweise um 
-einen Faktor $4-5$ größer ist, als $e_\mathrm{MSE}$ selber:
-die einzelnen Werte der $\lbrace e_j\rbrace_{j \in [n]}$ decken
-typischerweise eine Spannbreite von $8-16$ Größenordnungen ab, 
+Es erweist sich, dass die einzelnen Werte der 
+$\lbrace e_j\rbrace_{j \in [n]}$ typischerweise eine
+Spannbreite von mehreren Größenordnungen abdecken, 
 wobei die größten Werte genau dann auftreten, wenn
 für ungewöhnlich große Beobachtungen der 
 Feinstaub-Konzentration eine Vorhersage gemäß Schritt b) 
 bestimmt wird und die Menge der korrespondierenden 
 Trainingsdaten nach a) überwiegend sehr viel kleinere Feinstaub-Werte
-beinhaltet. Diese nur wenigen, aber sehr großen Wert $e_j$ ziehen 
-den als Mittelwert kalkulierten Fehler $e_{\mathrm{MSE}}$ nach 
-oben und führen zu den großen Schwankungen gegeben durch die
- Standardabweichung.\\
+beinhaltet (vgl.\,Abb.\,(\ref{Abb_Datenauswertung_P25_LOO-CVNov2025_Ansicht_e_j}) 
+im Anhang). Diese nur wenigen, aber sehr großen Wert $e_j$ ziehen 
+den als Mittelwert kalkulierten Fehler $e_{\mathrm{MSE}}$
+nach oben und führen zu den großen Schwankungen gegeben
+durch die Standardabweichung.\\
 
 Die Ergebnisse dieser Analyse für den 
 November 2025 sind für ein
@@ -103,13 +102,10 @@ $\mathrm{P}_{2.5}$-Messwerten für November 2025}}
 Da nur das Anisotropie-Verhältnis $\lambda$ variiert wird,
 muss für eine der beiden Halbachsen der Ellipse ein Wert
 vorgegeben werden. Hierfür wurde die kleine Halbachse
-für alle drei Sätze der monatlich 
-gemittelten Messungen auf den maximalen Wert der 
-paarweisen euklidischen Distanz $\mathrm{R}_{max}$ der 
-Sensoren-Positionen gesetzt. Dies hat zur Folge, dass
-die Werte der großen Halbachse 
-$\lambda \cdot \mathrm{R}_{max}$ im Bereich von etwa
-$30-60\,km$ liegen.\\
+für alle drei Datensätze auf den maximalen Wert der 
+paarweisen Distanz $\mathrm{R}_{max}$ der 
+Sensoren-Positionen gesetzt. Folglich liegen
+die Werte der großen Halbachse bei etwa $30-60\,km$.\\
 
 Aus beiden Abbildungen ersieht man:
 \begin{itemize}[topsep=2pt,parsep=1pt,itemsep=0.5pt]
@@ -125,18 +121,6 @@ Ansisotropie der Fehler $e_{\mathrm{MSE}}$.
 \item[$\circ$ ] Tendenziell verringert sich mit abnehmendem Sill 
 der Fehler $e_{\mathrm{MSE}}$.
 \end{itemize}
-
-\vspace*{5pt}
-Auch die analogen Auswertungen der Messungen aus dem Juli 2025 
-in 
-Abb.\,(\ref{Abb_Datenauswertung_P25_LOO-CVJul2025_Lambda_fix}) 
-und dem April 2026 in 
-Abb.\,(\ref{Abb_Datenauswertung_P25_LOO-CVApr2026_Lambda_fix})
-weisen den geringsten Prognose-Fehler für das Kovarianz-Modell auf, 
-welches eine Drehung um etwa $40^\circ$ bzw.\,$20^\circ$ impliziert.\\
-Hierbei sind diese Vorzugsrichtungen wiederum unabhängig vom
-gewählten Wert für Anisotropie und Sill. \\
-
 
 \begin{figure}[H] 
 \centering
@@ -157,6 +141,16 @@ basierend auf den gemittelten
 $\mathrm{P}_{2.5}$-Messwerten für April 2026}}
 \label{Abb_Datenauswertung_P25_LOO-CVApr2026_Lambda_fix}
 \end{figure} 
+
+Auch die analogen Auswertungen der Messungen aus dem Juli 2025 
+in 
+Abb.\,(\ref{Abb_Datenauswertung_P25_LOO-CVJul2025_Lambda_fix}) 
+und dem April 2026 in 
+Abb.\,(\ref{Abb_Datenauswertung_P25_LOO-CVApr2026_Lambda_fix})
+weisen den geringsten Prognose-Fehler für das Kovarianz-Modell auf, 
+welches eine Drehung um etwa $40^\circ$ bzw.\,$20^\circ$ impliziert.
+Hierbei sind diese Vorzugsrichtungen wiederum unabhängig vom
+gewählten Wert für Anisotropie und Sill. \\
 
 Der Vollständigkeit halber sind in 
 Abb.\,(\ref{Abb_Datenauswertung_P25_KrigingMean_Winkel40_Sill0x8_Lambda3x5_Nov2025_Lambda_fix})
