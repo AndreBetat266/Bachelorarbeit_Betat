@@ -3,8 +3,7 @@
 
 import numpy as np
 import matplotlib.pyplot as plt
-from PlotBA import CGraphicConfig, CLine, GetColor, DrawFrameAxis, Plot2X2Y, PlotXY, PlotStackHorz2X2Y, PlotStackHorz3X3Y, PlotStackHorzImageXY
-from PlotBA import PlotX3Y, PlotX2Y, PlotImage, CInfoBox, PlotPolar, PlotContour, PlotImagesNx3, PlotImagesNx2
+import PlotBA as pl
 import gstools # Suffix GsT oder _gst
 from sklearn.model_selection import KFold, LeaveOneOut
 from gstools import SRF
@@ -295,10 +294,10 @@ class CVariogramSkG ( object ):
             sTitleText = "$r_{max}$: %.0f, Rg.: %.0f, Sill: %.1f, #Lags: %d, Mdl.: %s, Est.: %s"  % ( self.uMaxLag, self.fRange, self.fSill, 
                                                                                                       self.iNumLags, self.sModel.capitalize ()[ : 3 ], 
                                                                                                       self.sEstimator.capitalize () )
-            GraCon = CGraphicConfig ( sTitle = sTitleText, sLabelX = "Distanz $r$", sLabelY = "$\gamma(r)$" )
+            GraCon = pl.CGraphicConfig ( sTitle = sTitleText, sLabelX = "Distanz $r$", sLabelY = "$\gamma(r)$" )
         
-            Plot2X2Y ( aX1 = self.aX, aY1 = self.aVariogram_theo, aX2 = self.aBinCenter, aY2 = self.aVariogram_estd, 
-                       tStyleY1 = ( "o12", "o", 0.0, "-", 3.0, "Fit" ), tStyleY2 = ( "b12", "o", 8.0, "--", 2.0, "$\\gamma$" ), GraphicConfig = GraCon )
+            pl.Plot2X2Y ( aX1 = self.aX, aY1 = self.aVariogram_theo, aX2 = self.aBinCenter, aY2 = self.aVariogram_estd, 
+                          tStyleY1 = ( "o12", "o", 0.0, "-", 3.0, "Fit" ), tStyleY2 = ( "b12", "o", 8.0, "--", 2.0, "$\\gamma$" ), GraphicConfig = GraCon )
             
             """
             sTitleText =  "Residuals Plot (Model: %s)" % ( self.sModel.capitalize () )
@@ -422,18 +421,18 @@ class CVariogramSkG ( object ):
             ListBinInfos.append ( self.ListBinInfo )
             ## Ende for Schleife
             
-        CGraCon = CGraphicConfig ( sTitle = ListTitle[ 0 ], sLabelY = "$\hat{\gamma}(r)$", 
-                                   sLabelX = "Abstand $r$ (m)", sLabelX2 = "Abstand $r$ (m)", 
-                                   sLabelX3 = "Abstand $r$ (m)", sGridAxis = "both", sStepPlotWhere = "none" )
+        CGraCon = pl.CGraphicConfig ( sTitle = ListTitle[ 0 ], sLabelY = "$\hat{\gamma}(r)$", 
+                                      sLabelX = "Abstand $r$ (m)", sLabelX2 = "Abstand $r$ (m)", 
+                                      sLabelX3 = "Abstand $r$ (m)", sGridAxis = "both", sStepPlotWhere = "none" )
         if ( iNumEstimator == 1 ):
             aSemiVariance1 = ListSemivarianceEstimation[ 0 ]
-            PlotXY ( aX = aSemiVariance1[ :, 0 ], aY = aSemiVariance1[ :, 1 ], tStyle = ListStyleEstimation[ 0 ],
+            pl.PlotXY ( aX = aSemiVariance1[ :, 0 ], aY = aSemiVariance1[ :, 1 ], tStyle = ListStyleEstimation[ 0 ],
                         GraphicConfig = CGraCon, ListAnnotation = ListBinInfos[ 0 ] )
         if ( iNumEstimator == 2 ):
             CGraCon.Set ( sTitle2 = ListTitle[ 1 ] )
             aSemiVariance1 = ListSemivarianceEstimation[ 0 ]
             aSemiVariance2 = ListSemivarianceEstimation[ 1 ]
-            PlotStackHorz2X2Y ( aX1 = aSemiVariance1[ :, 0 ], aY1 = aSemiVariance1[ :, 1 ], 
+            pl.PlotStackHorz2X2Y ( aX1 = aSemiVariance1[ :, 0 ], aY1 = aSemiVariance1[ :, 1 ], 
                                    aX2 = aSemiVariance2[ :, 0 ], aY2 = aSemiVariance2[ :, 1 ], GraphicConfig = CGraCon, 
                                    tStyles = ( ListStyleEstimation[ 0 ], ListStyleEstimation[ 1 ] ),
                                    ListAnnotations = ListBinInfos, bShareY = False )
@@ -443,7 +442,7 @@ class CVariogramSkG ( object ):
             aSemiVariance1 = ListSemivarianceEstimation[ 0 ]
             aSemiVariance2 = ListSemivarianceEstimation[ 1 ]
             aSemiVariance3 = ListSemivarianceEstimation[ 2 ]
-            PlotStackHorz3X3Y ( aX1 = aSemiVariance1[ :, 0 ], aY1 = aSemiVariance1[ :, 1 ], 
+            pl.PlotStackHorz3X3Y ( aX1 = aSemiVariance1[ :, 0 ], aY1 = aSemiVariance1[ :, 1 ], 
                                    aX2 = aSemiVariance2[ :, 0 ], aY2 = aSemiVariance2[ :, 1 ], 
                                    aX3 = aSemiVariance3[ :, 0 ], aY3 = aSemiVariance3[ :, 1 ], GraphicConfig = CGraCon, 
                                    tStyles = ( ListStyleEstimation[ 0 ], ListStyleEstimation[ 1 ], ListStyleEstimation[ 2 ] ),
@@ -454,7 +453,7 @@ class CVariogramSkG ( object ):
             sLabel = "$\\hat{\gamma}$ (%s)" % ( ListParameter[ 0 ][ 0 ].capitalize () ) 
             tStyleEstimation1 = ( "o12", "o", 4.0, "", 0.0, sLabel )
             
-            PlotStackHorzImageXY ( aX = aSemiVariance1[ :, 0 ], aData = aSemiVariance1[ :, 1 ], aData2Dim = self.aData2D, 
+            pl.PlotStackHorzImageXY ( aX = aSemiVariance1[ :, 0 ], aData = aSemiVariance1[ :, 1 ], aData2Dim = self.aData2D, 
                                        GraphicConfig = CGraCon, tStyle = tStyleEstimation1, sColorMap = sColorMap, sOrigin = "upper" )
     
         return 
@@ -475,27 +474,27 @@ class CVariogramSkG ( object ):
         
         self.bShowFitResultTable = True 
         
-        CGraCon = CGraphicConfig ( sLabelX = "Abstands-Klasse $r$", sLabelY = "$\hat{\gamma}(r)$" )
+        CGraCon = pl.CGraphicConfig ( sLabelX = "Abstands-Klasse $r$", sLabelY = "$\hat{\gamma}(r)$" )
         for ik, sModel in enumerate ( tKernel ):
             self.Fit ( sModel = sModel, bUseBounds = True, iNumData = iNumData, bExportParameter = True )
             #print ( self.tGsToolsParameter )
             
             sColor, sMarker, fMarkerSize, sLineStyle, fLineWidth, sLabel = tStyleTheory
-            aCAxes[ ik ].plot ( self.aX, self.aVariogram_theo, color = GetColor ( sColor ) , marker = sMarker, markersize = fMarkerSize, 
+            aCAxes[ ik ].plot ( self.aX, self.aVariogram_theo, color = pl.GetColor ( sColor ) , marker = sMarker, markersize = fMarkerSize, 
                                 linestyle = sLineStyle, linewidth = fLineWidth, label = sLabel )
             sColor, sMarker, fMarkerSize, sLineStyle, fLineWidth, sLabel = tStyleEstimation
-            aCAxes[ ik ].plot ( self.aBinCenter, self.aVariogram_estd, color = GetColor ( sColor ) , marker = sMarker, markersize = fMarkerSize, 
+            aCAxes[ ik ].plot ( self.aBinCenter, self.aVariogram_estd, color = pl.GetColor ( sColor ) , marker = sMarker, markersize = fMarkerSize, 
                                 linestyle = sLineStyle, linewidth = fLineWidth, label = sLabel )
             
             fVar, fLenScale, fNugget, fRescale, fShape = self.tGsToolsParameter
             aRank[ ik ] = self.fMSE, fVar, fLenScale, fNugget, fRescale, fShape
 
             sTitleText =  "Modell: %s, Schätzer: %s (MSE: %.2E)" % ( sModel.capitalize (), self.sEstimator.capitalize (),  self.fMSE )
-            CHLine1 = CLine ( sLineColor = "g15", fLinePos = self.fSill + self.fNugget, fLineWidth = 1.5, sLineStyle = "-" )
-            CHLine2 = CLine ( sLineColor = "g10", fLinePos = self.fNugget, fLineWidth = 1.5, sLineStyle = "-" )
-            CVLine1 = CLine ( sLineColor = "c9", fLinePos = self.fRange, fLineWidth = 1.5, sLineStyle = "-." )
+            CHLine1 = pl.CLine ( sLineColor = "g15", fLinePos = self.fSill + self.fNugget, fLineWidth = 1.5, sLineStyle = "-" )
+            CHLine2 = pl.CLine ( sLineColor = "g10", fLinePos = self.fNugget, fLineWidth = 1.5, sLineStyle = "-" )
+            CVLine1 = pl.CLine ( sLineColor = "c9", fLinePos = self.fRange, fLineWidth = 1.5, sLineStyle = "-." )
             CGraCon.Set ( sTitle = sTitleText, VLine1 = CVLine1, HLine1 = CHLine1 )
-            DrawFrameAxis ( CAxis = aCAxes[ ik ], GraphicConfig = CGraCon, iIndex = 0, sGridAxis = "both", 
+            pl.DrawFrameAxis ( CAxis = aCAxes[ ik ], GraphicConfig = CGraCon, iIndex = 0, sGridAxis = "both", 
                                tHLines = ( CHLine2, ), tSizes = ( 14, 14, 12 ) )
             
         plt.tight_layout ()
@@ -522,24 +521,24 @@ class CVariogramSkG ( object ):
         CFigure, tCAxis = plt.subplots ( ncols = 3, nrows = 1, figsize = ( 12, 4 ), sharex = True, sharey = False )
         aCAxes = tCAxis.flatten ()
         
-        CGraCon = CGraphicConfig ( sLabelX = "Abstand $r$ (m)", sLabelY = "$\hat{\gamma}(r)$" )
+        CGraCon = pl.CGraphicConfig ( sLabelX = "Abstand $r$ (m)", sLabelY = "$\hat{\gamma}(r)$" )
         for ik, sEstimator in enumerate ( tEstimator ):
             self.CVariogram_skg.estimator = sEstimator
             self.CVariogram_skg.n_lags = self.iNumLags
             
             aX, aVariogram_theo, aBinCenter, aVariogram_estd = self.Fit ( sModel = self.sModel, iNumData = iNumData, bShowResiduals = False )
             sColor, sMarker, fMarkerSize, sLineStyle, fLineWidth, sLabel = tStyleTheory
-            aCAxes[ ik ].plot ( aX, aVariogram_theo, color = GetColor ( sColor ) , marker = sMarker, markersize = fMarkerSize, 
+            aCAxes[ ik ].plot ( aX, aVariogram_theo, color = pl.GetColor ( sColor ) , marker = sMarker, markersize = fMarkerSize, 
                                 linestyle = sLineStyle, linewidth = fLineWidth, label = sLabel )
             sColor, sMarker, fMarkerSize, sLineStyle, fLineWidth, sLabel = tStyleEstimation
-            aCAxes[ ik ].plot ( aBinCenter, aVariogram_estd, color = GetColor ( sColor ) , marker = sMarker, markersize = fMarkerSize, 
+            aCAxes[ ik ].plot ( aBinCenter, aVariogram_estd, color = pl.GetColor ( sColor ) , marker = sMarker, markersize = fMarkerSize, 
                                 linestyle = sLineStyle, linewidth = fLineWidth, label = sLabel )
             
             sTitleText =  "Estimator: %s (Model: %s); MSE: %.1E" % ( sEstimator.capitalize (), self.sModel.capitalize (), self.fMSE )
-            CHLine = CLine ( sLineColor = "g12", fLinePos = self.fSill, fLineWidth = 1.0 )
-            CVLine = CLine ( sLineColor = "g12", fLinePos = self.fRange, fLineWidth = 1.0 )
+            CHLine = pl.CLine ( sLineColor = "g12", fLinePos = self.fSill, fLineWidth = 1.0 )
+            CVLine = pl.CLine ( sLineColor = "g12", fLinePos = self.fRange, fLineWidth = 1.0 )
             CGraCon.Set ( sTitle = sTitleText, VLine1 = CVLine, HLine1 = CHLine )
-            DrawFrameAxis ( CAxis = aCAxes[ ik ], GraphicConfig = CGraCon, iIndex = 0, sGridAxis = "both", tSizes = ( 10, 10, 8 ) )
+            pl.DrawFrameAxis ( CAxis = aCAxes[ ik ], GraphicConfig = CGraCon, iIndex = 0, sGridAxis = "both", tSizes = ( 10, 10, 8 ) )
             
         plt.tight_layout ()
         plt.show ()
@@ -747,23 +746,23 @@ class CCovarianceModelGsT ( object ):
 ##  Cov(r) = \sigma^2 * rho(r); wobei Cov(r) die Kovarianz-Funktion bezeichnet 
     def PlotStatistics ( self, fStop = 5.0, iNumPoints = 200 ):
         if ( self.fVar != 1.0 ):
-            CGraCon = CGraphicConfig ( sTitle = self.sDescription_long, sLabelX = "Lag $r$", sLabelY = "$\\gamma(r)$, $\\rho(r)$, $\\text{Cov}(r)$" )
+            CGraCon = pl.CGraphicConfig ( sTitle = self.sDescription_long, sLabelX = "Lag $r$", sLabelY = "$\\gamma(r)$, $\\rho(r)$, $\\text{Cov}(r)$" )
             aR = np.linspace ( start = 0.0, stop = fStop, num = iNumPoints )
             aGamma = self.CCovModel_gst.variogram ( r = aR )
             aRho = self.CCovModel_gst.correlation ( r = aR )
             aCov = self.CCovModel_gst.covariance ( r = aR )
 
-            PlotX3Y ( aX = aR, aY1 = aGamma, aY2 = aRho, aY3 = aCov,
-                      tStyleY1 = ( "c10", "x", 0.0, "--", 3.0, "$\\gamma$" ),
-                      tStyleY2 = ( "b10", "D", 0.0, "-.", 3.0, "$\\rho$" ), 
-                      tStyleY3 = ( "r14", "o", 0.0, "-", 3.0, "$\\text{Cov}$" ), GraphicConfig = CGraCon )
+            pl.PlotX3Y ( aX = aR, aY1 = aGamma, aY2 = aRho, aY3 = aCov,
+                         tStyleY1 = ( "c10", "x", 0.0, "--", 3.0, "$\\gamma$" ),
+                         tStyleY2 = ( "b10", "D", 0.0, "-.", 3.0, "$\\rho$" ), 
+                         tStyleY3 = ( "r14", "o", 0.0, "-", 3.0, "$\\text{Cov}$" ), GraphicConfig = CGraCon )
         else:
-            CGraCon = CGraphicConfig ( sTitle = self.sDescription_long, sLabelX = "Distanz $r$", sLabelY = "$\\gamma(r)$, $\\rho(r)$" )
+            CGraCon = pl.CGraphicConfig ( sTitle = self.sDescription_long, sLabelX = "Distanz $r$", sLabelY = "$\\gamma(r)$, $\\rho(r)$" )
             aR = np.linspace ( start = 0.0, stop = fStop, num = iNumPoints )
             aGamma = self.CCovModel_gst.variogram ( r = aR )
             aRho = self.CCovModel_gst.correlation ( r = aR )
 
-            PlotX2Y ( aX = aR, aY1 = aGamma, aY2 = aRho,
+            pl.PlotX2Y ( aX = aR, aY1 = aGamma, aY2 = aRho,
                          tStyleY1 = ( "c10", "x", 0.0, "-.", 3.0, "$\\gamma$" ),
                          tStyleY2 = ( "b10", "D", 0.0, "-.", 3.0, "$\\rho$" ), GraphicConfig = CGraCon )
             
@@ -773,7 +772,7 @@ class CCovarianceModelGsT ( object ):
         CheckAssert ( bBool = ( len ( tLengthScale ) == 3 ), sMsg = "Invalid Shape <tLenghtScale>" )
         
         self.sDescription_long, self.sDescription, self.sDescription_short, self.sDescription_compact = GetDescription ( self.CCovModel_gst, tLengthScale, "gamma" ) 
-        CGraCon = CGraphicConfig ( sTitle = self.sDescription_long, sLabelX = "Lag $r$", sLabelY = "Semivarianz $\\gamma(r)$" )
+        CGraCon = pl.CGraphicConfig ( sTitle = self.sDescription_long, sLabelX = "Lag $r$", sLabelY = "Semivarianz $\\gamma(r)$" )
             
         aR = np.linspace ( start = 0.0, stop = fStop, num = iNumPoints )
         ListGamma = list ()
@@ -785,10 +784,10 @@ class CCovarianceModelGsT ( object ):
             sLabel = "$\\gamma$ für $\ell=%.1f$" % fLengthScale
             ListGamma.append ( ( aGamma, sLabel ) )
 
-        PlotX3Y ( aX = aR, aY1 = ListGamma[ 0 ][ 0 ], aY2 = ListGamma[ 1 ][ 0 ], aY3 = ListGamma[ 2 ][ 0 ],
-                  tStyleY1 = ( "c10", "x", 0.0, "--", 3.0, ListGamma[ 0 ][ 1 ] ),
-                  tStyleY2 = ( "b10", "D", 0.0, "-.", 3.0, ListGamma[ 1 ][ 1 ] ), 
-                  tStyleY3 = ( "r14", "o", 0.0, "-", 3.0, ListGamma[ 2 ][ 1 ] ), GraphicConfig = CGraCon )
+        pl.PlotX3Y ( aX = aR, aY1 = ListGamma[ 0 ][ 0 ], aY2 = ListGamma[ 1 ][ 0 ], aY3 = ListGamma[ 2 ][ 0 ],
+                     tStyleY1 = ( "c10", "x", 0.0, "--", 3.0, ListGamma[ 0 ][ 1 ] ),
+                     tStyleY2 = ( "b10", "D", 0.0, "-.", 3.0, ListGamma[ 1 ][ 1 ] ), 
+                     tStyleY3 = ( "r14", "o", 0.0, "-", 3.0, ListGamma[ 2 ][ 1 ] ), GraphicConfig = CGraCon )
 
         return
     
@@ -796,7 +795,7 @@ class CCovarianceModelGsT ( object ):
         CheckAssert ( bBool = ( len ( tLengthScale ) == 3 ), sMsg = "Invalid Shape <tLenghtScale>" )
         
         self.sDescription_long, self.sDescription, self.sDescription_short, self.sDescription_compact = GetDescription ( self.CCovModel_gst, tLengthScale, "rho" ) 
-        CGraCon = CGraphicConfig ( sTitle = self.sDescription_long, sLabelX = "Lag $r$", sLabelY = "Korrelation $\\rho(r)$" )
+        CGraCon = pl.CGraphicConfig ( sTitle = self.sDescription_long, sLabelX = "Lag $r$", sLabelY = "Korrelation $\\rho(r)$" )
             
         aR = np.linspace ( start = 0.0, stop = fStop, num = iNumPoints )
         ListRho = list ()
@@ -807,10 +806,10 @@ class CCovarianceModelGsT ( object ):
             sLabel = "$\\rho$ für $\ell=%.1f$" % fLengthScale
             ListRho.append ( ( aRho, sLabel ) )
 
-        PlotX3Y ( aX = aR, aY1 = ListRho[ 0 ][ 0 ], aY2 = ListRho[ 1 ][ 0 ], aY3 = ListRho[ 2 ][ 0 ],
-                  tStyleY1 = ( "c10", "x", 0.0, "--", 3.0, ListRho[ 0 ][ 1 ] ),
-                  tStyleY2 = ( "b10", "D", 0.0, "-.", 3.0, ListRho[ 1 ][ 1 ] ), 
-                  tStyleY3 = ( "r14", "o", 0.0, "-", 3.0, ListRho[ 2 ][ 1 ] ), GraphicConfig = CGraCon )
+        pl.PlotX3Y ( aX = aR, aY1 = ListRho[ 0 ][ 0 ], aY2 = ListRho[ 1 ][ 0 ], aY3 = ListRho[ 2 ][ 0 ],
+                     tStyleY1 = ( "c10", "x", 0.0, "--", 3.0, ListRho[ 0 ][ 1 ] ),
+                     tStyleY2 = ( "b10", "D", 0.0, "-.", 3.0, ListRho[ 1 ][ 1 ] ), 
+                     tStyleY3 = ( "r14", "o", 0.0, "-", 3.0, ListRho[ 2 ][ 1 ] ), GraphicConfig = CGraCon )
 
         return
     
@@ -837,11 +836,11 @@ class CCovarianceModelGsT ( object ):
             sDescription = "Gauß ZF für "
         sDescription = sDescription + self.sDescription
         
-        CGraCon = CGraphicConfig ( sTitle = sDescription, sLabelX = "X", sLabelY = "Y", 
+        CGraCon = pl.CGraphicConfig ( sTitle = sDescription, sLabelX = "X", sLabelY = "Y", 
                                       sTitle2 = "Variogramm", sLabelX2 = "Lag r", sLabelY2 = "$\gamma(r)$", sGridAxis = "both" )
-        PlotStackHorzImageXY ( aX = aY_rf, aData = aGamma, aData2Dim = self.aRandomField, GraphicConfig = CGraCon, 
-                               tStyle = ( "c10", "x", 0.0, "--", 3.0, "$\\gamma$" ), sColorMap = sColorMap, 
-                               tExtent = ( tDimX[ 0 ], tDimX[ 1 ], tDimY[ 0 ], tDimY[ 1 ] ), sOrigin = "lower" )
+        pl.PlotStackHorzImageXY ( aX = aY_rf, aData = aGamma, aData2Dim = self.aRandomField, GraphicConfig = CGraCon, 
+                                  tStyle = ( "c10", "x", 0.0, "--", 3.0, "$\\gamma$" ), sColorMap = sColorMap, 
+                                  tExtent = ( tDimX[ 0 ], tDimX[ 1 ], tDimY[ 0 ], tDimY[ 1 ] ), sOrigin = "lower" )
         
         return
     
@@ -868,11 +867,11 @@ class CCovarianceModelGsT ( object ):
             sDescription = "Gauß ZF für "
         sDescription = sDescription + self.sDescription + "$,\,\sigma^2=%.1f$" % ( self.CCovModel_gst.var )
         
-        CGraCon = CGraphicConfig ( sTitle = sDescription, sLabelX = "X", sLabelY = "Y", 
+        CGraCon = pl.CGraphicConfig ( sTitle = sDescription, sLabelX = "X", sLabelY = "Y", 
                                       sTitle2 = "Korrelogramm", sLabelX2 = "Lag r", sLabelY2 = "$\\rho(r)$", sGridAxis = "both" )
-        PlotStackHorzImageXY ( aX = aY_rf, aData = aRho, aData2Dim = self.aRandomField, GraphicConfig = CGraCon, 
-                               tStyle = ( "c10", "x", 0.0, "--", 3.0, "$\\rho$" ), sColorMap = sColorMap, 
-                               tExtent = ( tDimX[ 0 ], tDimX[ 1 ], tDimY[ 0 ], tDimY[ 1 ] ), sOrigin = "lower" )
+        pl.PlotStackHorzImageXY ( aX = aY_rf, aData = aRho, aData2Dim = self.aRandomField, GraphicConfig = CGraCon, 
+                                  tStyle = ( "c10", "x", 0.0, "--", 3.0, "$\\rho$" ), sColorMap = sColorMap, 
+                                  tExtent = ( tDimX[ 0 ], tDimX[ 1 ], tDimY[ 0 ], tDimY[ 1 ] ), sOrigin = "lower" )
         
         return
         
@@ -919,14 +918,14 @@ class CRandomFieldGsT ( object ):
         self.aGammaY = vario_estimate_structured ( self.aRandomField, direction = "y", estimator = "cressie" )
         
         if ( sColorMap ):
-            CGraCon = CGraphicConfig ( sTitle = "Variogramm X-Richtung", sLabelX = "X", sLabelY = "$\gamma_x$", 
+            CGraCon = pl.CGraphicConfig ( sTitle = "Variogramm X-Richtung", sLabelX = "X", sLabelY = "$\gamma_x$", 
                                        sTitle2 = "Variogramm Y-Richtung", sLabelX2 = "Y", sLabelY2 = "$\gamma_y$", sGridAxis = "both" )
-            PlotStackHorz2X2Y ( aX1 = self.aX_rf[ : 200 ], aY1 = self.aGammaX[ : 200 ], aX2 = self.aY_rf[ : 200 ], aY2 = self.aGammaY[ : 200 ], 
-                                tStyles = ( self.ListVarioStyleX, self.ListVarioStyleY ), GraphicConfig  = CGraCon )
+            pl.PlotStackHorz2X2Y ( aX1 = self.aX_rf[ : 200 ], aY1 = self.aGammaX[ : 200 ], aX2 = self.aY_rf[ : 200 ], aY2 = self.aGammaY[ : 200 ], 
+                                   tStyles = ( self.ListVarioStyleX, self.ListVarioStyleY ), GraphicConfig  = CGraCon )
     
             CGraCon.Set ( sTitle = self.sDescription, sLabelY = "Y" )
-            PlotStackHorzImageXY ( aX = self.aY_rf, aData = self.aGammaY, aData2Dim = self.aRandomField, GraphicConfig = CGraCon, 
-                                   tStyle = self.ListVarioStyleY, sColorMap = sColorMap, sOrigin = "lower" )
+            pl.PlotStackHorzImageXY ( aX = self.aY_rf, aData = self.aGammaY, aData2Dim = self.aRandomField, GraphicConfig = CGraCon, 
+                                      tStyle = self.ListVarioStyleY, sColorMap = sColorMap, sOrigin = "lower" )
 
         return
     
@@ -956,9 +955,9 @@ class CRandomFieldGsT ( object ):
                 self.ListVarioStyleX[ 5 ] = "obs"
                 _, sText, _, _ = GetDescription ( CCovModel_gst = self.CCovModel.CCovModel_gst )
                 sTitleText = sText + " $(\\text{R}^2: %.3f)$" % ( DictResultX.get ( "R2" ) )
-                CGC = CGraphicConfig ( sTitle = "Fit X-Direction > " + sTitleText, sLabelX = "r", sLabelY = "Variogram" )
-                PlotX2Y ( aX = self.aX_rf, aY1 = self.aGammaX, aY2 = self.aVariogramX_theo, GraphicConfig = CGC, 
-                          tStyleY1 = self.ListVarioStyleX, tStyleY2 = self.ListVarioStyleFit )
+                CGC = pl.CGraphicConfig ( sTitle = "Fit X-Direction > " + sTitleText, sLabelX = "r", sLabelY = "Variogram" )
+                pl.PlotX2Y ( aX = self.aX_rf, aY1 = self.aGammaX, aY2 = self.aVariogramX_theo, GraphicConfig = CGC, 
+                             tStyleY1 = self.ListVarioStyleX, tStyleY2 = self.ListVarioStyleFit )
         
         ## Y-Richtung
         if ( sDirection in [ "Y", "XY", "BOTH" ] ):
@@ -971,9 +970,9 @@ class CRandomFieldGsT ( object ):
                 self.ListVarioStyleFit[ 5 ] = "$f_y$"
                 _, sText, _, _ = GetDescription ( CCovModel_gst = self.CCovModel.CCovModel_gst )
                 sTitleText = sText + " $(\\text{R}^2: %.3f)$" % ( DictResultY.get ( "R2" ) )
-                CGC = CGraphicConfig ( sTitle = "Fit Y-Direction > " + sTitleText, sLabelX = "r", sLabelY = "Variogram" )
-                PlotX2Y ( aX = self.aY_rf, aY1 = self.aGammaY, aY2 = self.aVariogramY_theo, GraphicConfig = CGC, 
-                          tStyleY1 = self.ListVarioStyleY, tStyleY2 = self.ListVarioStyleFit )
+                CGC = pl.CGraphicConfig ( sTitle = "Fit Y-Direction > " + sTitleText, sLabelX = "r", sLabelY = "Variogram" )
+                pl.PlotX2Y ( aX = self.aY_rf, aY1 = self.aGammaY, aY2 = self.aVariogramY_theo, GraphicConfig = CGC, 
+                             tStyleY1 = self.ListVarioStyleY, tStyleY2 = self.ListVarioStyleFit )
 
         if ( bShowInfo == True ):
             print ( DictResultX, DictResultY )
@@ -990,11 +989,11 @@ class CRandomFieldGsT ( object ):
             
         aLine = np.linspace ( start = 0.0, stop = 1.0, num = self.aX_rf.shape[ 0 ] )
         
-        CGC = CGraphicConfig ( sTitle = "Isotropie Check", sLabelX = "theo. Semivarianz x-Direction", 
+        CGC = pl.CGraphicConfig ( sTitle = "Isotropie Check", sLabelX = "theo. Semivarianz x-Direction", 
                                   sLabelY = "theo. Semivarianz y-Direction" )
-        Plot2X2Y ( aX1 = self.aVariogramX_theo[ : iMin ], aY1 = self.aVariogramY_theo[ : iMin ], aX2 = aLine, aY2 = aLine, 
-                   GraphicConfig = CGC, tStyleY1 = ( "s9", "o", 5.0, "--", 2.0, "theo. Variograms" ),
-                   tStyleY2 = ( "r12", "o", 0.0, "--", 2.0, "\"Line of Isotropy\"" ) )
+        pl.Plot2X2Y ( aX1 = self.aVariogramX_theo[ : iMin ], aY1 = self.aVariogramY_theo[ : iMin ], aX2 = aLine, aY2 = aLine, 
+                      GraphicConfig = CGC, tStyleY1 = ( "s9", "o", 5.0, "--", 2.0, "theo. Variograms" ),
+                      tStyleY2 = ( "r12", "o", 0.0, "--", 2.0, "\"Line of Isotropy\"" ) )
         
         return
     
@@ -1002,14 +1001,14 @@ class CRandomFieldGsT ( object ):
         sBarLabel = "z(x, y)" 
         if ( sTitleText is None ):
             sTitleText = self.sDescription
-        CGC = CGraphicConfig ( sTitle = sTitleText, sLabelX = "X", sLabelY = "Y", sLegend = sBarLabel, sGridAxis = "none" )
+        CGC = pl.CGraphicConfig ( sTitle = sTitleText, sLabelX = "X", sLabelY = "Y", sLegend = sBarLabel, sGridAxis = "none" )
         
         if ( self.CCovModel.CCovModel_gst.anis != 1.0 ):
             sBoxText = "$\lambda = %.2f$" % ( self.CCovModel.CCovModel_gst.anis[ 0 ] )
-            CInfobox = CInfoBox ( fBoxPosX = 5, fBoxPosY = self.iDimY - 15, sText = sBoxText, sFaceColor = "chartreuse" )
+            CInfobox = pl.CInfoBox ( fBoxPosX = 5, fBoxPosY = self.iDimY - 15, sText = sBoxText, sFaceColor = "chartreuse" )
             CGC.Set ( InfoBox = CInfobox )
 
-        PlotImage ( aData2Dim = self.aRandomField, GraphicConfig = CGC, sColorMap = sColorMap, sOrigin = "upper" )
+        pl.PlotImage ( aData2Dim = self.aRandomField, GraphicConfig = CGC, sColorMap = sColorMap, sOrigin = "upper" )
     
         return 
     
@@ -1037,8 +1036,8 @@ def EstimateDirectionalVariogram ( aCoords, aData, sModel, sDate, iNumDirections
         sAverageParameter, sDescription, sUnit, iNumSensors = tTextLabel
         aDataID = np.arange ( start = 1, stop = iNumSensors + 1 )
         sTitleText = "Kenngröße %s aller %d Sensoren im %s" % ( sAverageParameter.capitalize (), iNumSensors, sDate )
-        GraCon = CGraphicConfig ( sTitle = sTitleText, sLabelX = "CountID", sLabelY = sDescription + " (" + sUnit + ")" )
-        PlotXY ( aX = aDataID, aY = aData, tStyle = ( "s8", "o", 8.0, "", 0.0, "" ), GraphicConfig = GraCon ) 
+        GraCon = pl.CGraphicConfig ( sTitle = sTitleText, sLabelX = "CountID", sLabelY = sDescription + " (" + sUnit + ")" )
+        pl.PlotXY ( aX = aDataID, aY = aData, tStyle = ( "s8", "o", 8.0, "", 0.0, "" ), GraphicConfig = GraCon ) 
 
     ## aAngles in Grad \beta mit: -180 <= \beta <= 180
     ### The azimuth of the directional dependence for this Variogram, given as an angle in degree. 
@@ -1095,21 +1094,21 @@ def EstimateDirectionalVariogram ( aCoords, aData, sModel, sDate, iNumDirections
             for il in range ( aCounts.shape[ 0 ] ):
                 ListAnnotation.append ( ( " (%s)" % ( aCounts[ il ] ), aBinCenter[ il ], aGamma[ il ], 10, "s18" ) )
             sFitLabel = "Fit (%s)" % ( sModel.capitalize () )
-            CHLine1 = CLine ( sLineColor = "r8", fLinePos = fNugget, sLineStyle = "--", fLineWidth = 2.0, sLineLabel = "Nugget" )
-            CHLine2 = CLine ( sLineColor = "r12", fLinePos = fSill, sLineStyle = "-", fLineWidth = 2.0,  sLineLabel = "Sill" )
-            CVLine1 = CLine ( sLineColor = "s12", fLinePos = fRange, sLineStyle = "--", fLineWidth = 2.0, sLineLabel = "Range" )
+            CHLine1 = pl.CLine ( sLineColor = "r8", fLinePos = fNugget, sLineStyle = "--", fLineWidth = 2.0, sLineLabel = "Nugget" )
+            CHLine2 = pl.CLine ( sLineColor = "r12", fLinePos = fSill, sLineStyle = "-", fLineWidth = 2.0,  sLineLabel = "Sill" )
+            CVLine1 = pl.CLine ( sLineColor = "s12", fLinePos = fRange, sLineStyle = "--", fLineWidth = 2.0, sLineLabel = "Range" )
             GraCon.Set ( sTitle = "Anpassung an direktionale Semivarianz ($\\vartheta= %.0f°$); %s" % ( aAngles[ ik ], sDate ), 
                          sLabelX = "Distanz r (m)", sAnnotationHorzAlign = "left", sAnnotationVertAlign = "bottom", HLine1 = CHLine1, HLine2 = CHLine2, VLine1 = CVLine1,
                         )
-            Plot2X2Y ( aX1 = aBinCenter, aY1 = aGamma, aX2 = aX, aY2 = aVariogram_theo, 
-                       tStyleY1 = ( "c9", "o", 9.0, "", 0.0, "$\gamma(r)$" ), 
-                       tStyleY2 = ( "b12", "", 0.0, "--", 3.0, sFitLabel ), ListAnnotation = ListAnnotation, GraphicConfig = GraCon )
+            pl.Plot2X2Y ( aX1 = aBinCenter, aY1 = aGamma, aX2 = aX, aY2 = aVariogram_theo, 
+                          tStyleY1 = ( "c9", "o", 9.0, "", 0.0, "$\gamma(r)$" ), 
+                          tStyleY2 = ( "b12", "", 0.0, "--", 3.0, sFitLabel ), ListAnnotation = ListAnnotation, GraphicConfig = GraCon )
 
     if ( sPivotParameter is not None ):
         sPivotParameter = sPivotParameter.capitalize ()
         iIndex = DictPivotParameter.get ( sPivotParameter )
         sTitleText = "Direktionale Variogramm-Karte (%s); %s" % ( sPivotParameter, sDate ) 
-        GraCon = CGraphicConfig ( sTitle = sTitleText, fPosVariable = 270.0 )
+        GraCon = pl.CGraphicConfig ( sTitle = sTitleText, fPosVariable = 270.0 )
         
         #if ( sPivotParameter == "Sill" ):
          #   aY = aFitParameter[ :, iIndex ] + aFitParameter[ :, 2 ]
@@ -1126,7 +1125,7 @@ def EstimateDirectionalVariogram ( aCoords, aData, sModel, sDate, iNumDirections
         else:
             tCrossStyle = None
             
-        PlotPolar ( aRad = aRad, aRho = aY, tStyleScatter = tStyleScatter, tCrossStyle = tCrossStyle, GraphicConfig = GraCon ) 
+        pl.PlotPolar ( aRad = aRad, aRho = aY, tStyleScatter = tStyleScatter, tCrossStyle = tCrossStyle, GraphicConfig = GraCon ) 
         
     return ( aBinCenter, ListGamma, aFitParameter )
 
@@ -1294,10 +1293,10 @@ def ShowRegressionResult ( aGridX, aGridY, aZ_mean, aZ_var, aZ = None, aDataObse
     #print ( aDataObserved )
     #print ( ">> ShowRegressionresult > aGridX Shape: %s, aGridY Shape: %s" % ( str ( aGridX.shape ), str ( aGridY.shape ) ) )
     #print ( ">> ShowRegressionResult > aZ_mean Shape: %s, aZ_var Shape: %s, aData_obs Shape: %s" % ( str ( aZ_mean.shape ), str ( aZ_var.shape ), str ( aDataObserved.shape ) ) )
-    CGraCon = CGraphicConfig ( sTitle = "Spatial Data", sLabelX = "x", sLabelY = "y", sLegend = "$f(x, y)$" )
+    CGraCon = pl.CGraphicConfig ( sTitle = "Spatial Data", sLabelX = "x", sLabelY = "y", sLegend = "$f(x, y)$" )
 
     if ( aZ is not None ):
-        PlotContour ( aX = aGridX, aY = aGridY, aData2D = aZ, iNumLevel = iNumLevel, GraphicConfig = CGraCon, sColorMap = sColorMap,
+        pl.PlotContour ( aX = aGridX, aY = aGridY, aData2D = aZ, iNumLevel = iNumLevel, GraphicConfig = CGraCon, sColorMap = sColorMap,
                          tStyleDataObs = ( sColorMap, "x", 12.0, "Z", "s2" ) )
     
     if ( aZ is not None ):
@@ -1308,18 +1307,18 @@ def ShowRegressionResult ( aGridX, aGridY, aZ_mean, aZ_var, aZ = None, aDataObse
     if ( CInfoBox is not None ):
         CGraCon.Set ( InfoBox = CInfoBox )
         
-    PlotContour ( aX = aGridX, aY = aGridY, aData2D = aZ_mean, iNumLevel = iNumLevel, GraphicConfig = CGraCon, sColorMap = sColorMap, 
+    pl.PlotContour ( aX = aGridX, aY = aGridY, aData2D = aZ_mean, iNumLevel = iNumLevel, GraphicConfig = CGraCon, sColorMap = sColorMap, 
                      aDataObserved = aDataObserved, tStyleDataObs = tStyleDataObs_mean, tLimX = tLimX, tLimY = tLimY )
     
     if ( bShowVariance == True ):
         CGraCon.Set ( sTitle = sTitleText + "Varianz", sLegend = "Varianz" )
-        PlotContour ( aX = aGridX, aY = aGridY, aData2D = aZ_var, iNumLevel = iNumLevel, GraphicConfig = CGraCon, sColorMap = sColorMap, 
+        pl.PlotContour ( aX = aGridX, aY = aGridY, aData2D = aZ_var, iNumLevel = iNumLevel, GraphicConfig = CGraCon, sColorMap = sColorMap, 
                          aDataObserved = aDataObserved, tStyleDataObs = tStyleDataObs_var, tLimX = tLimX, tLimY = tLimY )
     
     if ( aZ is not None ):
         sTitleText = sTitleText + "(MSE ($e_{MSE} = %.3f$))" % ( np.mean ( aMSE ) )
         CGraCon.Set ( sTitle = sTitleText, sLegend = "$MSE\,(x, y)$" )
-        PlotContour ( aX = aGridX, aY = aGridY, aData2D = aMSE, iNumLevel = 6, GraphicConfig = CGraCon, sColorMap = sColorMap, 
+        pl.PlotContour ( aX = aGridX, aY = aGridY, aData2D = aMSE, iNumLevel = 6, GraphicConfig = CGraCon, sColorMap = sColorMap, 
                          aDataObserved = aDataObserved, tStyleDataObs = tStyleDataObs_data, tLimX = tLimX, tLimY = tLimY )
     
     return
@@ -1345,9 +1344,9 @@ def DemoKriging ( tDimX = ( 0.0, 6.0, 50 ), tDimY = ( 0.0, 5.0, 40 ), iNumLevel 
     aMSE = COrdKriging.RunCrossValidation ( iNumFolds = 5 )
     print ( ">> Demokriging > MSE of CV: %.2f" % ( np.mean ( aMSE ) ) )
 
-    CGraCon = CGraphicConfig ( sTitle = "Kriging (Image)", sGridAxis = "both" )
-    PlotImage ( aData2Dim = aRField[ 0 ], GraphicConfig = CGraCon, sColorMap = "RdYlBu_r", 
-                  sInterpolation = "spline36", sOrigin = "lower", tExtent = ( 0, 6, 0, 5), sGridAxis = "both")
+    CGraCon = pl.CGraphicConfig ( sTitle = "Kriging (Image)", sGridAxis = "both" )
+    pl.PlotImage ( aData2Dim = aRField[ 0 ], GraphicConfig = CGraCon, sColorMap = "RdYlBu_r", 
+                   sInterpolation = "spline36", sOrigin = "lower", tExtent = ( 0, 6, 0, 5), sGridAxis = "both")
 
     return
 # ************************************* Demonstration des Kriging anhand eines Bildes (für die Einleitung ?) *******************************
@@ -1370,10 +1369,10 @@ def DemoKrigingPortrait ( fRatio = 0.4, iScaleFactor = 12 ): # 12
                                    bFitVariogram = True )
     aRField = COrdKriging.Interpolate ( tDimY = ( 0, iDimX, iDimX ), tDimX = ( 0, iDimY, iDimY ), iNumLevel = None, sColorMap = "Grays_r" )
 
-    PlotImagesNx3 ( tImageArray = ( aGrayImage, aSampleData2D, aRField[ 0 ] ), sTickOption = "none", 
+    pl.PlotImagesNx3 ( tImageArray = ( aGrayImage, aSampleData2D, aRField[ 0 ] ), sTickOption = "none", 
                        tTitle = ( "Original", "Beobachtung (%.0f%%)" % ( fRatio * 100.0 ), "Ergebnis \"Kriging\"" ), sColorMap = "Grays_r" )
     
-    PlotImagesNx2 ( tImageArray = ( aGrayImage, aRField[ 0 ] ), sTickOption = "all",
+    pl.PlotImagesNx2 ( tImageArray = ( aGrayImage, aRField[ 0 ] ), sTickOption = "all",
                        tTitle = ( "Original", "Ergebnis \"Kriging\"" ), sColorMap = "Grays_r" )
     
     return

@@ -5,7 +5,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.patches import Rectangle
 from mpl_toolkits.axes_grid1 import make_axes_locatable
-from PlotBA import GetColor, GDictPlotParameter, DrawFrameAxis, PlotScatterwMap, CGraphicConfig
+import PlotBA as pl
 import osmnx as ox
 from UtilitiesBA import CheckAssert, CountFrequencyContinousData
 from osmnx import plot_graph
@@ -59,10 +59,10 @@ def ShowBorder ( sPlaceName, sGraphType = "straßen_grob", CProjCRS = None, bSho
     
     if ( bShow == True ):
         CFigure, CAxis = plt.subplots ( nrows = 1, ncols = 1, figsize = ( 16, 10 ) )        
-        CGeoDfPlace.plot ( kind = "geo", ax = CAxis, edgecolor = GetColor ( "c12" ), linewidth = 2.0, facecolor = GetColor ( "s2" ), 
+        CGeoDfPlace.plot ( kind = "geo", ax = CAxis, edgecolor = pl.GetColor ( "c12" ), linewidth = 2.0, facecolor = pl.GetColor ( "s2" ), 
                            alpha = 0.9 )
         if ( sGraphType != "none" ):
-            ox.plot_graph ( G = CMultiGraph, ax = CAxis, bgcolor = "none", node_size = 0, edge_color = GetColor ( "c12" ), 
+            ox.plot_graph ( G = CMultiGraph, ax = CAxis, bgcolor = "none", node_size = 0, edge_color = pl.GetColor ( "c12" ), 
                             edge_linewidth = 0.1, edge_alpha = 0.9, show = False, bbox = aBoundingBox ) 
         
         #CGeoDfPlace.plot ( kind = "geo", ax = CAxis, edgecolor = pl.GetColor ( "b12" ), facecolor = pl.GetColor ( "s2" ), alpha = 0.9 )
@@ -96,34 +96,34 @@ def PlotScatterwMapAndGraph ( aX, aY, aZ, tMarker, GraphicConfig, tStyle, DfGeoD
 
     CFigure, CAxis = plt.subplots ( nrows = 1, ncols = 1, figsize = GraphicConfig.tFigureSize )
 
-    CAxis2 = DfGeoData.plot ( kind = "geo", ax = CAxis, edgecolor = GetColor ( sGeoDataEdgeColor ), 
-                              linewidth = fGeoDataEdgeLineWidth, facecolor = GetColor ( sGeoDataFaceColor ), alpha = fAlpha )
+    CAxis2 = DfGeoData.plot ( kind = "geo", ax = CAxis, edgecolor = pl.GetColor ( sGeoDataEdgeColor ), 
+                              linewidth = fGeoDataEdgeLineWidth, facecolor = pl.GetColor ( sGeoDataFaceColor ), alpha = fAlpha )
     
     if ( tStyleRectangle is not None ):
         CheckAssert ( bBool = ( len ( tStyleRectangle ) == 8 ), sMsg = "Invalid Shape of <tStyleRectangle>!",
                      sExtraInfo = "fLowerLeftX, fLowerLeftY, fWidth, fHeight, fLineWidth, sLineStyle, sEdgeColor, sFaceColor" )
         fLowerLeftX, fLowerLeftY, fWidth, fHeight, fLineWidth, sLineStyle, sEdgeColor, sFaceColor = tStyleRectangle
         CRect = Rectangle ( ( fLowerLeftX, fLowerLeftY ), fWidth, fHeight, linewidth = fLineWidth, linestyle = sLineStyle, 
-                              edgecolor = GetColor ( sEdgeColor) , facecolor = GetColor ( sFaceColor ) )
+                              edgecolor = pl.GetColor ( sEdgeColor) , facecolor = pl.GetColor ( sFaceColor ) )
 
         CAxis.add_patch ( CRect )
     
     tLimX = CAxis2.get_xlim ()
     tLimY = CAxis2.get_ylim ()
     
-    plot_graph ( G = CMultiGraph, ax = CAxis, bgcolor = "none", node_size = 0, edge_color = GetColor ( "c12" ), 
+    plot_graph ( G = CMultiGraph, ax = CAxis, bgcolor = "none", node_size = 0, edge_color = pl.GetColor ( "c12" ), 
                  edge_linewidth = 0.3, edge_alpha = fAlpha, show = False, close = False,
                  bbox = [ tLimX[ 0 ], tLimY[ 0 ], tLimX[ 1 ], tLimY[ 1 ] ] )
                  
     if ( sColor in plt.colormaps () ):
         CPathCollection = CAxis.scatter ( x = aX, y = aY, s = fMarkerSize, marker = sMarker, c = aZ, cmap = sColor, label = sLabel )
     else:
-        CPathCollection = CAxis.scatter ( x = aX, y = aY, s = fMarkerSize, marker = sMarker, c = GetColor ( sColor ), cmap = None, label = sLabel )
+        CPathCollection = CAxis.scatter ( x = aX, y = aY, s = fMarkerSize, marker = sMarker, c = pl.GetColor ( sColor ), cmap = None, label = sLabel )
     
     if ( tMarker is not None ):
         for ik in range ( len ( tMarker ) ):
             fX, fY, sMarker, fMarkerSize, sColor = tMarker[ ik ] 
-            CPathCollection = CAxis.scatter ( x = fX, y = fY, s = fMarkerSize, marker = sMarker, color = GetColor ( sColor ) )
+            CPathCollection = CAxis.scatter ( x = fX, y = fY, s = fMarkerSize, marker = sMarker, color = pl.GetColor ( sColor ) )
                                               #edgecolor = pl.GetColor ( sColor ), facecolor = "none" )
     
     if ( GraphicConfig.sTextLegend ):
@@ -131,14 +131,14 @@ def PlotScatterwMapAndGraph ( aX, aY, aZ, tMarker, GraphicConfig, tStyle, DfGeoD
         CAxis2 = CAxisDivider.append_axes ( "right", size = "3%", pad = GraphicConfig.fColorbarPad )
         CColorBar = CFigure.colorbar ( mappable = CPathCollection, cax = CAxis2 )
         
-        CColorBar.ax.set_ylabel ( GraphicConfig.sTextLegend, fontname = GDictPlotParameter.get ( "FontName" ), 
-                                  fontsize = GDictPlotParameter.get ( "LabelSizeColorbar" ), rotation = -90, verticalalignment = "bottom" )
+        CColorBar.ax.set_ylabel ( GraphicConfig.sTextLegend, fontname = pl.GDictPlotParameter.get ( "FontName" ), 
+                                  fontsize = pl.GDictPlotParameter.get ( "LabelSizeColorbar" ), rotation = -90, verticalalignment = "bottom" )
 
         for CLabel in CColorBar.ax.get_yticklabels ():
-            CLabel.set_fontname ( fontname = GDictPlotParameter.get ( "FontName" ) )
-            CLabel.set_fontsize ( fontsize = GDictPlotParameter.get ( "TickSizeColorbar" ) )
+            CLabel.set_fontname ( fontname = pl.GDictPlotParameter.get ( "FontName" ) )
+            CLabel.set_fontsize ( fontsize = pl.GDictPlotParameter.get ( "TickSizeColorbar" ) )
         
-    DrawFrameAxis ( CAxis = CAxis, GraphicConfig = GraphicConfig, iIndex = 0, sGridAxis = GraphicConfig.sGridAxis )
+    pl.DrawFrameAxis ( CAxis = CAxis, GraphicConfig = GraphicConfig, iIndex = 0, sGridAxis = GraphicConfig.sGridAxis )
     plt.show ()
     
     return
@@ -168,7 +168,7 @@ def ShowDataSnapShotwGraph ( aRawData, sDataSelection, sDate, sStartTime = None,
     else:
         sTitleText = "%s Messpunkte im %s (n = %d)" % ( sDescription, sDate, aRawData.shape[ 0 ] )
     #sTitleText = "Stadtgrenze, Messpunkte und Englischer Garten"
-    CGraCon = CGraphicConfig ( sTitle = sTitleText, sLabelX = sLabelX )#, sLegend = GDictSensorColumnDescription.get ( "PMS5003" )[ iIndex ], 
+    CGraCon = pl.CGraphicConfig ( sTitle = sTitleText, sLabelX = sLabelX )#, sLegend = GDictSensorColumnDescription.get ( "PMS5003" )[ iIndex ], 
                                   #fColorbarPad = -1.4 )
 
     if ( CProjCRS is not None ):
@@ -179,13 +179,6 @@ def ShowDataSnapShotwGraph ( aRawData, sDataSelection, sDate, sStartTime = None,
                               tStyleGeoDataEdge = ( "s14", 2.0 ), sGeoDataFaceColor = "s1", tStyleRectangle = tStyleRectangle, 
                               fAlpha = 0.9 )
     
-    ##geändert für darasetllung Englsicher Garten
-    """
-    PlotScatterwMapAndGraph ( aX = aX, aY = aY, aZ = aZ, tMarker = tMarker, GraphicConfig = CGraCon, 
-                              tStyle = ( "s11", "x", 15.0, ""), DfGeoData = DfGeoData, CMultiGraph = CMultiGraph, 
-                              tStyleGeoDataEdge = ( "s14", 2.0 ), sGeoDataFaceColor = "s1", tStyleRectangle = tStyleRectangle, 
-                              fAlpha = 0.9 )
-    """
     if ( bShowDistribution == True ):
         ShowDistributionDistances ( aData = aData, sDescription = sDescription, sUnit = sUnit )
     
@@ -219,12 +212,12 @@ def ShowDataSnapshotwBorder ( aRawData, sDataSelection, sDate, sStartTime = None
     else:
         sTitleText = "Messungen %s im %s (n = %d)" % ( sDescription, sDate, aRawData.shape[ 0 ] )
         
-    CGraCon = CGraphicConfig ( sTitle = sTitleText, sLabelX = sLabelX, sLabelY = sLabelY, sLegend = sDescription + " " + sUnit, fPosVariable = 0.5 )
+    CGraCon = pl.CGraphicConfig ( sTitle = sTitleText, sLabelX = sLabelX, sLabelY = sLabelY, sLegend = sDescription + " " + sUnit, fPosVariable = 0.5 )
 
     if ( CProjCRS is not None ):
         tMarker = [ ( 0.0, 0.0, "X", 180.0, "s11" ) ] 
      
-    PlotScatterwMap ( aX = aX, aY = aY, aZ = aZ, tMarker = tMarker, GraphicConfig = CGraCon, tStyle = ( "RdYlBu_r", "o", 80, "" ), 
+    pl.PlotScatterwMap ( aX = aX, aY = aY, aZ = aZ, tMarker = tMarker, GraphicConfig = CGraCon, tStyle = ( "RdYlBu_r", "o", 80, "" ), 
                          DfGeoData = CGeoDfPlace, tStyleGeoDataEdge = ( "s14", 2 ), sGeoDataFaceColor = "s1", 
                          tStyleRectangle = tStyleRectangle, fAlpha = 0.9 )
     
@@ -246,7 +239,7 @@ def ShowDistributionDistances ( aData, sDescription, sUnit ):
     aDist_diff = aDist[ np.triu_indices ( aDist.shape[ 0 ], 1 ) ]
 
     sTitleText = "Verteilung der Euklidischen Distanzen ($N=%d$)" % ( aDist_diff.shape[ 0 ] )
-    CGraCon = CGraphicConfig ( sTitle = sTitleText, sLabelX = "Euklidische Distanz $R$ (m)", 
+    CGraCon = pl.CGraphicConfig ( sTitle = sTitleText, sLabelX = "Euklidische Distanz $R$ (m)", 
                                   sLabelY = "Relative Häufigkeit" )
     CountFrequencyContinousData ( aData = aDist_diff, iNumBins = 20, sReturnType = "relative", bCenterEdges = True, 
                                   sColor = "g10", GraphicConfig = CGraCon, bInfo = False )
@@ -267,69 +260,11 @@ def ShowDistributionMeasurements ( aData, sTitleStartText, sDescription, sUnit, 
     CheckAssert ( bBool = ( aData.ndim == 1 ), sMsg = "Invalid Shape for <aData>!" )
 
     sTitleText = sTitleStartText + ": Verteilung der %s-Messwerte ($N=%d$)" % ( sDescription, aData.shape[ 0 ] )
-    CGraCon = CGraphicConfig ( sTitle = sTitleText, sLabelX = sDescription + " (" +  sUnit + ")", 
+    CGraCon = pl.CGraphicConfig ( sTitle = sTitleText, sLabelX = sDescription + " (" +  sUnit + ")", 
                                   sLabelY = "Relative Häufigkeit", sGridAxis = "y" )
     CountFrequencyContinousData ( aData = aData, iNumBins = iNumBins, sReturnType = "relative", bCenterEdges = True, 
                                   sColor = "b10", GraphicConfig = CGraCon, bInfo = False )
     
     return
-# ************************ Umriss von München mit Englischem Garten und Hauptverkehrsstraßen sowie ggf Wasserflächen ***********************
-def ShowMunichwBorder ( bAddWater ):
-    # 1) Administrative Grenze von München laden
-    CGeoDfMunichBboundary = ox.geocode_to_gdf ( "München, Germany" )
 
-    # 2) Englischen Garten als Fläche laden
-    CGeoDfEnglischerGarten = ox.geocode_to_gdf ( "Englischer Garten, München, Germany" )
-
-    # 3) Hauptverkehrsstraßen innerhalb der Münchner Stadtgrenze laden
-    sMajorRoadsFilter = '["highway"~"motorway|primary|secondary|tertiary"]'
-
-    CGraph = ox.graph_from_polygon ( CGeoDfMunichBboundary.geometry.iloc[ 0 ],
-                                     network_type = "drive",
-                                     custom_filter = sMajorRoadsFilter, simplify = True, )
-
-    CGeoDfEdges = ox.graph_to_gdfs ( CGraph, nodes = False )
-
-    # 4) Wasserflächen (Flüsse, Seen) innerhalb der Stadtgrenze
-    if ( bAddWater == True ):
-        DictWaterTags = { "natural": "water", "waterway" : "riverbank" }
-        try:
-            CGraphWater = ox.features_from_polygon ( CGeoDfMunichBboundary.geometry.iloc[ 0 ], DictWaterTags )
-        except Exception as e:
-            print ( "Keine Wasserflächen gefunden:", e )
-            CGraphWater = None
-            
-    # 5) Marienplatz als Punkt geocodieren
-    CPointMarienplatz = ox.geocode ( "Marienplatz, München, Germany" )  # (lat, lon)
-    fLat, fLon = CPointMarienplatz
-
-    # --- Plot zusammenbauen ---
-    CFigure, CAxis = plt.subplots ( figsize = ( 12, 12 ) )
-
-    # a) Stadtgrenze (nur Umriss)
-    CGeoDfMunichBboundary.boundary.plot ( ax = CAxis, color = GetColor ( "s14" ), linewidth = 2.0, zorder = 1 )
-
-    # Wasserflächen hellblau
-    if ( bAddWater == True ):
-        if ( ( CGraphWater is not None ) and ( not CGraphWater.empty ) ):
-            CGraphWater.plot ( ax = CAxis, color = GetColor ( "b4" ), zorder = 2 )
-
-    # b) Englischer Garten grün ausgefüllt
-    CGeoDfEnglischerGarten.plot ( ax = CAxis, color = GetColor ( "g12" ), alpha = 0.9, zorder = 3 )
-
-    # c) Hauptverkehrsstraßen dunkelbraun
-    CGeoDfEdges.plot ( ax = CAxis, color = GetColor ( "c12" ), linewidth = 0.5, zorder = 4 )
-
-    # d) Marienplatz als graues Kreuz
-    CAxis.scatter ( fLon, fLat, marker = "X", color = GetColor ( "s11" ), s = 180, linewidths = 2.5, zorder = 6 )
-
-    CAxis.set_title ( "München: Stadtgrenze, Englischer Garten, Hauptstraßen", 
-                       fontname = GDictPlotParameter.get ( "FontName" ), fontsize = 20 )
-    CAxis.set_axis_off ()
-
-    plt.tight_layout ()
-
-    plt.show ()
-    
-    return
     

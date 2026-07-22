@@ -3,15 +3,14 @@
 
 import numpy as np
 import matplotlib.pyplot as plt 
-from PlotBA import CGraphicConfig, GetColor, GDictPlotParameter, CInfoBox, CLine
-from PlotBA import PlotX3Y, PlotX2Y, PlotQuartett, PlotX4Y, PlotXY, PlotStackVertX2Y, PlotBarChart, Plot2X3Y, PlotScatterXY
+import PlotBA as pl
 import Statistic as st
-import GeodataAnalysis as ga
-import SpatialAnalysis as sa
-import DataImportSensor as ds
+import GeodataAnalysisBA as ga
+import SpatialAnalysisBA as sa
+import DataImportSensorBA as ds
 from cartopy import crs
 from scipy.interpolate import CubicSpline
-from Utilities import CheckAssert, SortDict
+from UtilitiesBA import CheckAssert, SortDict
 
 
 fLon_ref, fLat_ref = ds.GDictConfig.get ( "CentralLocation" )
@@ -67,7 +66,7 @@ def RunAnisotropicCrossValidation ( sModel, tParameterLambda, tParameterVar, iNu
     aDegTheta = np.rad2deg ( aRadTheta )
     ListCV = list ()
     
-    #ListMSE = list ()
+    ListMSE = list ()
 
     for fVar in aVar:
         for fLambda in aLambda:
@@ -89,7 +88,7 @@ def RunAnisotropicCrossValidation ( sModel, tParameterLambda, tParameterVar, iNu
                 
                 #fCV_MSE = CKrige.Predict ( uPos = [ aData[ 0, : ], aData[ 1, : ] ], aDataObserved = aData[ 2, : ] )
                 aCV_MSE = CKrige.RunCrossValidation ( iNumFolds = aData.shape[ 0 ], bShowInfo = False )
-                #ListMSE.append ( aCV_MSE )
+                ListMSE.append ( aCV_MSE )
                 fStd = np.std ( aCV_MSE )
                 fMean =  np.mean ( aCV_MSE )
                 fMedian = np.median ( aCV_MSE )
@@ -97,8 +96,8 @@ def RunAnisotropicCrossValidation ( sModel, tParameterLambda, tParameterVar, iNu
                 ListCV.append ( ( fVar, fLambda, fDegTheta, fStd, fMedian, fMean ) )
 
     aResultCV = np.asarray ( ListCV )
-    #aResultMSE = np.asarray ( ListMSE )
-    #np.save ( file = "ResultMSE.npy", arr = aResultMSE )
+    aResultMSE = np.asarray ( ListMSE )
+    np.save ( file = "ResultMSE.npy", arr = aResultMSE )
     
     ListY = list ()
     ListLegend = list ()
@@ -110,10 +109,10 @@ def RunAnisotropicCrossValidation ( sModel, tParameterLambda, tParameterVar, iNu
         aResult = aResultCV[ aSelectIndices ]
         ListY.append ( aResult[ :, -1 ] )
         
-    CGraCon = CGraphicConfig ( sTitle = "LOO-CV Ergebnisse der %s Messungen von %s ($\\lambda=%.1f$)" % ( tLabel[ 2 ], sDate, fLambda_fix ), 
+    CGraCon = pl.CGraphicConfig ( sTitle = "LOO-CV Ergebnisse der %s Messungen von %s ($\\lambda=%.1f$)" % ( tLabel[ 2 ], sDate, fLambda_fix ), 
                                   sLabelX = "Rotationswinkel $\\vartheta$ (Grad)", sLabelY = "$e_{\mathrm{MSE}}$" )
 
-    PlotX3Y ( aX = aResult[ :, 2 ], aY1 = ListY[ 0 ], aY2 = ListY[ 1 ], aY3 = ListY[ 2 ], 
+    pl.PlotX3Y ( aX = aResult[ :, 2 ], aY1 = ListY[ 0 ], aY2 = ListY[ 1 ], aY3 = ListY[ 2 ], 
                 tStyleY1 = ( "o10", "o", 8.0, "--", 2.0, ListLegend[ 0 ] ),
                 tStyleY2 = ( "b10", "o", 8.0, "--", 2.0, ListLegend[ 1 ] ),
                 tStyleY3 = ( "s10", "o", 8.0, "--", 2.0, ListLegend[ 2 ] ), GraphicConfig = CGraCon )   
@@ -128,16 +127,16 @@ def RunAnisotropicCrossValidation ( sModel, tParameterLambda, tParameterVar, iNu
         ListY.append ( aResult[ :, -1 ] )
         
     CGraCon.Set ( sTitle = "LOO-CV Ergebnisse der %s Messungen von %s ($\mathrm{Sill}=%.1f$)" % ( tLabel[ 2 ], sDate, fVar_fix ) ) 
-    PlotX3Y ( aX = aResult[ :, 2 ], aY1 = ListY[ 0 ], aY2 = ListY[ 1 ], aY3 = ListY[ 2 ], 
+    pl.PlotX3Y ( aX = aResult[ :, 2 ], aY1 = ListY[ 0 ], aY2 = ListY[ 1 ], aY3 = ListY[ 2 ], 
                  tStyleY1 = ( "o10", "o", 8.0, "--", 2.0, ListLegend[ 0 ] ),
                  tStyleY2 = ( "b10", "o", 8.0, "--", 2.0, ListLegend[ 1 ] ),
                  tStyleY3 = ( "s10", "o", 8.0, "--", 2.0, ListLegend[ 2 ] ), GraphicConfig = CGraCon )   
     
     
-    PlotX2Y ( aX = aResultCV[ :, 2 ], aY1 = aResultCV[ :, 3 ], aY2 = aResultCV[ :, -1  ], 
-                tStyleY1 = ( "o10", "o", 8.0, "--", 2.0, "Std" ),
-                tStyleY2 = ( "b10", "o", 8.0, "--", 2.0, "Mean" ),
-                GraphicConfig = CGraCon )   
+    pl.PlotX2Y ( aX = aResultCV[ :, 2 ], aY1 = aResultCV[ :, 3 ], aY2 = aResultCV[ :, -1  ], 
+                 tStyleY1 = ( "o10", "o", 8.0, "--", 2.0, "Std" ),
+                 tStyleY2 = ( "b10", "o", 8.0, "--", 2.0, "Mean" ),
+                 GraphicConfig = CGraCon )   
     
     return
 
@@ -347,7 +346,7 @@ def AnalyzeTimeAverageDataCV ( sDate, sSubFolderMonthYear, sDataSelection, tNumL
         CCovModel = sa.CCovarianceModelGsT ( sModel = sModel, fVar = fVar, uLenScale = fLenScale, fNugget = fNugget, 
                                              fRescale = fRescale, fShape = fShape )
         CKrige = sa.COrdKrigingGsT ( CCovarianceModel = CCovModel, uDataObserved = np.transpose ( aData_sel ), bFitVariogram = False )
-        CInfobox = CInfoBox ( sText = sInfoBoxText, fBoxPosX = -11800, fBoxPosY= -6200, iBoxFontSize = 12, sFaceColor = "chartreuse" )
+        CInfobox = pl.CInfoBox ( sText = sInfoBoxText, fBoxPosX = -11800, fBoxPosY= -6200, iBoxFontSize = 12, sFaceColor = "chartreuse" )
         CKrige.Interpolate ( tDimX = ( fMinX, fMaxX, 400 ), tDimY = ( fMinY, fMaxY, 400 ), tLimX = ( 300, 300 ), tLimY = ( 300, 300 ), 
                              iNumLevel = 40, sColorMap = "RdYlBu_r", CInfoBox = CInfobox, bShowVariance = True )
     
@@ -434,41 +433,41 @@ def ShowDataSensorLUA ( sMonthYear = "Apr2026" ):
     
     tStyleP10 = ( "c12", "o", 4.0, "--", 1.0, "$\mathrm{PM}_{10}$" )
     tStyleP2x5 = ( "b12", "D", 4.0, "--", 1.0, "$\mathrm{PM}_{2.5}$" )
-    CHLine1 = CLine ( sLineColor = "r12", fLinePos = 25.0, fLineWidth = 2.0, sLineStyle = "--", sLineLabel = "Jahresgrenzwert $\mathrm{PM}_{2.5}$" )
-    GraCon = CGraphicConfig ( sTitle = "Feinstaubmessungen Landesumweltamt April 2026: München Stacchus", sLabelX = "Zeit", 
+    CHLine1 = pl.CLine ( sLineColor = "r12", fLinePos = 25.0, fLineWidth = 2.0, sLineStyle = "--", sLineLabel = "Jahresgrenzwert $\mathrm{PM}_{2.5}$" )
+    GraCon = pl.CGraphicConfig ( sTitle = "Feinstaubmessungen Landesumweltamt April 2026: München Stacchus", sLabelX = "Zeit", 
                                  sLabelY = "Stundenmittelwerte $\mathrm{PM}_{10}$ und $\mathrm{PM}_{2.5}$", HLine1 = CHLine1 )
 
-    PlotX2Y ( aX = aDateTime, aY1 = aData[ :, 6 ], aY2 = aData[ :, 7 ], tStyleY1 = tStyleP2x5, tStyleY2 = tStyleP10, GraphicConfig = GraCon )
+    pl.PlotX2Y ( aX = aDateTime, aY1 = aData[ :, 6 ], aY2 = aData[ :, 7 ], tStyleY1 = tStyleP2x5, tStyleY2 = tStyleP10, GraphicConfig = GraCon )
     
 
     ### Stundenmittelwerte PM2.5
     sLabelYPM2x5 = "Stundenmittelwerte $\mathrm{PM}_{2.5}$"
-    GraConQuartett = CGraphicConfig ( sLabelY = sLabelYPM2x5, sLabelY3 = sLabelYPM2x5 )#, sLabelY3 = sLabelYPM2x5, sLabelY4 = sLabelYPM2x5 )
+    GraConQuartett = pl.CGraphicConfig ( sLabelY = sLabelYPM2x5, sLabelY3 = sLabelYPM2x5 )#, sLabelY3 = sLabelYPM2x5, sLabelY4 = sLabelYPM2x5 )
 
     fMeanJoh2x5 = np.mean ( aData[ :, 0 ] )    
     fMeanLan2x5 = np.mean ( aData[ :, 2 ] )    
     fMeanLot2x5 = np.mean ( aData[ :, 4 ] )
     fMeanSta2x5 = np.mean ( aData[ :, 6 ] )
-    CHLineJoh = CLine ( sLineColor = "r12", fLinePos = fMeanJoh2x5, sLineStyle = "--", fLineWidth = 2.0, sLineLabel = "Monats-Mittelwert" )
-    CHLineLan = CLine ( sLineColor = "r12", fLinePos = fMeanLan2x5, sLineStyle = "--", fLineWidth = 2.0, sLineLabel = "Monats-Mittelwert" )
-    CHLineLot = CLine ( sLineColor = "r12", fLinePos = fMeanLot2x5, sLineStyle = "--", fLineWidth = 2.0, sLineLabel = "Monats-Mittelwert" )
-    CHLineSta = CLine ( sLineColor = "r12", fLinePos = fMeanSta2x5, sLineStyle = "--", fLineWidth = 2.0, sLineLabel = "Monats-Mittelwert" )
+    CHLineJoh = pl.CLine ( sLineColor = "r12", fLinePos = fMeanJoh2x5, sLineStyle = "--", fLineWidth = 2.0, sLineLabel = "Monats-Mittelwert" )
+    CHLineLan = pl.CLine ( sLineColor = "r12", fLinePos = fMeanLan2x5, sLineStyle = "--", fLineWidth = 2.0, sLineLabel = "Monats-Mittelwert" )
+    CHLineLot = pl.CLine ( sLineColor = "r12", fLinePos = fMeanLot2x5, sLineStyle = "--", fLineWidth = 2.0, sLineLabel = "Monats-Mittelwert" )
+    CHLineSta = pl.CLine ( sLineColor = "r12", fLinePos = fMeanSta2x5, sLineStyle = "--", fLineWidth = 2.0, sLineLabel = "Monats-Mittelwert" )
     GraConQuartett.Set ( HLine1 = CHLineJoh, HLine2 = CHLineLan, HLine3 = CHLineLot, HLine4 = CHLineSta )
 
-    PlotQuartett ( uX = aDateTime, tY = ( aData[ :, 0 ], aData[ :, 2 ], aData[ :, 4 ], aData[ :, 6 ] ), GraphicConfig = GraConQuartett, 
+    pl.PlotQuartett ( uX = aDateTime, tY = ( aData[ :, 0 ], aData[ :, 2 ], aData[ :, 4 ], aData[ :, 6 ] ), GraphicConfig = GraConQuartett, 
                       tStyles = ( ( "b12", "o", 4.0, "-", 1.0, "Johanneskirchen" ),
                                   ( "b12", "o", 4.0, "-", 1.0, "Landshuter Allee" ),
                                   ( "b12", "o", 4.0, "-", 1.0, "Lothstraße" ),
                                   ( "b12", "o", 4.0, "-", 1.0, "Stacchus" ) ) )
     
-    GraCon = CGraphicConfig ( sTitle = "Feinstaubmessungen Landesumweltamt in München: April 2026", sLabelX = "Zeit",
+    GraCon = pl.CGraphicConfig ( sTitle = "Feinstaubmessungen Landesumweltamt in München: April 2026", sLabelX = "Zeit",
                                  sLabelY = "Stundenmittelwerte $\mathrm{PM}_{2.5}$" )
     
-    PlotX4Y ( aX = aDateTime, tY = ( aData[ :, 0 ], aData[ :, 2 ], aData[ :, 4 ], aData[ :, 6 ] ), 
-              tStylesY = ( ( "b12", "o", 1.0, "-", 1.0, "Johanneskirchen" ),
-                           ( "o12", "D", 1.0, "-", 1.0, "Landshuter Allee" ),
-                           ( "c12", "o", 1.0, "-", 1.0, "Lothstraße" ),
-                           ( "s12", "D", 1.0, "-", 1.0, "Stacchus" ) ), GraphicConfig = GraCon )
+    pl.PlotX4Y ( aX = aDateTime, tY = ( aData[ :, 0 ], aData[ :, 2 ], aData[ :, 4 ], aData[ :, 6 ] ), 
+                 tStylesY = ( ( "b12", "o", 1.0, "-", 1.0, "Johanneskirchen" ),
+                            ( "o12", "D", 1.0, "-", 1.0, "Landshuter Allee" ),
+                            ( "c12", "o", 1.0, "-", 1.0, "Lothstraße" ),
+                            ( "s12", "D", 1.0, "-", 1.0, "Stacchus" ) ), GraphicConfig = GraCon )
 
     return
 # ***************************************** Grafische Darstellung des Verlaufes für einen Sensor *******************************************
@@ -490,19 +489,19 @@ def ShowDataSingleID ( sSensorID, sDataSelection, tSequence = None, sDate = None
     sTitleText = "Sensor-ID: %s (%d); Azimutal: (%.2f, %.2f)" % ( sSensorID, iCountID, fLon_ref, fLat_ref ) 
     
     if ( len ( tSelectIndices )  == 3 ): ## einzelner Messwert für P1, P2 oder T
-        CGraCon = CGraphicConfig ( sTitle = sTitleText, sLabelX = "Zeit", sLabelY = sTextLabelY )
+        CGraCon = pl.CGraphicConfig ( sTitle = sTitleText, sLabelX = "Zeit", sLabelY = sTextLabelY )
         fMean = np.mean ( aData[ :, 0 ] )
         fMedian = np.median ( aData[ :, 0 ] )
-        CHLine1 = CLine ( sLineColor = "b12", fLinePos = fMean, sLineLabel = "Mittelwert", fLineWidth = 2.0, sLineStyle = "--" )
-        CHLine2 = CLine ( sLineColor = "p8", fLinePos = fMedian, sLineLabel = "Median", fLineWidth = 2.0, sLineStyle = "-" )
+        CHLine1 = pl.CLine ( sLineColor = "b12", fLinePos = fMean, sLineLabel = "Mittelwert", fLineWidth = 2.0, sLineStyle = "--" )
+        CHLine2 = pl.CLine ( sLineColor = "p8", fLinePos = fMedian, sLineLabel = "Median", fLineWidth = 2.0, sLineStyle = "-" )
         CGraCon.Set ( HLine1 = CHLine1, HLine2 = CHLine2 )
-        PlotXY ( aX = aDateTime, aY = aData[ :, 0 ], tStyle = tStyleY1, GraphicConfig = CGraCon ) 
+        pl.PlotXY ( aX = aDateTime, aY = aData[ :, 0 ], tStyle = tStyleY1, GraphicConfig = CGraCon ) 
     else: ## beide Messerte P1 und P2
         sTextLabelY2 = tLabel[ 4 ] + " (" + tLabel[ 5 ] + ")"
-        CGraCon = CGraphicConfig ( sTitle = sTitleText, sLabelX2 = "Zeit", 
+        CGraCon = pl.CGraphicConfig ( sTitle = sTitleText, sLabelX2 = "Zeit", 
                                       sLabelY = sTextLabelY, sLabelY2 = sTextLabelY2 )
-        PlotStackVertX2Y ( aX = aDateTime, aY1 = aData[ :, 0 ], aY2 = aData[ :, 1 ], GraphicConfig = CGraCon, 
-                           tStyle1 = tStyleY1, tStyle2 = tStyleY2 )
+        pl.PlotStackVertX2Y ( aX = aDateTime, aY1 = aData[ :, 0 ], aY2 = aData[ :, 1 ], GraphicConfig = CGraCon, 
+                              tStyle1 = tStyleY1, tStyle2 = tStyleY2 )
     
     if ( sDate is not None ):
         sText = "Sensor-ID %s (%s)" % ( sSensorID, sDate )
@@ -529,14 +528,14 @@ def ShowDataSingleID2 ( sSensorID, sDataSelection, aDateTimeAll, aDataAll, aID_A
     sTitleText = "Sensor-ID: %s (%d); Pos: Geo: (%.2f, %.2f), Azimutal: (%.2f, %.2f)" % ( sSensorID, iCountID, fLat, fLon, fLon_ref, fLat_ref ) 
     
     if ( len ( tSelectIndices )  == 3 ): ## einzelner Messwert für P1, P2 oder T
-        CGraCon = CGraphicConfig ( sTitle = sTitleText, sLabelX = "Zeit", sLabelY = sTextLabelY )
-        PlotXY ( aX = aDateTime, aY = aData[ :, 0 ], tStyle = tStyleY1, GraphicConfig = CGraCon ) 
+        CGraCon = pl.CGraphicConfig ( sTitle = sTitleText, sLabelX = "Zeit", sLabelY = sTextLabelY )
+        pl.PlotXY ( aX = aDateTime, aY = aData[ :, 0 ], tStyle = tStyleY1, GraphicConfig = CGraCon ) 
     else: ## beide Messerte P1 und P2
         sTextLabelY2 = tLabel[ 4 ] + " (" + tLabel[ 5 ] + ")"
-        CGraCon = CGraphicConfig ( sTitle = sTitleText, sLabelX2 = "Zeit", 
+        CGraCon = pl.CGraphicConfig ( sTitle = sTitleText, sLabelX2 = "Zeit", 
                                       sLabelY = sTextLabelY, sLabelY2 = sTextLabelY2 )
-        PlotStackVertX2Y ( aX = aDateTime, aY1 = aData[ :, 0 ], aY2 = aData[ :, 1 ], GraphicConfig = CGraCon, 
-                           tStyle1 = tStyleY1, tStyle2 = tStyleY2 )
+        pl.PlotStackVertX2Y ( aX = aDateTime, aY1 = aData[ :, 0 ], aY2 = aData[ :, 1 ], GraphicConfig = CGraCon, 
+                              tStyle1 = tStyleY1, tStyle2 = tStyleY2 )
     
     return ( aDateTime, aData )
 # ********************* Analyse der Zeitreihen auf Auffälligkeiten hin und ggf Imputation der Artefakte und Ausreißer **********************
@@ -643,11 +642,11 @@ def ScreenData ( sDate, sDataSelection, sSubFolderMonthYear, tSetSensorID = None
         
         if ( bShow == True ):
             if ( fMax > fThreshold ):
-                CHLine = CLine ( sLineColor = "p10", fLinePos = fThreshold, sLineLabel = "Schwellwert %.0f %s" % ( fThreshold, sUnit ) )
+                CHLine = pl.CLine ( sLineColor = "p10", fLinePos = fThreshold, sLineLabel = "Schwellwert %.0f %s" % ( fThreshold, sUnit ) )
             else:
                 CHLine = None
             
-            CGraCon = CGraphicConfig ( sLabelX = "Zeit", sLabelY = sMesswert + " (" + sUnit + ")", HLine1 = CHLine )
+            CGraCon = pl.CGraphicConfig ( sLabelX = "Zeit", sLabelY = sMesswert + " (" + sUnit + ")", HLine1 = CHLine )
             tFillArea = ( aRollMean + fToleranceFactor * fStd, aRollMean - fToleranceFactor * fStd, "g10", 0.2, 
                           "Toleranzband ($\lambda_{\\text{tol}}=%.0f$)" % ( fToleranceFactor ) )
         
@@ -655,19 +654,19 @@ def ScreenData ( sDate, sDataSelection, sSubFolderMonthYear, tSetSensorID = None
                 sTitleText = sTitleTextStart + "%d Ausreißer " % ( aIndicesOutlier.shape[ 0 ] ) + "$\\rightsquigarrow$ " + sTag
                 sLabelY1 = "bereinigte Daten"
                 CGraCon.Set ( sTitle = sTitleText, sMarkerSingleLabel = "bereinigter Ausreißer" )
-                Plot2X3Y ( aX1 = aDateTime, aX2 = aDateTime[ aIndicesOutlier ], aY1 = aData_imp, aY2 = aRollMean, aY3 = aData[ aIndicesOutlier ],
-                             tStyleY1 = ( "c10", "o", 6.0, "", 0.0, sLabelY1 ), 
-                             tStyleY2 = ( "b12", "o", 2.0, "-.", 2.0, "gleitender Durchschnitt (m=%d)" % ( tDegreeRollMean[ 0 ] ) ), 
-                             tStyleY3 = ( "p13", "o", 7.0, "", 0.0, "Ausreißer" ), 
-                             GraphicConfig = CGraCon, 
-                             tFillArea = tFillArea, ListMarker = ListMarker, ListAnnotation = None )
+                pl.Plot2X3Y ( aX1 = aDateTime, aX2 = aDateTime[ aIndicesOutlier ], aY1 = aData_imp, aY2 = aRollMean, aY3 = aData[ aIndicesOutlier ],
+                              tStyleY1 = ( "c10", "o", 6.0, "", 0.0, sLabelY1 ), 
+                              tStyleY2 = ( "b12", "o", 2.0, "-.", 2.0, "gleitender Durchschnitt (m=%d)" % ( tDegreeRollMean[ 0 ] ) ), 
+                              tStyleY3 = ( "p13", "o", 7.0, "", 0.0, "Ausreißer" ), 
+                              GraphicConfig = CGraCon, 
+                              tFillArea = tFillArea, ListMarker = ListMarker, ListAnnotation = None )
             else:
                 sTitleText = sTitleTextStart + sTag
                 CGraCon.Set ( sTitle = sTitleText )
-                PlotX2Y ( aX = aDateTime, aY1 = aData_imp, aY2 = aRollMean, 
-                            tStyleY1 = ( "c10", "o", 6.0, "", 0.0, "original Daten" ), 
-                            tStyleY2 = ( "b12", "o", 0.0, "-.", 3.0, "gleitender Durchschnitt (m=%d)" % ( tDegreeRollMean[ 0 ] ) ), 
-                            GraphicConfig = CGraCon, tFillArea = tFillArea, ListMarker = None, ListAnnotation = None )
+                pl.PlotX2Y ( aX = aDateTime, aY1 = aData_imp, aY2 = aRollMean, 
+                             tStyleY1 = ( "c10", "o", 6.0, "", 0.0, "original Daten" ), 
+                             tStyleY2 = ( "b12", "o", 0.0, "-.", 3.0, "gleitender Durchschnitt (m=%d)" % ( tDegreeRollMean[ 0 ] ) ), 
+                             GraphicConfig = CGraCon, tFillArea = tFillArea, ListMarker = None, ListAnnotation = None )
     
     DictCategoryLabel = dict ()
     for ik in range ( len ( ListResult ) ):
@@ -683,7 +682,7 @@ def ScreenData ( sDate, sDataSelection, sSubFolderMonthYear, tSetSensorID = None
     if ( bShowSummaryPlot == True ):
         ListAnnotationSummary = list ()
         
-        CGraCon = CGraphicConfig ( sTitle = "Analyse der %s Messungen vom %s (N=%d)" % ( sMesswert, sDate, len ( tSetSensorID ) ), 
+        CGraCon = pl.CGraphicConfig ( sTitle = "Analyse der %s Messungen vom %s (N=%d)" % ( sMesswert, sDate, len ( tSetSensorID ) ), 
                                      sLabelY = "Anzahl", sGridAxis = "y", sAnnotationHorzAlign = "center", 
                                      sAnnotationVertAlign = "bottom" )
         aX = np.asarray ( list ( DictCategoryLabel.keys () ) )
@@ -693,7 +692,7 @@ def ScreenData ( sDate, sDataSelection, sSubFolderMonthYear, tSetSensorID = None
             ListAnnotationSummary.append ( ( str ( aY[ ik ] ), aX[ ik ], aY[ ik ], 16.0, "black" ) )
 
         #pl.PlotStackedBarChart ( aX = aX, aData = aY, GraphicConfig = CGraCon, sColor = "b11" )
-        PlotBarChart ( aX = aX, aData = aY, GraphicConfig = CGraCon, ListAnnotation = ListAnnotationSummary, uColor = "b11" )
+        pl.PlotBarChart ( aX = aX, aData = aY, GraphicConfig = CGraCon, ListAnnotation = ListAnnotationSummary, uColor = "b11" )
         
     return ( ListResult )
 # ********* Durchführung einer Cross-Validation zur Bestimmung der besten Parameter-Kombination für die isotrope Variogramm-Schätzung ******
@@ -752,13 +751,13 @@ def RunIsotropicCrossValidation ( aData, ListVariogramEstimation, fLowerFitBound
 
     if ( bShowPlot == True ):
         sTitleText = "Cross-Validation Resultat (%s: %s Messungen)" % ( sDate, sDescription )
-        GraCon = CGraphicConfig ( sTitle = sTitleText, sLabelX = "Range", sLabelY = "Sill", 
+        GraCon = pl.CGraphicConfig ( sTitle = sTitleText, sLabelX = "Range", sLabelY = "Sill", 
                                      sLegend = "mittlerer MSE der CV" )
-        PlotScatterXY ( aX = aResultCV[ :, 2 ], aY = aResultCV[ :, 3 ], aZ = aResultCV[ :, 5 ], GraphicConfig = GraCon, 
+        pl.PlotScatterXY ( aX = aResultCV[ :, 2 ], aY = aResultCV[ :, 3 ], aZ = aResultCV[ :, 5 ], GraphicConfig = GraCon, 
                            tStyle = ( "RdYlBu_r", "o", 50.0, "" ) )
     
         GraCon.Set ( sLabelX = "$r_{max}$", sLabelY = "#Lags" )
-        PlotScatterXY ( aX = aResultCV[ :, 1 ], aY = aResultCV[ :, 0 ], aZ = aResultCV[ :, 5 ], sEdgeColor = "black",
+        pl.PlotScatterXY ( aX = aResultCV[ :, 1 ], aY = aResultCV[ :, 0 ], aZ = aResultCV[ :, 5 ], sEdgeColor = "black",
                           GraphicConfig = GraCon, tStyle = ( "RdYlBu_r", "o", 50.0, "" ) )
     
     return ( aResultCV[ iArgMinTotal ] )
@@ -770,17 +769,17 @@ def PlotResultCV ( ListX, ListY, fTotalMin ):
     
     tStyles = ( ( "s6", "o" ), ( "b6", "o" ), ( "s10", "o" ) , ( "b10", "o" ), ( "s14", "o" ), ( "b14", "o" ), ( "s18", "o" ), ( "b18", "o" ) )
     for aX, aY, tStyle in zip ( ListX, ListY, tStyles ):
-        plt.plot ( aX, [ aY ] * len ( aX ), color = GetColor ( tStyle[ 0 ] ), marker = tStyle[ 1 ], markersize = 9.0,
+        plt.plot ( aX, [ aY ] * len ( aX ), color = pl.GetColor ( tStyle[ 0 ] ), marker = tStyle[ 1 ], markersize = 9.0,
                   linestyle = "none" )
-    plt.axvline ( x = fTotalMin, color = GetColor ( "r12" ), ls = "--", lw = 2.0, label = "Kleinster MSE" )
+    plt.axvline ( x = fTotalMin, color = pl.GetColor ( "r12" ), ls = "--", lw = 2.0, label = "Kleinster MSE" )
     plt.title ( "Cross-Validation Resultat: Kombination (Kovarianz-Modell, Schätzer)", 
-            fontname = GDictPlotParameter.get ( "FontName" ), fontsize = GDictPlotParameter.get ( "TitleSize" ) )
-    plt.xlabel ( "MSE", fontname = GDictPlotParameter.get ( "FontName" ), fontsize = GDictPlotParameter.get ( "LabelSize" ) )
-    plt.xticks ( fontname = GDictPlotParameter.get ( "FontName" ), fontsize = GDictPlotParameter.get ( "TickSize" )  )
-    plt.yticks ( fontname = GDictPlotParameter.get ( "FontName" ), fontsize = GDictPlotParameter.get ( "TickSize" ) )
+                fontname = pl.GDictPlotParameter.get ( "FontName" ), fontsize = pl.GDictPlotParameter.get ( "TitleSize" ) )
+    plt.xlabel ( "MSE", fontname = pl.GDictPlotParameter.get ( "FontName" ), fontsize = pl.GDictPlotParameter.get ( "LabelSize" ) )
+    plt.xticks ( fontname = pl.GDictPlotParameter.get ( "FontName" ), fontsize = pl.GDictPlotParameter.get ( "TickSize" )  )
+    plt.yticks ( fontname = pl.GDictPlotParameter.get ( "FontName" ), fontsize = pl.GDictPlotParameter.get ( "TickSize" ) )
     plt.grid ( visible = True, axis = "both" )
 
-    plt.legend ( prop = { "family": GDictPlotParameter.get ( "FontName" ), "size": GDictPlotParameter.get ( "LegendSize" ) }, 
+    plt.legend ( prop = { "family": pl.GDictPlotParameter.get ( "FontName" ), "size": pl.GDictPlotParameter.get ( "LegendSize" ) }, 
              loc = "best" )
     plt.show ()
 
@@ -854,9 +853,9 @@ def ShowSensorNearLUA ( sKeyRefLUA ):
         ListDataAverage.append ( ( aDataNN_avg[ :, 1 ] ) ) ### Mittelwert Pm2.5
 
     sTitleText = "Einstündige Mittelwerte: April 2026; Nähe %s" % ( DictLoc.get ( sKeyRefLUA ) )
-    GraCon = CGraphicConfig ( sTitle = sTitleText, sLabelX = "Zeit", sLabelY = "$\mathrm{P}_{2.5}$ bzw. $\mathrm{PM}_{2.5}$" )
+    GraCon = pl.CGraphicConfig ( sTitle = sTitleText, sLabelX = "Zeit", sLabelY = "$\mathrm{P}_{2.5}$ bzw. $\mathrm{PM}_{2.5}$" )
     
-    PlotX4Y ( aX = aDateTimeNN_avg, tY = ListDataAverage, tStylesY =
+    pl.PlotX4Y ( aX = aDateTimeNN_avg, tY = ListDataAverage, tStylesY =
                  ( ( "o12", "D", 3.0, "--", 2.0, "$\mathrm{PM}_{2.5}$; Messstation Landshuter Allee" ),
                    ( "b10", "o", 3.0, "--", 2.0, ListLabels[ 0 ] ),
                    ( "c10", "o", 3.0, "--", 2.0, ListLabels[ 1 ] ),

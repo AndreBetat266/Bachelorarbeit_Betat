@@ -3,7 +3,8 @@
 
 import numpy as np
 import os
-from PlotBA import CGraphicConfig, PlotBarChart, PlotImage
+import PlotBA as pl
+from collections import OrderedDict
 from inspect import stack
 from termcolor import colored
 from PIL import Image
@@ -34,6 +35,11 @@ def CheckAssert ( bBool, sMsg, sExtraInfo = None ):
         raise ( SystemExit )
     
     return 
+# ******************************************* Sortierung der Items oder Keys eines Dictionary **********************************************
+def SortDict ( Dict, bReverse = True ): # True : absteigend, False: aufsteigend
+    DictSorted = OrderedDict ( sorted ( Dict.items (), key = lambda x: x[ 1 ], reverse = bReverse ) )
+
+    return ( DictSorted )
 
 # ********************************** Häufigkeits-Verteilung von kontinuierlichen Daten durch Diskretisierung *******************************
 def CountFrequencyContinousData ( aData, iNumBins = 100, sReturnType = "RELATIVE", bCenterEdges = True, sColor = None, GraphicConfig = None, bInfo = True ):
@@ -75,11 +81,11 @@ def CountFrequencyContinousData ( aData, iNumBins = 100, sReturnType = "RELATIVE
                 sLabelTextY = "Absolute Häufigkeit $H_{abs}$"
             elif ( sReturnType in [ "NORMED", "NORM" ] ):
                 sLabelTextY = "normierte Häufigkeit $H_{norm}$"
-            GraphicConfig = CGraphicConfig ( sTitle = "Histogramm reeller, eindimensionaler Daten", sLabelX = "Wert $x_k$", sLabelY = sLabelTextY )
+            GraphicConfig = pl.CGraphicConfig ( sTitle = "Histogramm reeller, eindimensionaler Daten", sLabelX = "Wert $x_k$", sLabelY = sLabelTextY )
             
         fBarWidth = np.around ( ( fBinWidth ), decimals = 2 )
 
-        PlotBarChart ( aX = aBinEdges, aData = aCounts, GraphicConfig = GraphicConfig, uColor = sColor, sEdgeColor = "black", fWidth = fBarWidth )
+        pl.PlotBarChart ( aX = aBinEdges, aData = aCounts, GraphicConfig = GraphicConfig, uColor = sColor, sEdgeColor = "black", fWidth = fBarWidth )
     
     return ( aCounts, aBinEdges, fBinWidth )
 # **************************** Skalierung der Größe eines Bildes aus einer Datei um einen ganzzahligen Faktor ******************************
@@ -145,9 +151,9 @@ def SampleFromData2D ( aData2Dim, fRatio, fEmptyValue, sColorMap = "Grays_r", iR
     aSampleData2D[ aCoordsX, aCoordsY ] = aData2Dim[ aCoordsX, aCoordsY ]
         
     if ( sColorMap is not None ):
-        CGraCon = CGraphicConfig ( sTitle = "Beobachtung (%.0f%% des Originalbilds)" % ( 100.0 * fRatio ), sLabelX = "x", sLabelY = "y", sLegend = "Grauwert" )
-        PlotImage ( aData2Dim = aSampleData2D, GraphicConfig = CGraCon, sColorMap = sColorMap, sInterpolation = "spline36", 
-                    sOrigin = "upper", tExtent = None, sGridAxis = "both" )
+        CGraCon = pl.CGraphicConfig ( sTitle = "Beobachtung (%.0f%% des Originalbilds)" % ( 100.0 * fRatio ), sLabelX = "x", sLabelY = "y", sLegend = "Grauwert" )
+        pl.PlotImage ( aData2Dim = aSampleData2D, GraphicConfig = CGraCon, sColorMap = sColorMap, sInterpolation = "spline36", 
+                       sOrigin = "upper", tExtent = None, sGridAxis = "both" )
         
     return ( aSampleData2D, ( aCoordsX, aCoordsY ), tSampleObservations )
 # ******** Analyse einer beliebigen Datei bzgl. Datentyp der Spalten, fehlender Werte, Median, arith. Mittelwert und #Ausprägungen *********
