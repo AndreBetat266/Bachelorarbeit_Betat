@@ -16,5 +16,5 @@ Um die Skripte zum Laufen zu bringen, müssen die folgenden frei verfügbaren Bi
 17) geopy
 18) cartopy
 
-Die selsbt verfassten Dateien sind durch die Endung *BA.py zu erkennen. Diese Dateien müssen über die Pfad-Variable der IDE 
+Die selbst verfassten Dateien sind durch die Endung *BA.py zu erkennen. Diese Dateien müssen über die Pfad-Variable der IDE 
 identifizierbar sein.
