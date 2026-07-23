@@ -1,5 +1,4 @@
 Um die Skripte zum Laufen zu bringen, müssen die folgenden frei verfügbaren Bibliotheken installiert sein:
-
 1) numpy
 2) matplotlib
 3) scipy
@@ -16,3 +15,6 @@ Um die Skripte zum Laufen zu bringen, müssen die folgenden frei verfügbaren Bi
 16) bs4
 17) geopy
 18) cartopy
+
+Die selsbt verfassten Dateien sind durch die Endung *BA.py zu erkennen. Diese Dateien müssen über die Pfad-Variable der IDE 
+identifizierbar sein.
