@@ -1,16 +1,22 @@
-% Stand 19. Juli 2026
+% Stand 23. Juli 2026
 \label{KapitelDatenauswertung_Diskussion}
 Zielsetzung dieser Arbeit war die Untersuchung, ob die betrachteten
 Feinstaubmessungen Hinweise auf eine räumliche Anisotropie 
 liefern und ob sich diese bei der Modellierung mittels Kriging
 berücksichtigen lässt.\\
-Die Untersuchungen in dieser Arbeit liefern \textit{Indizien}
-für das Vorliegen einer 
-anisotropen Verteilung der Feinstaub-Messungen in der 
-Stadt München aber keinen nach wissenschaftlichen Maßstäben
-haltbaren Beweis. Insbesondere kann die Frage nach dem
-Vorliegen einer  geometrischen oder zonalen Anisotropie 
-nicht geklärt werden. \\
+
+Es erweist sich, dass auf Basis der verwendeten Daten keine
+zuverlässige Schätzung des Range-Parameters möglich ist, da 
+die maximale paarweise Distanz der Sensor-Positionen mit hoher
+ Wahrscheinlichkeit deutlich unterhalb der tatsächlichen
+Reichweite der räum\-li\-chen Korrelation liegt. Als direkte
+Folge liefern die Untersuchungen in dieser Arbeit zwar
+\textit{Indizien} für das Vorliegen einer anisotropen
+Verteilung der Feinstaub-Messungen in München aber keinen 
+nach wissenschaftlichen Maßstäben haltbaren Beweis.
+Insbesondere kann die Frage nach dem Vorliegen einer 
+ geometrischen oder zonalen Anisotropie nicht geklärt 
+ werden. \\
 
 Die Variogramm-Karten für den Range als 
 Standard-Methode zur Detektion von räum\-li\-cher Anisotropie 
@@ -21,21 +27,21 @@ Kovarianz-Modell bestimmt, wobei der Range-Parameter nach oben
 durch die die maximale, paarweise Distanz der untersuchten
 Sensoren beschränkt ist, die bei etwa $21-24\,k m$ liegt.\\
 Da die Schätzungen der empirischen Semivarianz vielfach 
-nicht die zu erwartende Sättigung in das Sill-Plateau bei
-großen Werten des Lag aufweisen
+nicht den zu erwartenden Über\-gang in das Sill-Plateau 
+bei großen Werten des Lag aufweisen
 (vgl.\,z.\,B.\,Abb.\,(\ref{Abb_Datenauswertung_P25MessungenApr2026DirektionaleSemivarianzBeispielFit340}))
 kommt es bei der Anpassung zu numerischen Artefakten: der 
 Range der Anpassung 
 wird als die maximale, paarweise Distanz geschätzt.
-Diese anerkannte Methode zur Detektion von Anisotropie liefert 
-somit keine schlüssigen Ergebnisse.\\
+Die etablierte Methode der Variogramm-Karten zur Detektion von
+Anisotropie liefert somit keine schlüssigen Ergebnisse.\\
  
-Interessanterweise zeigen die Variogramm-Karten für den Sill eine 
+Interessanterweise zeigen einige der Variogramm-Karten für den Sill eine 
 bevorzugte Richtung, in der der Sill deutlich höhere Werte annimmt 
 als in einer senkrecht dazu stehenden Richtung. 
 Das ist kein stringenter Beweis für eine räumliche Anisotropie der Daten, 
 könnte aber ein indirektes Indiz sein:
-Sill und Range charakterisieren als $y$- und $x$-Koordinate denselben
+Sill und Range charakterisieren als Koordinaten-Paar denselben
 ausgezeichneten Punkt des Übergangs vom ansteigenden
 Ast hin zum Plateau, welches den Bereich der räumlichen Unkorreliertheit
 der Zufallsvariablen einleitet. Dieser Zusammenhang führt zu einer 
@@ -45,7 +51,7 @@ die Beobachtungen im ansteigenden Ast der Semivarianz liegen. \\
 Motiviert durch diese Beobachtung werden im letzten Teil der Arbeit 
 Kriging-Vorhersagen für anisotrop konstruierte Ko\-va\-ri\-anz-Modelle 
 betrachtet, deren Parametrisierungen mit den vorherigen Beobachtungen 
-konsistent sind. Hierbei liegt die Zielsetzung nicht darin, dass \glqq beste\grqq\ Kovarinaz-Modell zu finden, sondern ausschließlich darin, ein
+konsistent sind. Hierbei liegt die Zielsetzung nicht darin, dass \glqq beste\grqq\ Kovarinaz-Modell zu finden, sondern vorrangig darin, ein
 stärkeres Indiz für eine mögliche Anisotropie der Feinstaubdaten zu finden. 
  Diese mithilfe einer Leave-One-Out Cross-Validation
 durchgeführten Analysen weisen auf eine ausgezeichnete Richtung hin,
@@ -75,23 +81,15 @@ Erweiterung isotroper Modelle darstellen können. Für eine belastbare
 Bestätigung wären jedoch umfangreichere Datensätze und weiterführende
  Untersuchungen erforderlich.\\
 
-Nach Einschätzung des Autoren wären weitere Analysen der
-verwendeten Daten wenig erfolgversprechend: die irregulären Verläufe 
-der Schätzungen der Semivarianz, die daraus folgende, nicht
-konvergierende Anpassung des Range Parameters an theoretische
-Kovarianz-Funktionen in Kombination mit den Befunden von Reichweiten
-deutlich größer als $20\,km$ anderer Autoren sind starke Belege dafür,
-dass die Datenbasis nur den beginnenden Ast im Graphen der empirischen
-Semivarianz abdeckt.\\
-Dieser Makel würde auch weitergehenden räumlichen 
-oder raum-zeitlichen Untersuchungen anhaften und mögliche Ergebnisse 
-unter einen Vorbehalt stellen.\\
+Die identifizierten Limitationen der vorliegenden Datenbasis, allem 
+voran die zu geringe räumliche Abdeckung der Messpunkte in Bezug 
+zur vermutlichen Reichweite der Korrelation, bestimmen als primäre 
+Anforderung an weitere Analysen die Betrachtung eines größeren 
+Untersuchungsgebietes bei vergleichbarer Sensordichte. \\
 
-Die folgenden Untersuchungen erscheinen mit absteigender 
+\textit{Danach} erscheinen die folgenden Untersuchungen in absteigender 
 Priorität aussichtsreich:
 \begin{itemize}[topsep=2pt,parsep=1pt,itemsep=0.5pt]
-\item[$\circ$] Untersuchung eines größeren Untersuchungsgebietes 
-bei vergleichbarer Sensordichte.
 \item[$\circ$] Die Betrachtung deutlich längerer Zeiträume,
 wie sie in verwandten Arbeiten durchgeführt wurde, könnte
 die Aussagekraft der Analysen deutlich erhöhen. 
@@ -99,13 +97,13 @@ Insbesondere sollte sich dadurch der sehr starke Einfluss einzelner
 Sensoren auf die Ergebnisse der Cross-Validation verringern.
 \item[$\circ$] Die Frage, ob die räumliche Verteilung der Sensoren
 innerhalb des Stadtgebiets von München eine Vorzugsrichtung impliziert, 
-ließe sich durch geeignete Testverfahren adressieren.
+ließe sich z.\,B.\,durch einen Permutations-Test adressieren.
 \item[$\circ$] Da die Messdaten nicht normal-verteilt sind, 
 wäre es aufschlussreich, die Auswirkungen einer 
 vorherigen Transformation der schiefen Daten zu testen.
 \item[$\circ$] Die Untersuchung möglicher saisonaler Einflüsse 
-ist ein guter Einstieg in eine mög\-licher\-wei\-se noch
-detailliertere raum-zeitliche Modellierung der 
+ist ein guter Einstieg in Richtung einer darauf aufbauenden, 
+detaillierteren raum-zeitlichen Modellierung der 
 Feinstaubdaten.    
 \item[$\circ$] Die Verwendung der Kriging Methode mit externem Drift 
 (universal Kriging) in Kombination mit anisotropen Kovarianz-Modellen wäre 
