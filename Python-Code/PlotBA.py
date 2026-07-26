@@ -1,11 +1,10 @@
 # -*- coding: utf-8 -*-
-# Version vom 21. Juli 2026
+# Version vom 25. Juli 2026
 
 import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.patches import Polygon, Rectangle
-from mpl_toolkits.axes_grid1.inset_locator import zoomed_inset_axes 
-from mpl_toolkits.axes_grid1.inset_locator import mark_inset
+from matplotlib.colors import Normalize
 from mpl_toolkits.axes_grid1 import make_axes_locatable
 from UtilitiesBA import CheckAssert
 from geopandas.geodataframe import GeoDataFrame
@@ -454,44 +453,7 @@ def StyleCheck5 ( tStyle ):
     
     return ( sColor, sMarker, fMarkerSize, sLabel, sEdgeColor )
 
-def PlotStyleCheck ( iDim, tStyle ):
-    tStyles = None
-    
-    # für jeden Plot ein eigenes Style-Sheet
-    if ( iDim == len ( tStyle ) ): 
-        for ik in range ( iDim ): # sicherstellen, dass in keinem der Unter-Style-Sheets tStyle[ ik ] eine Farbpallete auftaucht
-            CheckAssert ( bBool = ( ( len ( tStyle[ ik ] ) == 6 ) and ( tStyle[ ik ][ 0 ] not in plt.colormaps () )), sMsg = "Shape Mismatch (len[tSyle] != iDim) !" )
-        tStyles = tStyle   
-        
-    # nur eine Plot-Serie
-    elif ( ( iDim == 1 ) and ( len ( tStyle ) == 6 ) ):
-        tStyles = tuple ( tStyle )
-        
-    # Farben und Label müssen generiert werden
-    else: 
-        uColor, sMarker, fMarkerSize, sLineStyle, fLineWidth, uLabel = StyleCheck6 ( tStyle )            
-        ListStyles = list ()
-        
-        if ( uColor in plt.colormaps () ):
-            uColors = CreateDiscreteColorMap ( sColorMapName = uColor, iNumEntries = iDim )
-        else:
-            uColors = uColor
-            
-        for ik in range ( iDim ):
-            if ( type ( uLabel ) == str ):
-                sLabel = uLabel
-            else:
-                sLabel = uLabel[ ik ]
-            if ( type ( uColors ) == str ):
-                sColor = uColor  
-            else:
-                sColor = uColors[ ik ]
-            
-            ListStyles.append ( ( sColor, sMarker, fMarkerSize, sLineStyle, fLineWidth, sLabel ) )
-            
-            tStyles = tuple ( ListStyles )
-            
-    return ( tStyles )
+
 
 # ********************** Allgemeine Funktion zur Darstellung von Annotationen basierend auf einer übergebenen Liste ************************
 ###                      Format eines einzelnen Listeneintrags:  ( sText, X-Koordinate, Y-Koordinate, fFontSize, optional: sColor  )
@@ -544,96 +506,6 @@ def DrawMarker ( ListMarker, GraphicConfig, CAxis = None ):
                 
     return
  
-"""
-## ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~  Test-Druck ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-tStyle = ( ( "r12", "H", 0.0, "-.", 3.0, "bla1" ), ( "s12", "X", 0.0, "-", 3.0, "bla2" ), 
-          ( "s12", ".", 12.0, "--", 3.0, "bla3" ) ) 
-
-#tStyle = ( "viridis", "o", 20.0, "--", 3.0, "blabla" )
-HLine = pl.CLine ( sLineColor = "p12", fLinePos = 0.25, fLineWidth = 4.0, sLineStyle = "-", sLineLabel = "test" ) 
-CBox = pl.CInfoBox( sText = "halle", fBoxPosX = 1.5, fBoxPosY = 1.5, iBoxFontSize = 22, sFaceColor = "azure", fAlpha = None )
-
-aX = np.linspace ( start = 0.0, stop = 2 * np.pi, num = 100 )
-aY = np.zeros ( shape = ( 3, aX.shape[ 0 ] ), dtype = np.float32 )
-
-aY[ 0, : ] = np.cos ( aX )
-aY[ 1, : ] = np.sin ( aX )
-aY[ 2, : ] = np.cos ( aX ) + np.sin ( aX )
-
-CGrCo = pl.CGraphicConfig ( sTitle = "Testdruck", sLabelX = "X-Koordinate", sLabelY  = "Y-Koordinate", HLine1 = HLine, InfoBox = CBox )
-tZoom = ( [ 2, 3], [ -1.0, -0.5], 2, 1 )
-pl.PlotXnY ( aX = aX, aY = aY, GraphicConfig = CGrCo, tStyles = tStyle, tZoom = tZoom, bShowLegend = True )
-
-"""
-##  tStyles: Tupel ( Color/Colormap, Marker, MarkerSize, LineStyle, LineWidth, Label/Label-Tuple ) 
-## ODER für jede Plot-Serie je ein Tupel ( Color, Marker, MarkerSize, LineStyle, LineWidth, Label ); wird von PlotStyleCheck geprüft 
-## tZoom = ( tXRange, tYRange, iZoomFactor, Position )
-## tZoom[ 3 ] = loc : 'upper right' : 1, 'upper left' : 2, 'lower left' : 3, 'lower right' : 4, 'right' : 5, 'center left'  : 6,
-## 'center right' : 7, 'lower center' : 8, 'upper center' : 9, 'center' : 10
-def PlotXnY ( aX, aY, GraphicConfig, tStyles, tZoom = None, tVLine = None, tHLine = None, tVLine2 = None, tHLine2 = None, bShowLegend = False ):    
-## geändert: 31.01.2026; Übergabe der Plot-Stile als Tupel mit umfangreichen Checks und Generierung der Stile bei Mehrfach-Plots durch
-## eigen Funktgion PlotStyleCheck
-    fig = plt.figure ( figsize = GraphicConfig.tFigureSize )
-    
-    if ( isinstance ( aY, ( list, tuple ) ) ):
-        aY = np.asarray ( aY, dytpe = np.float64 )
-        
-    tStyle = PlotStyleCheck ( aY.shape[ 0 ], tStyles )
-    
-    if ( aY.ndim > 1 ):
-        CheckAssert ( bBool = ( len ( tStyle ) == aY.shape[ 0 ] ), sMsg = "Shape Mismatch <tStyle>!" )
-    else:
-        CheckAssert ( bBool = ( len ( tStyle ) == 6 ), sMsg = "Invalid Parameter Shape <tStyle>!" )
-    
-    if ( tZoom is not None ):
-        CheckAssert ( bBool = ( len ( tZoom ) == 4 ), sMsg = "Shape Mismatch <tZoom>!" )
-        
-    if ( tZoom is not None ):
-        CAxis = plt.axes ()
-
-    if ( aY.ndim > 1 ):
-        for ik in range ( aY.shape[ 0 ] ):
-            sColor, sMarker, fMarkerSize, sLineStyle, fLineWidth, sLabel = tStyle[ ik ]
-            
-            if ( sMarker ):
-                plt.plot ( aX, aY[ ik ], marker = sMarker, markersize = fMarkerSize, linewidth = fLineWidth, linestyle = sLineStyle, 
-                           label = sLabel, color = GetColor ( sColor ), alpha = 0.5 )
-            else:
-                plt.plot ( aX, aY[ ik ], linewidth = fLineWidth, linestyle = sLineStyle, label = sLabel, color = GetColor ( sColor ) )        
-    else:
-        sColor, sMarker, fMarkerSize, sLineStyle, fLineWidth, sLabel = tStyle
-        if ( sMarker ):
-            plt.plot ( aX, aY, marker = sMarker, markersize = fMarkerSize, linewidth = fLineWidth, linestyle = sLineStyle, 
-                       label = sLabel, color = GetColor ( sColor ) )
-        else:
-            plt.plot ( aX, aY, linewidth = fLineWidth, linestyle = sLineStyle, label = sLabel, color = GetColor ( sColor ) )        
-    
-    GraphicConfig.Set ( CFigure = fig )
-    DrawFrame ( GraphicConfig = GraphicConfig, bShowLegend = bShowLegend )
-
-    if ( tZoom is not None ):
-        CAxisIn = zoomed_inset_axes ( parent_axes = CAxis, zoom = tZoom[ 2 ], loc = tZoom[ 3 ] ) 
-        if ( aY.ndim > 1 ):
-            sColor, sMarker, fMarkerSize, sLineStyle, fLineWidth, sLabel = tStyle[ 0 ]
-            CAxisIn.plot ( aX, aY[ 0, :], marker = sMarker, markersize = fMarkerSize, linewidth = fLineWidth, linestyle = sLineStyle, 
-                           color = GetColor ( sColor ) )
-        else:
-            sColor, sMarker, fMarkerSize, sLineStyle, fLineWidth, sLabel = tStyle
-            CAxisIn.plot ( aX, aY, marker = sMarker, markersize = fMarkerSize, linewidth = fLineWidth, linestyle = sLineStyle, 
-                           color = GetColor ( sColor ) )
-            
-        CAxisIn.set_xlim ( tZoom[ 0 ] )
-        CAxisIn.set_ylim ( tZoom[ 1 ] )
-        plt.xticks ( visible = False )
-        plt.yticks ( visible = False )
-        if ( GraphicConfig.sGridAxis in [ "x", "y", "both" ] ):
-            plt.grid ( visible = True, axis = GraphicConfig.sGridAxis )
-        mark_inset ( parent_axes = CAxis, inset_axes = CAxisIn, loc1 = 1, loc2 = 4, fc = "none", ec = "0.6" )
-     
-    plt.show ()
-    
-    return
-
 # ********************* Polar-Plot (theta; Rho) mit einem Kreuz zur Kennzechnung der maximalen und minimalen Ausdehnung ********************
 #### gute Wahl : tStyleScatter = ( "o", 40, "b12" ), tCrossStyle  = ( 3.0, "o12", 2.0, "o10" )
 def PlotPolar ( aRad, aRho, tStyleScatter, tCrossStyle, GraphicConfig ):
@@ -826,8 +698,8 @@ def PlotScatterwContour ( aX, aY, FuncPredict, GraphicConfig, sColorMap, iNumGri
 # Colorbar nur dann, wenn die Beschriftung via sTextLegend aktiviert wird
 # Der sColor-Eintrag von tStyleDataObs bestimmt, ob die Beobachtungen in der Farbpalette des Kontour-Plots ( sColor = "") 
 # oder als einfarbige Markierungen dargestellt werden ( sColor != "" ) 
-def PlotContour ( aX, aY, aData2D, iNumLevel, GraphicConfig, sColorMap, aDataObserved = None, tStyleDataObs = None, 
-                  tLimX = None, tLimY = None ):
+def PlotContour ( aX, aY, aData2D, iNumLevel, GraphicConfig, sColorMap, aDataObserved = None, tStyleDataObs = None, tLimX = None, tLimY = None,
+                  bUseSharedColorbar = True ):
     CheckAssert ( bBool = ( aData2D.shape == ( aY.shape[ 0 ], aX.shape[ 0 ] ) ), sMsg = "Shape Mismatch!",
                  sExtraInfo = "Shape Data2D: %s, Shape aX: %s, Shape aY: %s" % ( str ( aData2D.shape ), str ( aX.shape ), str ( aY.shape ) ) )
     if ( aDataObserved is not None ):
@@ -839,11 +711,17 @@ def PlotContour ( aX, aY, aData2D, iNumLevel, GraphicConfig, sColorMap, aDataObs
     uColor, sMarker, fMarkerSize, sLabel, sEdgeColor = StyleCheck5 ( tStyleDataObs )
     
     iNumColorBarTicks = 10
-    fMax, fMin = np.amax ( aData2D ), np.amin ( aData2D )
+
+    fMin, fMax = np.amin ( aData2D ), np.amax ( aData2D ) 
+    if ( ( aDataObserved is not None ) and ( bUseSharedColorbar == True ) ):
+        fMin, fMax = min ( fMin, np.amin ( aDataObserved[ 2, : ] ) ), max ( fMax, np.amax ( aDataObserved[ 2, : ] ) )
     if ( fMax == fMin ):
-        print ( ">> PlotContour > Constant Field!" )
-        print ( fMax, fMin )
+        print ( ">> PlotContour > Constant Field! (Max = %.3f, Min = %.3f)" % ( fMax, fMin ) )
         return
+    print ( ">> PlotContour > Max: %.3f, Min: %.3f" % ( fMax, fMin ) )
+    
+    ## Matplotlib Doku: A class which, when called, maps values within the interval [vmin, vmax] linearly to the interval [0.0, 1.0] 
+    CNormalizer = Normalize ( vmin = fMin, vmax = fMax, clip = False )
     
     aContourLevel = np.linspace ( start = fMin, stop = fMax, num = iNumLevel )
     
@@ -862,13 +740,15 @@ def PlotContour ( aX, aY, aData2D, iNumLevel, GraphicConfig, sColorMap, aDataObs
     #print ( ">>>>>> Y", np.amin ( aY ), np.amax ( aY ), aY.shape, aData2D.shape )
     
     ## 19.05.2026 nach vielem Probieren passt diese Formatierung; erst y dann x
-    CContourPlot = CAxis.contourf ( aY, aX, np.transpose ( aData2D ), cmap = sColorMap, levels = aContourLevel, alpha = 0.8, origin = "upper" )
+
+    CContourPlot = CAxis.contourf ( aY, aX, np.transpose ( aData2D ), cmap = sColorMap, levels = aContourLevel, 
+                                    norm = CNormalizer, alpha = 0.8, origin = "upper" )
     #CAxis.clabel ( CContourPlot, fontsize = 20 ) # Annotations! Sieht aber nicht gut aus 
     
     if ( aDataObserved is not None ):
         if ( uColor in plt.colormaps () ):
             CAxis.scatter ( x = aDataObserved[ 1, : ], y = aDataObserved[ 0, : ], marker = sMarker, s = fMarkerSize, c = aDataObserved[ 2, : ], 
-                            edgecolors = GetColor ( sEdgeColor ), cmap = uColor )
+                            norm = CNormalizer, edgecolors = GetColor ( sEdgeColor ), cmap = uColor )
         else:
             CAxis.plot ( aDataObserved[ 1, : ], aDataObserved[ 0, : ], color = GetColor ( uColor ), marker = sMarker, 
                          markersize = fMarkerSize, linestyle = "", linewidth = 0.0, alpha = 0.7 )
@@ -880,7 +760,7 @@ def PlotContour ( aX, aY, aData2D, iNumLevel, GraphicConfig, sColorMap, aDataObs
             CAxis.set_xlim ( np.amin ( aY ) - tLimX[ 0 ], np.amax ( aY ) + tLimX[ 1 ] )
 
     if ( GraphicConfig.sTextLegend ):
-        CColorBar = CAxis.figure.colorbar ( CContourPlot, ax = CAxis, ticks = ListLabel )
+        CColorBar = CAxis.figure.colorbar ( CContourPlot, ax = CAxis, ticks = ListLabel, norm = CNormalizer )
         CColorBar.ax.set_ylabel ( GraphicConfig.sTextLegend, fontname = GDictPlotParameter.get ( "FontName" ), 
                                   fontsize = GDictPlotParameter.get ( "LabelSizeColorbar" ), rotation = -90, verticalalignment = "bottom" )
     

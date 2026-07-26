@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# Version vom 21. Juni 2026
+# Version vom 25. Juni 2026
 
 import numpy as np
 import matplotlib.pyplot as plt
@@ -212,7 +212,8 @@ def ShowDataSnapshotwBorder ( aRawData, sDataSelection, sDate, sStartTime = None
     else:
         sTitleText = "Messungen %s im %s (n = %d)" % ( sDescription, sDate, aRawData.shape[ 0 ] )
         
-    CGraCon = pl.CGraphicConfig ( sTitle = sTitleText, sLabelX = sLabelX, sLabelY = sLabelY, sLegend = sDescription + " " + sUnit, fPosVariable = 0.5 )
+    CGraCon = pl.CGraphicConfig ( sTitle = sTitleText, sLabelX = sLabelX, sLabelY = sLabelY, sLegend = sDescription + " (" + sUnit + ")", 
+                                  fPosVariable = 0.5 )
 
     if ( CProjCRS is not None ):
         tMarker = [ ( 0.0, 0.0, "X", 180.0, "s11" ) ] 

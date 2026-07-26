@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# Version vom 21. Juli 2026
+# Version vom 25. Juli 2026
 
 import numpy as np
 import matplotlib.pyplot as plt
@@ -39,7 +39,7 @@ GiRandSeed = 21339
 # ******************************* Initialisierung eines Variogramms der Library Scikit-GStat als Klasse ************************************
 ## Die Daten müssen als äquidistante Matrix übergeben werden, das heißt X_jk ist der Wert an der Postion (j, k)
 class CVariogramSkG ( object ):
-    def __init__ ( self, aData, sEstimator = "matheron", sModel = "stable", bUseNugget = False, iNumLags = 20, fMaxLag = 10000, 
+    def __init__ ( self, aData, sEstimator = "matheron", sModel = "stable", bUseNugget = False, iNumLags = 20, fMaxLag = 20000, 
                    sColorMap = None, iRandSeed = GiRandSeed ):
         self.sEstimator = CheckValidEstimatorSkG ( sEstimator )
         self.sModel = CheckValidCovModelSkG ( sModel )
@@ -106,13 +106,13 @@ class CVariogramSkG ( object ):
     def UpdateModel ( self ):
         CVariogram_skg = sg.Variogram ( coordinates = self.aCoords, values = self.aData, estimator = self.sEstimator, 
                                         model = self.sModel, dist_func = "euclidean", bin_func = self.sBinFunc, normalize = False, 
-                                        fit_method = None, fit_sigma = None, use_nugget = self.bUseNugget, maxlag = self.uMaxLag, 
+                                        fit_method = None, fit_sigma = None, use_nugget = self.bUseNugget, maxlag = self.fMaxLag, 
                                         samples = None, n_lags = self.iNumLags )
         
         return ( CVariogram_skg )
     
     def UpdateFitBounds ( self ):
-        self.ListFitBounds[ 1 ][ 0 ] = self.uMaxLag
+        self.ListFitBounds[ 1 ][ 0 ] = self.fMaxLag
         return
         
     ## Die Routine to_gstools () ist NICHT sinnvoll zu verwenden, da diese nochmals einen Fit durchführt !
@@ -141,6 +141,8 @@ class CVariogramSkG ( object ):
         return 
     
     def GetEstimationParameter ( self, CVariogram_skg ):
+        print ( CVariogram_skg.get_empirical ( bin_center = True ) )
+        
         self.aBinCenter, self.aVariogram_estd = CVariogram_skg.get_empirical ( bin_center = True )
         self.aNumPerBin = np.zeros ( shape = ( self.aBinCenter.shape[ 0 ], ), dtype = np.int32 )
         ListBinInfo = list ()
@@ -240,7 +242,7 @@ class CVariogramSkG ( object ):
             self.fSill = tParameter[ 1 ]
             self.fNugget = tParameter[ 2 ]
             tFitParameter = ( self.sModel.capitalize ()[ : 3 ], self.sEstimator.capitalize ()[ : 3 ], self.sBinFunc.lower ()[ : 3 ],
-                              "%.0f" % ( self.uMaxLag ), "%.2f" % ( self.fRange ), "%.2f" % ( self.fSill ), 
+                              "%.0f" % ( self.fMaxLag ), "%.2f" % ( self.fRange ), "%.2f" % ( self.fSill ), 
                               "%.2f" % ( self.fNugget ), "%.3f" % ( self.fMSE ), "%.1f" % ( self.fRho ) )
             ListFitParameter.append ( tFitParameter ) 
             ListHeaders = [ "Mod.", "Est", "Bin", "MaxR", "Ran.", "Sill", "Nug.", "MSE", "Rho" ]
@@ -251,7 +253,7 @@ class CVariogramSkG ( object ):
             self.fShape = tParameter[ 2 ]
             self.fNugget = tParameter[ 3 ]
             tFitParameter = ( self.sModel.capitalize ()[ : 3 ], self.sEstimator.capitalize ()[ : 3 ], self.sBinFunc.lower ()[ : 3 ],
-                              "%.0f" % ( self.uMaxLag ), "%.2f" % ( self.fRange ), "%.2f" % ( self.fSill ), 
+                              "%.0f" % ( self.fMaxLag ), "%.2f" % ( self.fRange ), "%.2f" % ( self.fSill ), 
                               "%.2f" % ( self.fShape ), "%.2f" % ( self.fNugget ), "%.3f" % ( self.fMSE ), "%.1f" % ( self.fRho ) )
             ListFitParameter.append ( tFitParameter ) 
             ListHeaders = [ "Mod.", "Est.", "Bin", "MaxR", "Ran.", "Sill", "Shape", "Nug.", "MSE", "Rho" ]
@@ -373,7 +375,7 @@ class CVariogramSkG ( object ):
         ## tParameter = ( sEstimator, sBinFunc, iNumLags, uMaxLag )
         tStyleEstimation = ( ( "o12", "o", 6.0, "-", 2.0 ), ( "b9", "o", 6.0, "-", 2.0 ), ( "c12", "o", 6.0, "-", 2.0 ) )
         ListParameter = self.ParseParameterSet ( tParameterSet = tParameterEstimator )
-        #print ( ListParameter )
+        print ( ListParameter )
         
         iNumEstimator = len ( ListParameter )
         ListSemivarianceEstimation = list ()
@@ -386,8 +388,9 @@ class CVariogramSkG ( object ):
             self.CVariogram_skg.n_lags = self.iNumLags
             self.sEstimator = CheckValidEstimatorSkG ( ListParameter[ ik ][ 0 ] )
             self.CVariogram_skg.estimator = self.sEstimator
-            self.uMaxLag = ListParameter[ ik ][ 3 ]
-            self.CVariogram_skg.maxlag = self.uMaxLag
+            self.fMaxLag = ListParameter[ ik ][ 3 ]
+            print ( self.fMaxLag )
+            self.CVariogram_skg.maxlag = self.fMaxLag
             
             self.sBinFunc = ListParameter[ ik ][ 1 ]
             self.CVariogram_skg.set_bin_func = self.sBinFunc
@@ -399,7 +402,7 @@ class CVariogramSkG ( object ):
                
             sTitleText = "Variogramm (%s)" % ( self.sEstimator.capitalize () )
             #sLabel = "$\hat{\gamma}(r)\ (r_{max}=%.0f,\,N=%d,\,%s)$" % ( self.uMaxLag, self.iNumLags, self.sBinFunc[ : 4 ] )
-            sLabel = "$\hat{\gamma}(r)\ (r_{max}=%.0f,\,N=%d)$" % ( self.uMaxLag, self.iNumLags )
+            sLabel = "$\hat{\gamma}(r)\ (r_{max}=%.0f,\,N=%d)$" % ( self.fMaxLag, self.iNumLags )
             ListTitle.append ( sTitleText )
             sColor, sMarker, fMarkerSize, sLineStyle, fLineWidth = tStyleEstimation[ ik ]
             tStyleEstimationComplete = ( sColor, sMarker, fMarkerSize, sLineStyle, fLineWidth, sLabel )
@@ -415,6 +418,7 @@ class CVariogramSkG ( object ):
             """
             aSemivarianceEstimation = np.zeros ( shape = ( self.iNumLags, 2 ), dtype = np.float64 )
             aSemivarianceEstimation[ :, 0 ] = self.aBinCenter
+            print ( self.aBinCenter )
             
             aSemivarianceEstimation[ :, 1 ] = self.CVariogram_skg.experimental
             ListSemivarianceEstimation.append ( aSemivarianceEstimation )
@@ -422,8 +426,8 @@ class CVariogramSkG ( object ):
             ## Ende for Schleife
             
         CGraCon = pl.CGraphicConfig ( sTitle = ListTitle[ 0 ], sLabelY = "$\hat{\gamma}(r)$", 
-                                      sLabelX = "Abstand $r$ (m)", sLabelX2 = "Abstand $r$ (m)", 
-                                      sLabelX3 = "Abstand $r$ (m)", sGridAxis = "both", sStepPlotWhere = "none" )
+                                      sLabelX = "Distanz $r$ (m)", sLabelX2 = "Distanz $r$ (m)", 
+                                      sLabelX3 = "Distanz $r$ (m)", sGridAxis = "both", sStepPlotWhere = "none" )
         if ( iNumEstimator == 1 ):
             aSemiVariance1 = ListSemivarianceEstimation[ 0 ]
             pl.PlotXY ( aX = aSemiVariance1[ :, 0 ], aY = aSemiVariance1[ :, 1 ], tStyle = ListStyleEstimation[ 0 ],
@@ -467,7 +471,7 @@ class CVariogramSkG ( object ):
         
         CFigure, tCAxis = plt.subplots ( ncols = 2, nrows = 2, figsize = ( 13, 8 ), sharex = True, sharey = False )
         aCAxes = tCAxis.flatten ()
-        self.CVariogram_skg.maxlag = self.uMaxLag
+        self.CVariogram_skg.maxlag = self.fMaxLag
         self.CVariogram_skg.n_lag = self.iNumLags
         self.CVariogram_skg.set_bin_func = self.sBinFunc
         self.CVariogram_skg = self.UpdateModel () 
@@ -609,9 +613,9 @@ class COrdKrigingGsT ( object ):
             
         if ( iNumLevel is not None ):
             if ( self.CCovarianceModel is not None ):
-                sTitleText = "Ordinary Kriging (" + self.CCovarianceModel.CCovModel_gst.name.capitalize ()[ : 3] + ". Korr.-Fkt.): "
+                sTitleText = "Ordinary Kriging (" + self.CCovarianceModel.CCovModel_gst.name.capitalize ()[ : 3] + ". Kov.-Fkt.): "
             else:
-                sTitleText = "Ordinary Kriging (" + self.CCovarianceModel_gst.name.capitalize ()[ : 3 ] + ". Korr.-Fkt.): "
+                sTitleText = "Ordinary Kriging (" + self.CCovarianceModel_gst.name.capitalize ()[ : 3 ] + ". Kov.-Fkt.): "
 
             ShowRegressionResult ( aGridX = aGridX, aGridY = aGridY, aZ_mean = aRField[ 0 ].T, aZ_var = aRField[ 1 ].T, aZ = None, 
                                    aDataObserved = self.aDataObserved, sTitleText = sTitleText, sColorMap = sColorMap, 
@@ -1092,7 +1096,7 @@ def EstimateDirectionalVariogram ( aCoords, aData, sModel, sDate, iNumDirections
         if ( tTextLabel is not None ):
             ListAnnotation = list ()
             for il in range ( aCounts.shape[ 0 ] ):
-                ListAnnotation.append ( ( " (%s)" % ( aCounts[ il ] ), aBinCenter[ il ], aGamma[ il ], 10, "s18" ) )
+                ListAnnotation.append ( ( " (%s)" % ( aCounts[ il ] ), aBinCenter[ il ], aGamma[ il ], 13, "s18" ) )
             sFitLabel = "Fit (%s)" % ( sModel.capitalize () )
             CHLine1 = pl.CLine ( sLineColor = "r8", fLinePos = fNugget, sLineStyle = "--", fLineWidth = 2.0, sLineLabel = "Nugget" )
             CHLine2 = pl.CLine ( sLineColor = "r12", fLinePos = fSill, sLineStyle = "-", fLineWidth = 2.0,  sLineLabel = "Sill" )
@@ -1303,17 +1307,19 @@ def ShowRegressionResult ( aGridX, aGridY, aZ_mean, aZ_var, aZ = None, aDataObse
         aMSE = ( np.square ( aZ - aZ_mean ) )
         print ( ">> MSE: %.3f" % ( np.mean ( aMSE ) ) )
      
-    CGraCon.Set ( sTitle = sTitleText + "Erwartungswert", sLabelX = "x", sLabelY = "y", sLegend = "Erwartungswert" )
+    CGraCon.Set ( sTitle = sTitleText + "Erwartungswert", sLabelX = "x", sLabelY = "y", sLegend = "$\mathrm{S}(x, y)$" )
     if ( CInfoBox is not None ):
         CGraCon.Set ( InfoBox = CInfoBox )
         
     pl.PlotContour ( aX = aGridX, aY = aGridY, aData2D = aZ_mean, iNumLevel = iNumLevel, GraphicConfig = CGraCon, sColorMap = sColorMap, 
-                     aDataObserved = aDataObserved, tStyleDataObs = tStyleDataObs_mean, tLimX = tLimX, tLimY = tLimY )
+                     aDataObserved = aDataObserved, tStyleDataObs = tStyleDataObs_mean, tLimX = tLimX, tLimY = tLimY,
+                     bUseSharedColorbar = True )
     
     if ( bShowVariance == True ):
         CGraCon.Set ( sTitle = sTitleText + "Varianz", sLegend = "Varianz" )
         pl.PlotContour ( aX = aGridX, aY = aGridY, aData2D = aZ_var, iNumLevel = iNumLevel, GraphicConfig = CGraCon, sColorMap = sColorMap, 
-                         aDataObserved = aDataObserved, tStyleDataObs = tStyleDataObs_var, tLimX = tLimX, tLimY = tLimY )
+                         aDataObserved = aDataObserved, tStyleDataObs = tStyleDataObs_var, tLimX = tLimX, tLimY = tLimY, 
+                         bUseSharedColorbar = False )
     
     if ( aZ is not None ):
         sTitleText = sTitleText + "(MSE ($e_{MSE} = %.3f$))" % ( np.mean ( aMSE ) )
@@ -1333,13 +1339,13 @@ def DemoKriging ( tDimX = ( 0.0, 6.0, 50 ), tDimY = ( 0.0, 5.0, 40 ), iNumLevel 
     aDataObserved = np.asarray ( ( tCond_x, tCond_y, tCond_val ), dtype = np.float64 )
     print ( aDataObserved )
 
-    CCovModel = CCovarianceModelGsT ( sModel = "rational", fVar = 0.5, uLenScale = 1.0, fShape = 1.5, fAngles = 0.0, fNugget = 0.0 )
+    CCovModel = CCovarianceModelGsT ( sModel = "rational", fVar = 120.5, uLenScale = 1.0, fShape = 1.5, fAngle = 0.0, fNugget = 30.0 )
     
-    COrdKriging = COrdKrigingGsT ( CCovarianceModel = CCovModel, uDataObserved = aDataObserved, bFitVariogram = True )
+    COrdKriging = COrdKrigingGsT ( CCovarianceModel = CCovModel, uDataObserved = aDataObserved, bFitVariogram = False )
     aRField = COrdKriging.Interpolate ( tDimX = tDimX, tDimY = tDimY, iNumLevel = iNumLevel )
     
     ### sollte exakt so aussehen wie InterpolateGrid
-    COrdKriging.Predict ( uPos = aDataObserved[ : 2, : ], aDataObserved = aDataObserved[ 2, : ] )
+    #COrdKriging.Predict ( uPos = aDataObserved[ : 2, : ], aDataObserved = aDataObserved[ 2, : ] )
     
     aMSE = COrdKriging.RunCrossValidation ( iNumFolds = 5 )
     print ( ">> Demokriging > MSE of CV: %.2f" % ( np.mean ( aMSE ) ) )
