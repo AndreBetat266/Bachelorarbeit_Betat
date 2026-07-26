@@ -1,4 +1,4 @@
-% Stand 21. Juli 2026
+% Stand 26. Juli 2026
 Die zentralen, im Zuge dieser Arbeit zu adressierenden Fragen
 lauten:
 \begin{itemize}[topsep=2pt,parsep=1pt,itemsep=0.5pt]
@@ -112,14 +112,18 @@ pro Sensor betrachtet\footnote{Ein typischer
 Sensor nimmt pro Tag etwa 580 Messungen 
 (jeweils für $\mathrm{P}_{10}$ und $\mathrm{P}_{2.5}$ ) auf, so dass 
 für die Berechnung des Mittelwerts bzw.\,des Medians 
-rund $30\cdot 580=17400$ Werte herangezogen werden.}.
+rund $30\cdot 580=17400$ Werte herangezogen werden.}. 
+Die drei verfügbaren Monats-Datensätze wurden einzeln analysiert,
+um keinen systematischen, saisonbedingten Fehler, 
+z.\,B.\,aufgrund der höheren Feinstaubemissionen von 
+Heizungen während des Winters einzuführen. 
 
 \subsubsection{Allgemeine Beobachtungen}
 \label{KapitelDatenauswertung_Ergebnisse_Beobachtungen}
 Abb.\,(\ref{Abb_Datenauswertung_VerteilungMesspunkteApr2026}) 
 zeigt beispielhaft für den April 2026 die Verteilung der 83 
-Sensoren innerhalb der Stadtgrenzen von München. Hierbei 
-symbolisieren die braun eingezeichneten Linien primäre 
+Sensoren innerhalb der Stadtgrenzen von München. 
+Hierbei symbolisieren die braun eingezeichneten Linien primäre 
 und sekundäre Straßen gemäß der
 \texttt{OpenStreetMap} Einteilung
 ($\rightsquigarrow$ \href{https://www.openstreetmap.org/relation/62428}
@@ -135,6 +139,31 @@ azimuthalen Projektion ist der Marienplatz
 \label{Abb_Datenauswertung_VerteilungMesspunkteApr2026}
 \end{figure} 
  
+In 
+Abb.\,(\ref{Abb_Datenauswertung_P25MessungenApr2026}) 
+sind farbkodiert die arithmetischen Mittelwerte der 
+$\mathrm{P}_{2.5}$-Messungen dieser Sensoren wiedergegeben.
+Bei der Betrachtung fällt sofort der ganz links in der
+Abbildung liegende Messpunkt mit der 
+$\mathrm{P}_{2.5}$-Konzentration von etwa $36\,\mu g/m^3$ ins Auge. 
+Da die nur wenige Hundert Meter entfernt liegenden 
+Nachbar-Messungen deutlich geringere Konzentrationen 
+aufweisen, wäre diese Beobachtung durch einen entsprechend
+kleinen Range-Parameter der Semivarianz oder durch einen
+Nugget-Effekt zu erklären. Wie im weiteren Verlauf diese Kapitels 
+gezeigt werden wird, scheidet die Erklärung mittels eines geringen 
+Range-Parameters mit großer Wahrscheinlichkeit aus.\\
+Des Weiteren erkennt man, 
+dass die Sensoren auf einer Fläche von 
+überschlagen etwa $20\,km$ Ausdehnung in Ost-West-Richtung
+und $15\,km$ Ausdehnung in Nord-Süd-Richtung verteilt sind.
+Daraus ergibt sich 
+die Abschätzung, dass die Verteilung der paarweisen
+Distanzen nach 
+oben durch einen Wert von etwa $\sqrt{20^2 + 15^2}= 25\,km$
+ beschränkt sein sollte. 
+ 
+ 
 \begin{figure}[H] 
 \centering
 \includegraphics[scale = 0.52]{Datenauswertung_P25MessungenApr2026} 
@@ -143,20 +172,6 @@ im April 2026; Zentrum der azimuthalen Projektion ist der
 Marienplatz (\textcolor{gray}{$\boldsymbol{\mathrm{X}}$})}}
 \label{Abb_Datenauswertung_P25MessungenApr2026}
 \end{figure} 
-
-In 
-Abb.\,(\ref{Abb_Datenauswertung_P25MessungenApr2026}) 
-sind farbkodiert die arithmetischen Mittelwerte der 
-$\mathrm{P}_{2.5}$-Messungen dieser Sensoren wiedergegeben.
-Bei der Betrachtung erkennt man, dass die Sensoren auf
- einer Fläche von 
-überschlagen etwa $20\,km$ Ausdehnung in Ost-West-Richtung und 
-$15\,km$ 
-Ausdehnung in Nord-Süd-Richtung verteilt sind.
-Daraus ergibt sich 
-die Abschätzung, dass die Verteilung der paarweisen Distanzen nach 
-oben durch einen Wert von etwa $\sqrt{20^2 + 15^2}= 25\,km$ beschränkt
-sein sollte. 
 
 \begin{figure}[H] 
 \centering

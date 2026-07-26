@@ -1,4 +1,4 @@
-% Stand 18. Juli 2026
+% Stand 24. Juli 2026
 \subsubsection{Kriging Interpolation mit anisotropen Kovarianz-Modellen}
 \label{KapitelDatenauswertung_Ergebnisse_Kriging}
 Wie im vorherigen Kapitel \ref{KapitelDatenauswertung_Ergebnisse_Variogramme} 
@@ -10,8 +10,9 @@ Ansatz, um \textit{Indizien} für oder gegen die Anisotropie-Vermutung herauszua
 Zu diesem Zweck wird das folgende Vorgehen durchgeführt:: 
 
 \begin{itemize}[topsep=2pt,parsep=1pt,itemsep=0.5pt]
-\item[1) ] bei schrittweiser Variation der Anisotropie mit $\Delta \lambda = 1$, wobei $1.5 \leq \lambda \leq 3.5$, sowie
-\item[2) ] mit einer Schrittweite des Sill von $\Delta \mathrm{S} = 2$, wobei $2 \leq \mathrm{S} \leq 6$, und
+\item[1) ] bei schrittweiser Variation der Anisotropie mit $\Delta \lambda = 1$, wobei $1 \leq \lambda \leq 4$, sowie
+\item[2) ] für drei verschiedenen Wert des Sill $\mathrm{S}$, 
+d.\,h.\,$\mathrm{S} \in \lbrace \mathrm{S}_{\mathrm{min}},\,\mathrm{S}_{\mathrm{mid}},\,\mathrm{S}_{\mathrm{max}}\rbrace$ und
 \item[3) ] mit einer Winkel-Schrittweite von 
 $\Delta\,\vartheta= 20^\circ$, wobei 
 $0^\circ \leq \vartheta < 360^\circ$
@@ -69,35 +70,37 @@ beinhaltet (vgl.\,Abb.\,(\ref{Abb_Datenauswertung_P25_LOO-CVNov2025_Ansicht_e_j}
 im Anhang). Diese nur wenigen, aber sehr großen Wert $e_j$ ziehen 
 den als Mittelwert kalkulierten Fehler $e_{\mathrm{MSE}}$
 nach oben und führen zu den großen Schwankungen gegeben
-durch die Standardabweichung.\\
+durch die Standardabweichung. Des Weiteren musste mit $c_0 = 0.2$ dem Modell 
+ein Nugget-Effekt hinzugefügt werden, da andernfalls die Kriging-Interpolation 
+teilweise zu negativen Werten führt.\\
 
 Die Ergebnisse dieser Analyse für den 
 November 2025 sind für ein
 festes Anisotropie-Verhältnis bzw.\,einen festen Sill in 
 den 
-Abb.\,(\ref{Abb_Datenauswertung_P25_LOO-CVNov2025_Lambda_fix}) 
+Abb.\,(\ref{Abb_Datenauswertung_P25_LOO-CVNov2025_Lambda30}) 
 und 
-(\ref{Abb_Datenauswertung_P25_LOO-CVNov2025_Sill_fix}) 
+(\ref{Abb_Datenauswertung_P25_LOO-CVNov2025_Sill40}) 
 wiedergegeben.
 
 \begin{figure}[H] 
 \centering
-\includegraphics[scale = 0.45]{Datenauswertung_P25_LOO-CVNov2025_Lambda_fix} 
+\includegraphics[scale = 0.45]{Datenauswertung_P25_LOO-CVNov2025_Lambda30} 
 \caption{\small{Ergebnis der Leave-One-Out Cross-Validation
-für ein fixes Anisotropie-Verhältnis von $\lambda=3.5$
+für ein fixes Anisotropie-Verhältnis von $\lambda=3$
 basierend auf den gemittelten 
 $\mathrm{P}_{2.5}$-Messwerten für November 2025}}
-\label{Abb_Datenauswertung_P25_LOO-CVNov2025_Lambda_fix}
+\label{Abb_Datenauswertung_P25_LOO-CVNov2025_Lambda30}
 \end{figure} 
 
 \begin{figure}[H] 
 \centering
-\includegraphics[scale = 0.45]{Datenauswertung_P25_LOO-CVNov2025_Sill_fix} 
+\includegraphics[scale = 0.45]{Datenauswertung_P25_LOO-CVNov2025_Sill40} 
 \caption{\small{Ergebnis der Leave-One-Out Cross-Validation
-für einen fixen Sill von $\mathrm{S}=4.0$
+für einen Sill von $\mathrm{S}=4$
 basierend auf den gemittelten 
 $\mathrm{P}_{2.5}$-Messwerten für November 2025}}
-\label{Abb_Datenauswertung_P25_LOO-CVNov2025_Sill_fix}
+\label{Abb_Datenauswertung_P25_LOO-CVNov2025_Sill40}
 \end{figure} 
 
 Da nur das Anisotropie-Verhältnis $\lambda$ variiert wird,
@@ -113,8 +116,8 @@ Aus beiden Abbildungen ersieht man:
 \item[$\circ$ ] den geringsten Prognosefehler
 $e_{\mathrm{MSE}}$ weisen die konstruierten anisotropen 
 Kovarianz-Modell auf, die eine Drehung der Koordinaten in
-Richtung $40^\circ$ (oder gleichbedeutend 
-$220^\circ$) beinhalten. 
+Richtung $60^\circ$ (oder gleichbedeutend 
+$240^\circ$) beinhalten. 
 Diese Beobachtung ist unabhängig vom
 gewählten Wert für Anisotropie und Sill.
 \item[$\circ$ ] Tendenziell verringert sich mit steigender 
@@ -123,69 +126,106 @@ Ansisotropie der Fehler $e_{\mathrm{MSE}}$.
 der Fehler $e_{\mathrm{MSE}}$.
 \end{itemize}
 
-\begin{figure}[H] 
-\centering
-\includegraphics[scale = 0.45]{Datenauswertung_P25_LOO-CVJul2025_Lambda_fix} 
-\caption{\small{Ergebnis der Leave-One-Out Cross-Validation
-für ein fixes Anisotropie-Verhältnis von $\lambda=3.5$
-basierend auf den gemittelten 
-$\mathrm{P}_{2.5}$-Messwerten für Juli 2025}}
-\label{Abb_Datenauswertung_P25_LOO-CVJul2025_Lambda_fix}
-\end{figure} 
-
-\begin{figure}[H] 
-\centering
-\includegraphics[scale = 0.45]{Datenauswertung_P25_LOO-CVApr2026_Lambda_fix} 
-\caption{\small{Ergebnis der Leave-One-Out Cross-Validation
-für ein fixes Anisotropie-Verhältnis von $\lambda=3.5$
-basierend auf den gemittelten 
-$\mathrm{P}_{2.5}$-Messwerten für April 2026}}
-\label{Abb_Datenauswertung_P25_LOO-CVApr2026_Lambda_fix}
-\end{figure} 
-
+\vspace*{4pt}
 Auch die analogen Auswertungen der Messungen aus dem Juli 2025 
 in 
-Abb.\,(\ref{Abb_Datenauswertung_P25_LOO-CVJul2025_Lambda_fix}) 
+Abb.\,(\ref{Abb_Datenauswertung_P25_LOO-CVJul2025_Sill08}) 
 und dem April 2026 in 
-Abb.\,(\ref{Abb_Datenauswertung_P25_LOO-CVApr2026_Lambda_fix})
+Abb.\,(\ref{Abb_Datenauswertung_P25_LOO-CVApr2026_Sill10})
 weisen den geringsten Prognose-Fehler für das Kovarianz-Modell auf, 
-welches eine Drehung um etwa $40^\circ$ bzw.\,$20^\circ$ impliziert.
+welches eine Drehung um etwa $40^\circ$ bzw.\,$180^\circ$ impliziert.
 Hierbei sind diese Vorzugsrichtungen wiederum unabhängig vom
 gewählten Wert für Anisotropie und Sill. \\
 
+Für alle drei der monatlich gemittelten Datensätze, dargestellt in den 
+Abbildungen 
+(\ref{Abb_Datenauswertung_P25_LOO-CVNov2025_Sill40}),
+(\ref{Abb_Datenauswertung_P25_LOO-CVJul2025_Sill08}) und
+(\ref{Abb_Datenauswertung_P25_LOO-CVApr2026_Sill10})
+ liegt der Fehler
+$e_{\mathrm{MSE}}$ des isotropen ($\lambda =1$) Modells 
+(\textcolor{Green}{\rule[1mm]{3mm}{0.5mm}}) oberhalb des Fehlers 
+für das anisotrope Modell mit der fehlerminimalen Drehung. Das 
+isotrope Modell beschreibt die räumliche Verteilung der Feinstaubmessungen 
+somit \textit{weniger gut}.\\
+
+\begin{figure}[H] 
+\centering
+\includegraphics[scale = 0.45]{Datenauswertung_P25_LOO-CVJul2025_Sill08} 
+\caption{\small{Ergebnis der Leave-One-Out Cross-Validation
+für einen Sill von $\mathrm{S}=0.8$
+basierend auf den gemittelten 
+$\mathrm{P}_{2.5}$-Messwerten für Juli 2025}}
+\label{Abb_Datenauswertung_P25_LOO-CVJul2025_Sill08}
+\end{figure} 
+
+\begin{figure}[H] 
+\centering
+\includegraphics[scale = 0.45]{Datenauswertung_P25_LOO-CVApr2026_Sill10} 
+\caption{\small{Ergebnis der Leave-One-Out Cross-Validation
+für einen Sill von $\mathrm{S}=1.0$
+basierend auf den gemittelten 
+$\mathrm{P}_{2.5}$-Messwerten für April 2026}}
+\label{Abb_Datenauswertung_P25_LOO-CVApr2026_Sill10}
+\end{figure} 
+
+%Für alle drei der monatlich gemittelten Datensätze, dargestellt in den 
+%Abbildungen 
+%(\ref{Abb_Datenauswertung_P25_LOO-CVNov2025_Sill40}),
+%(\ref{Abb_Datenauswertung_P25_LOO-CVJul2025_Sill08}) und
+%(\ref{Abb_Datenauswertung_P25_LOO-CVApr2026_Sill10})
+% liegt der Fehler
+%$e_{\mathrm{MSE}}$ des isotropen ($\lambda =1$) Modells 
+%(\textcolor{Green}{\rule[1mm]{3mm}{0.5mm}}) oberhalb des Fehlers 
+%für das anisotrope Modell mit der fehlerminimalen Drehung. Das 
+%isotrope Modell beschreibt die räumliche Verteilung der Feinstaubmessungen 
+%somit \textit{weniger gut}.\\
+Die Frage nach der statistischen Signifikanz ist nicht einfach zu klären: der 
+naheliegend erscheinende t-Test für gepaarte Stichproben
+ (vgl.\,z.\,B.\,\cite[S.\,263]{Henze2019}) 
+würde die
+paarweisen Differenzen der Fehler von isotroper und
+ anisotroper Modellierung betrachten, diese als stochastisch unabhängig annehmen
+und davon ausgehend einen gewöhnlichen t-Test ableiten. 
+Da bei der Berechnung des LOO-CV aber dieselben räumlich 
+verteilten Messgrößen eingehen, dürfte diese Annahme kaum erfüllt sein.\\
+   
 Der Vollständigkeit halber sind in 
-Abb.\,(\ref{Abb_Datenauswertung_P25_KrigingMean_Winkel40_Sill0x8_Lambda3x5_Nov2025_Lambda_fix})
+Abb.\,(\ref{Abb_Datenauswertung_P25_KrigingMean_Winkel40_Sill4x0_Lambda3x0_Nov2025})
 und
-(\ref{Abb_Datenauswertung_P25_KrigingVariance_Winkel40_Sill0x8_Lambda3x5_Nov2025_Lambda_fix})
-die Visualiserungen von Erwartungswert und
+(\ref{Abb_Datenauswertung_P25_KrigingVariance_Winkel40_Sill4x0_Lambda3x0_Nov2025})
+farbkodiert der Erwartungswert und die
 Varianz der Kriging-Interpolation für ein konstruiertes,
 anisotropes Kovarianz-Modell mit 
-($\vartheta=40^\circ,\,\lambda = 3.5)$ dargestellt. 
+($\vartheta=40^\circ,\,\lambda = 3,\,\mathrm{S}=4)$ dargestellt\footnote{Der
+Kriging-Algorithmus ist bei nicht-verschwindendem Nugget 
+\textit{kein} Interpolator mehr. Dies erkennt man in der Abbildung 
+prominent anhand der rot eingezeichneten maximalen Beobachtung.}. 
 
 \begin{figure}[H] 
 \centering
-\includegraphics[scale = 0.45]{Datenauswertung_P25_KrigingMean_Winkel40_Sill0x8_Lambda3x5_Nov2025_Lambda_fix} 
+\includegraphics[scale = 0.45]{Datenauswertung_P25_KrigingMean_Winkel40_Sill4x0_Lambda3x0_Nov2025} 
 \caption{\small{Erwartungswert der Kriging-Interpoaltion
-für $\vartheta=40^\circ$, $\lambda=3.5$ und $\mathrm{S}=0.8$
+für $\vartheta=40^\circ$, $\lambda=3$ und $\mathrm{S}=4$
 basierend auf den gemittelten 
 $\mathrm{P}_{2.5}$- Messwerten für November 2025}}
-\label{Abb_Datenauswertung_P25_KrigingMean_Winkel40_Sill0x8_Lambda3x5_Nov2025_Lambda_fix}
+\label{Abb_Datenauswertung_P25_KrigingMean_Winkel40_Sill4x0_Lambda3x0_Nov2025}
 \end{figure} 
 
 \begin{figure}[H] 
 \centering
-\includegraphics[scale = 0.45]{Datenauswertung_P25_KrigingVariance_Winkel40_Sill0x8_Lambda3x5_Nov2025_Lambda_fix} 
+\includegraphics[scale = 0.45]{Datenauswertung_P25_KrigingVariance_Winkel40_Sill4x0_Lambda3x0_Nov2025} 
 \caption{\small{Varianz der Kriging-Interpoaltion
-für $\vartheta=40^\circ$, $\lambda=3.5$ und $\mathrm{S}=0.8$
+für $\vartheta=40^\circ$, $\lambda=3$ und $\mathrm{S}=4$
 basierend auf den gemittelten 
 $\mathrm{P}_{2.5}$- Messwerten für November 2025}}
-\label{Abb_Datenauswertung_P25_KrigingVariance_Winkel40_Sill0x8_Lambda3x5_Nov2025_Lambda_fix}
+\label{Abb_Datenauswertung_P25_KrigingVariance_Winkel40_Sill4x0_Lambda3x0_Nov2025}
 \end{figure} 
 
-Die Anisotropie des zugrundeliegenden Kovarianz-Modells erkennt 
-man in 
-Abb.\,(\ref{Abb_Datenauswertung_P25_KrigingMean_Winkel40_Sill0x8_Lambda3x5_Nov2025_Lambda_fix}) 
-recht deutlich in der oberen linken Ecke anhand der ellipsoiden, 
-rot gefärbten Flächen.
+%Die Anisotropie des zugrundeliegenden Kovarianz-Modells erkennt 
+%man in 
+%Abb.\,(\ref{Abb_Datenauswertung_P25_KrigingMean_Winkel40_Sill0x8_Lambda3x5_Nov2025_Lambda_fix}) 
+%recht deutlich in der oberen linken Ecke anhand der ellipsoiden, 
+%rot gefärbten Flächen.
 
 
