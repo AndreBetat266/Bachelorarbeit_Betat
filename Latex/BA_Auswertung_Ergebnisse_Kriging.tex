@@ -1,5 +1,5 @@
 % Stand 24. Juli 2026
-\subsubsection{Kriging Interpolation mit anisotropen Kovarianz-Modellen}
+\subsubsection{Kriging-Interpolation mit anisotropen Kovarianz-Modellen}
 \label{KapitelDatenauswertung_Ergebnisse_Kriging}
 Wie im vorherigen Kapitel \ref{KapitelDatenauswertung_Ergebnisse_Variogramme} 
 ausgeführt, lässt sich auf der Grundlage der vorhandenen Messungen
@@ -7,26 +7,25 @@ keine belastbare Aussage hinsichtlich einer möglichen Anisotropie der
 Feinstaubdaten treffen. \\
 Die in diesem Kapitel vorgestellte Methode versteht sich als ein explorativer
 Ansatz, um \textit{Indizien} für oder gegen die Anisotropie-Vermutung herauszuarbeiten.
-Zu diesem Zweck wird das folgende Vorgehen durchgeführt:: 
-
+Zu diesem Zweck wird das folgende Vorgehen durchgeführt: 
 \begin{itemize}[topsep=2pt,parsep=1pt,itemsep=0.5pt]
 \item[1) ] bei schrittweiser Variation der Anisotropie mit $\Delta \lambda = 1$, wobei $1 \leq \lambda \leq 4$, sowie
-\item[2) ] für drei verschiedenen Wert des Sill $\mathrm{S}$, 
+\item[2) ] für drei verschiedene Wert des Sill $\mathrm{S}$, 
 d.\,h.\,$\mathrm{S} \in \lbrace \mathrm{S}_{\mathrm{min}},\,\mathrm{S}_{\mathrm{mid}},\,\mathrm{S}_{\mathrm{max}}\rbrace$ und
 \item[3) ] mit einer Winkel-Schrittweite von 
 $\Delta\,\vartheta= 20^\circ$, wobei 
 $0^\circ \leq \vartheta < 360^\circ$
 \item[4) ] wird ein anisotropes Kovarianz-Modell definiert 
-und damit für die beobachteten Werten die 
+und damit für die beobachteten Werte die 
 Kriging-Gleichungen gelöst. 
 Insbesondere findet somit \textit{keine} Anpassung der
 Modell-Parameter an 
 die richtungsabhängig geschätzte Semivarianz statt, da sich
-hierbei -wie in Kapitel
-\ref{KapitelDatenauswertung_Ergebnisse_Variogramme} ausgeführt- ja keine verwertbaren Ergebnisse zeigen.
+hierbei -- wie in Kapitel
+\ref{KapitelDatenauswertung_Ergebnisse_Variogramme} ausgeführt -- ja keine verwertbaren Ergebnisse zeigen.
 \item[5) ] Um die Güte der anisotropen Modell-Wahl zu 
 evaluieren, wird
-ein Leave-One-Out Cross-Validation (\textit{kurz:} LOO-CV) 
+ein Leave-One-Out-Cross-Validation (\textit{kurz:} LOO-CV) 
 Ansatz  
 (vgl.\,z.\,B.\,\cite[Kap.\,3.8.4]{Murphy2023}, 
 \cite[Kap.\,5.1.2]{James2023}) gewählt: 
@@ -38,7 +37,7 @@ Kriging-Gewichte bestimmt.
 Beobachtung wird eine Vorhersage erzeugt und für diese die
 quadrierte Differenz $e_j$ zur Beobachtung berechnet.
 \item[c) ] Dieser Ablauf wird für alle 
-$n$ möglichen Aufteilungen in Training- und Test-Menge
+$n$ möglichen Aufteilungen in Trainings- und Test-Menge
 durchgeführt. 
 \item[d) ] Damit berechnet sich der Fehler $e_\mathrm{MSE}$ der Cross-Validation:
 \begin{equation*}
@@ -55,7 +54,7 @@ e_\mathrm{MSE} = \frac{1}{n} \sum_{j=1}^n e_j.
 Da die Parameter des anisotropen Kovarianz-Modells \textit{nicht} 
 mithilfe der empirischen Semivarianz anhand der Messdaten geschätzt 
 werden können, ist das skizzierte Vorgehen methodisch eher als eine 
-Art plausbilisiertes Raten zu bezeichnen und stellt 
+Art plausibilisiertes Raten zu bezeichnen und stellt 
 sicher \textit{keine} saubere Analyse dar.\\
 
 Es erweist sich, dass die einzelnen Werte der 
@@ -67,10 +66,10 @@ Feinstaub-Konzentration eine Vorhersage gemäß Schritt b)
 bestimmt wird und die Menge der korrespondierenden 
 Trainingsdaten nach a) überwiegend sehr viel kleinere Feinstaub-Werte
 beinhaltet (vgl.\,Abb.\,(\ref{Abb_Datenauswertung_P25_LOO-CVNov2025_Ansicht_e_j}) 
-im Anhang). Diese nur wenigen, aber sehr großen Wert $e_j$ ziehen 
+im Anhang). Diese nur wenigen, aber sehr großen Werte $e_j$ ziehen 
 den als Mittelwert kalkulierten Fehler $e_{\mathrm{MSE}}$
-nach oben und führen zu den großen Schwankungen gegeben
-durch die Standardabweichung. Des Weiteren musste mit $c_0 = 0.2$ dem Modell 
+nach oben und führen zu großen, durch die Standardabweichung 
+quantifizierten Schwankungen. Des Weiteren musste mit $c_0 = 0.2$ dem Modell 
 ein Nugget-Effekt hinzugefügt werden, da andernfalls die Kriging-Interpolation 
 teilweise zu negativen Werten führt.\\
 
@@ -115,13 +114,13 @@ Aus beiden Abbildungen ersieht man:
 \begin{itemize}[topsep=2pt,parsep=1pt,itemsep=0.5pt]
 \item[$\circ$ ] den geringsten Prognosefehler
 $e_{\mathrm{MSE}}$ weisen die konstruierten anisotropen 
-Kovarianz-Modell auf, die eine Drehung der Koordinaten in
+Kovarianz-Modelle auf, die eine Drehung der Koordinaten in
 Richtung $60^\circ$ (oder gleichbedeutend 
 $240^\circ$) beinhalten. 
 Diese Beobachtung ist unabhängig vom
 gewählten Wert für Anisotropie und Sill.
 \item[$\circ$ ] Tendenziell verringert sich mit steigender 
-Ansisotropie der Fehler $e_{\mathrm{MSE}}$.
+Anisotropie der Fehler $e_{\mathrm{MSE}}$.
 \item[$\circ$ ] Tendenziell verringert sich mit abnehmendem Sill 
 der Fehler $e_{\mathrm{MSE}}$.
 \end{itemize}
@@ -141,7 +140,7 @@ Für alle drei der monatlich gemittelten Datensätze, dargestellt in den
 Abbildungen 
 (\ref{Abb_Datenauswertung_P25_LOO-CVNov2025_Sill40}),
 (\ref{Abb_Datenauswertung_P25_LOO-CVJul2025_Sill08}) und
-(\ref{Abb_Datenauswertung_P25_LOO-CVApr2026_Sill10})
+(\ref{Abb_Datenauswertung_P25_LOO-CVApr2026_Sill10}),
  liegt der Fehler
 $e_{\mathrm{MSE}}$ des isotropen ($\lambda =1$) Modells 
 (\textcolor{Green}{\rule[1mm]{3mm}{0.5mm}}) oberhalb des Fehlers 
@@ -188,7 +187,10 @@ paarweisen Differenzen der Fehler von isotroper und
  anisotroper Modellierung betrachten, diese als stochastisch unabhängig annehmen
 und davon ausgehend einen gewöhnlichen t-Test ableiten. 
 Da bei der Berechnung des LOO-CV aber dieselben räumlich 
-verteilten Messgrößen eingehen, dürfte diese Annahme kaum erfüllt sein.\\
+verteilten Messgrößen eingehen, dürfte diese Annahme kaum erfüllt sein. 
+Der auch im Hinblick auf andere Fragestellungen  
+(vgl.\,Kapitel \ref{KapitelDatenauswertung_Diskussion}) 
+geeignete Permuationstest könnte hier Klarheit bringen.\\
    
 Der Vollständigkeit halber sind in 
 Abb.\,(\ref{Abb_Datenauswertung_P25_KrigingMean_Winkel40_Sill4x0_Lambda3x0_Nov2025})
@@ -205,7 +207,7 @@ prominent anhand der rot eingezeichneten maximalen Beobachtung.}.
 \begin{figure}[H] 
 \centering
 \includegraphics[scale = 0.45]{Datenauswertung_P25_KrigingMean_Winkel40_Sill4x0_Lambda3x0_Nov2025} 
-\caption{\small{Erwartungswert der Kriging-Interpoaltion
+\caption{\small{Erwartungswert der Kriging-Interpolation
 für $\vartheta=40^\circ$, $\lambda=3$ und $\mathrm{S}=4$
 basierend auf den gemittelten 
 $\mathrm{P}_{2.5}$- Messwerten für November 2025}}
@@ -215,7 +217,7 @@ $\mathrm{P}_{2.5}$- Messwerten für November 2025}}
 \begin{figure}[H] 
 \centering
 \includegraphics[scale = 0.45]{Datenauswertung_P25_KrigingVariance_Winkel40_Sill4x0_Lambda3x0_Nov2025} 
-\caption{\small{Varianz der Kriging-Interpoaltion
+\caption{\small{Varianz der Kriging-Interpolation
 für $\vartheta=40^\circ$, $\lambda=3$ und $\mathrm{S}=4$
 basierend auf den gemittelten 
 $\mathrm{P}_{2.5}$- Messwerten für November 2025}}

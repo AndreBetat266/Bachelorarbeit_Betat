@@ -24,7 +24,7 @@ Auf diesem Hintergrund werden nachfolgend
 \begin{itemize}[topsep=2pt,parsep=1pt,itemsep=0.5pt]
 \item[$\circ$ ] im Kapitel 
 \ref{KapitelDatenauswertung_Ergebnisse_Beobachtungen}
-zunächst allgemeine Beobachtung bzgl.\,räumlicher und 
+zunächst allgemeine Beobachtungen bzgl.\,räumlicher und 
 statistischer Verteilung der Messdaten herausgearbeitet.
 \item[$\circ$ ] Im Kapitel
 \ref{KapitelDatenauswertung_Ergebnisse_Variogramme}
@@ -38,7 +38,7 @@ Kapitel \ref{KapitelDatenauswertung_Ergebnisse_Kriging}
 die Frage nach einer möglichen 
 Anisotropie mithilfe von 
 konstruierten anisotropen Kovarianz-Modellen unter Nutzung 
-des Kriging Interpolationsverfahren beleuchtet bevor 
+des Kriging Interpolationsverfahrens beleuchtet, bevor 
 \item[$\circ$] abschließend in Kapitel 
 \ref{KapitelDatenauswertung_VerwandteArbeiten} die 
 gewonnenen Einsichten in den 
@@ -62,8 +62,8 @@ Bibliothek \texttt{GSTools}
 %für die Auswertungen herangezogen.
 
 Insgesamt standen für die Auswertung die täglichen, 
-bereits bereinigten Daten und an verschiedenen Orten 
-positionierter Sensoren für 
+bereits bereinigten Daten von an verschiedenen Orten 
+positionierten Sensoren für 
 die Monate Juli 2025 (96 Sensoren), November 2025 (87 Sensoren)
  und April 2026 (83 Sensoren) zur
 Verfügung.\\
@@ -125,7 +125,7 @@ zeigt beispielhaft für den April 2026 die Verteilung der 83
 Sensoren innerhalb der Stadtgrenzen von München. 
 Hierbei symbolisieren die braun eingezeichneten Linien primäre 
 und sekundäre Straßen gemäß der
-\texttt{OpenStreetMap} Einteilung
+\texttt{OpenStreetMap}-Einteilung
 ($\rightsquigarrow$ \href{https://www.openstreetmap.org/relation/62428}
 {OSM: Munich}).
 
@@ -150,19 +150,18 @@ Da die nur wenige Hundert Meter entfernt liegenden
 Nachbar-Messungen deutlich geringere Konzentrationen 
 aufweisen, wäre diese Beobachtung durch einen entsprechend
 kleinen Range-Parameter der Semivarianz oder durch einen
-Nugget-Effekt zu erklären. Wie im weiteren Verlauf diese Kapitels 
+Nugget-Effekt zu erklären. Wie im weiteren Verlauf dieses Kapitels 
 gezeigt werden wird, scheidet die Erklärung mittels eines geringen 
 Range-Parameters mit großer Wahrscheinlichkeit aus.\\
 Des Weiteren erkennt man, 
 dass die Sensoren auf einer Fläche von 
-überschlagen etwa $20\,km$ Ausdehnung in Ost-West-Richtung
+überschlagen $20\,km$ Ausdehnung in Ost-West-Richtung
 und $15\,km$ Ausdehnung in Nord-Süd-Richtung verteilt sind.
 Daraus ergibt sich 
 die Abschätzung, dass die Verteilung der paarweisen
 Distanzen nach 
 oben durch einen Wert von etwa $\sqrt{20^2 + 15^2}= 25\,km$
  beschränkt sein sollte. 
- 
  
 \begin{figure}[H] 
 \centering
@@ -189,7 +188,7 @@ paarweisen Distanzen $R$ dargestellt ist und die ein
 Maximum der euklidischen Distanzen bei rd.\,$7\,km$ 
 aufweist. Des Weiteren fällt auf, dass die Anzahl 
 der Distanz-Paare für Werte größer als dieses 
-Häufigkeits-Maximums bis hin zum maximalen Wert bei etwa 
+Häufigkeits-Maximum bis hin zum maximalen Wert bei etwa 
 $R_{max}=22\,km$ sehr schnell abfällt. Daher müssen die \textit{absoluten Häufigkeiten}, 
 die bei den nachfolgenden Schätzungen der Semivarianz
 einfließen, insbesondere für diese Distanz-Klassen 
@@ -201,8 +200,8 @@ $83\cdot(83-1)/2=3403$
 (vgl.\,Kapitel \ref{KapitelTheorieVariogrammSchätzung}). \\
 
 Abb.\,(\ref{Abb_Datenauswertung_VerteilungP25MesswerteApr2026}) 
-verdeutlicht, dass -wie bei den Einzelmessungen 
-(vgl.\,Abb.\,(\ref{Abb_Datenstruktur_Häufigkeitsanalyse_P1_Sensor6117}))- 
+verdeutlicht, dass -- wie bei den Einzelmessungen 
+(vgl.\,Abb.\,(\ref{Abb_Datenstruktur_Häufigkeitsanalyse_P1_Sensor6117})) -- 
 auch für die arithmetisch gemittelten Messwerte eine 
 Normalverteilungs-Annahme ungerechtfertigt erscheint.
 

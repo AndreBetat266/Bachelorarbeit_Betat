@@ -1,4 +1,4 @@
-% Stand 18. Juli 2026
+% Stand 26. Juli 2026
 \subsubsection{Analyse der direktionalen Variogramme}
 \label{KapitelDatenauswertung_Ergebnisse_Variogramme}
 Analog zu der in Kapitel \ref{KapitelTheorieVariogramm} 
@@ -11,14 +11,14 @@ sind die Schätzfunktion nach Cressie-Hawkins
 und das Matérn Kovarianz-Modell: ersteres, da es sich in
 Voruntersuchungen als  besonders robust erwiesen 
 hat; letzteres, da dessen funktionale Beschreibung durch den
-zusätzlichen Parameter $\nu$ ein hohe Flexibilität besitzt.\\
+zusätzlichen Parameter $\nu$ eine hohe Flexibilität besitzt.\\
 Die Anpassung (\textit{engl.:} \glqq fit\grqq ) der Schätzungen an das Parameter-Tupel 
 (Sill, Range, Nugget) der theoretischen 
 Kovarianz-Funktion erfolgt mithilfe eines 
-Optimierungs-Verfahren\footnote{Es wird der 
+Optimierungs-Verfahrens\footnote{Es wird der 
 \glqq \textbf{T}rust \textbf{R}egion
 \textbf{R}eflective\grqq\ Optimierungs-Algorithmus verwendet,
-welches oft für die nicht-lineare Kurvenanpassung zum Einsatz kommt.}, dem ein beschränkendes Intervall für 
+welcher oft für die nicht-lineare Kurvenanpassung zum Einsatz kommt.}, dem ein beschränkendes Intervall für 
 den anzupassenden Parameter übergeben wird.\\
 Für den Range Parameter wird dieses Intervall mit
 $\mathcal{J}^{(R)}_{fit}=
@@ -42,7 +42,7 @@ aufweisen: das Optimierungs-Problem ist in diesem Falle schlecht konditioniert.
 \item[b) ] Wenn der Sill innerhalb der beobachteten Entfernungen nicht erreicht wird,
 enthalten die Daten nicht genügend Information, um den \glqq wahren\grqq\ Range 
 zu schätzen. Die Angabe der größten beobachteten Distanz $R_{max}$ als Schätzung für 
-den Range erscheint unter diesem Blickwinkel \glqq aufrichtiger\grqq als
+den Range erscheint unter diesem Blickwinkel \glqq aufrichtiger\grqq\ als
 der Rückgabewert einer unbeschränkten und möglicherweise unplausiblen
  numerischen Anpassung.
 \end{itemize}
@@ -103,7 +103,7 @@ beiden Winkelrichtungen das Sill-Plateau, wie es bei hinreichend
 großer Wahl des Lags stattfinden sollte. 
 \item[3) ] Als Folge davon war es in
 Abb.\,(\ref{Abb_Datenauswertung_P25MessungenApr2026DirektionaleSemivarianzBeispielFit340})
-für den Algorithmus optimal, den Range auf den größten, möglichen Wert 
+für den Algorithmus optimal, den Range auf den größten möglichen Wert 
 von $R_{max}$ des beschränkenden Intervalls $\mathcal{J}^{\mathrm{(R)}}_{fit}$ 
 zu setzen. Bei der Anpassung in
 Abb.\,(\ref{Abb_Datenauswertung_P25MessungenApr2026DirektionaleSemivarianzBeispielFit140})
@@ -121,9 +121,9 @@ ungünstige Wahl von Schätzer und theoretischem Modell verursacht
 sind, sondern aus der versuchsbedingten, räumlichen Verteilung 
 der Sensoren resultieren. Die quasi als eine Art Gegenprobe 
 dienende Schätzung der richtungs\underline{un}ab\-hän\-gigen 
-Semivarianz und die daraus abgeleitete Anpassung an ein Kovarianz-Funktion zeigen 
+Semivarianz und die daraus abgeleitete Anpassung an eine Kovarianz-Funktion zeigen 
 die gleichen Auffälligkeiten 
-(vgl.\,Abb.\,(\ref{Abb_Datenauswertung_P25_Nov2025_IsotropesVariogramm}), 
+(vgl.\,Abb.\,(\ref{Abb_Datenauswertung_P25_Nov2025_IsotropesVariogramm}) 
 und Abb.\,(\ref{Abb_Datenauswertung_P25_Nov2025_IsotropesVariogrammAnpassungen})),
 wodurch die Vermutung einer zu geringen räumlichen Abdeckung 
 der Messpunkte unterstrichen wird.  
@@ -151,7 +151,7 @@ beziehen sich auf die Drehung im Uhrzeigersinn
 gegen die Ost-West-Achse. Die $360^\circ / 20^\circ=18$ blauen
 Punkte (\textcolor{CornflowerBlue}{$\bullet$}) kennzeichnen 
 die Parame\-ter-Anpassungen der geschätzten Semivarianz in die 
-angegeben Winkelrichtung. Die Parameter-Anpassungen sind durch
+angegebene Winkelrichtung. Die Parameter-Anpassungen sind durch
 eine Linie miteinander verbunden und der sich ergebende
 Polygonzug ist bläulich 
 (\textcolor{CornflowerBlue}{\rule[-0.3mm]{3mm}{3mm}}) 
@@ -170,14 +170,14 @@ aufgezeigt wurde: bei der Anpassung des Parameters Range
 \glqq klebt\grqq\ der Algorithmus oft an der oberen Schranke fest, 
 sodass der in diesen Fällen durch die Anpassung ermittelte Wert für
  den Range mit hoher Wahrscheinlichkeit ein Artefakt 
-der Optimierung aber nicht den \glqq wahren\grqq\ Wert widerspiegelt.\\
+der Optimierung, aber nicht den \glqq wahren\grqq\ Wert widerspiegelt.\\
 
 Dieses Verhalten wurde für alle drei der verfügbaren, 
 monatlich gemittelten Daten beobachtet, sowohl für die Messungen der
 Konzentration von $\mathrm{P}_{2.5}$ wie auch von 
 $\mathrm{P}_{10}$. Setzt man den oberen Wert des Intervalls 
 $\mathcal{J}^{\mathrm{(R)}}_{fit}$ für die Range Anpassung 
-auf den unrealistischen Wert von $100\,km$ zeigt sich dasselbe
+auf den unrealistischen Wert von $100\,km$, zeigt sich dasselbe
 Verhalten bei Betrachtung der Variogramm-Karte: der 
 Optimierungs-Algorithmus setzt den Range-Parameter 
 auf diesen maximal zulässigen Wert fest. 
@@ -187,12 +187,11 @@ Variogramm-Karte unter dieser Nebenbedingung
 befinden sich im Anhang 
 (Abb.\,(\ref{Abb_Datenauswertung_P25MessungenApr2026DirektionaleSemivarianzBeispielFit340_NoConstraints})
 und
-Abb.\,(\ref{Abb_Datenauswertung_P25MessungenApr2026VariogrammRoseRange_NoConstraints})
-). 
+Abb.\,(\ref{Abb_Datenauswertung_P25MessungenApr2026VariogrammRoseRange_NoConstraints})). 
 
 Abb.\,(\ref{Abb_Datenauswertung_P25_Apr2026_VariogrammKarte_Range_Matern})
 allein lässt somit keine Aussage über eine mögliche Anisotropie
-oder der darauf aufbauenden Unterscheidung geometrische versus zonale Anisotropie zu.\\
+oder die darauf aufbauenden Unterscheidung geometrische versus zonale Anisotropie zu.\\
 
 \begin{figure}[H] 
 \centering
@@ -253,11 +252,11 @@ $\displaystyle \lim_{r \longrightarrow \infty} f(r)=1$.
 Damit folgt
 \begin{equation}
 \gamma'(r) := \frac{\mathrm{d}\gamma(r)}{\mathrm{d}r}=
-\frac{\sigma^2}{a}\cdot f'(r)
+\frac{\sigma^2}{a}\cdot f'\left( \frac{r}{a} \right)
 \end{equation}
 Wenn der Sill noch nicht klar erreicht wird und somit die Daten im Wesentlichen nur den 
 anfänglichen Anstiegsbereich gut abbilden, dann bestimmt die Anpassung vorrangig 
-das Verhältnis $\frac{\sigma^2}{a}$ aber nicht die Einzelgrößen $\sigma^2$ und $a$. 
+das Verhältnis $\frac{\sigma^2}{a}$, aber nicht die Einzelgrößen $\sigma^2$ und $a$. 
 Eine Erhöhung von $a$ muss somit zu einem Anwachsen von $\sigma^2$ führen, damit die 
 Kurvenanpassung weiterhin zu den beobachteten Punkten passt. 
 Das führt zu einer positiven Korrelation der beiden Größen Sill und Range. 
@@ -266,7 +265,7 @@ Voraussetzungen Sill und Range \textit{nicht} konsistent unabhängig voneinander
 können (vgl.\,\cite{Zhang2004}). 
 
 
-Somit \textit{könnte} ein winkelabhängige Asymmetrie des Sill 
+Somit \textit{könnte} eine winkelabhängige Asymmetrie des Sill 
 auf eine Winkelabhängigkeit des Range und somit indirekt auf eine 
 Anisotropie hindeuten. \\
 
@@ -275,7 +274,7 @@ Anisotropie liefert, wird im folgenden
 Kapitel \ref{KapitelDatenauswertung_Ergebnisse_Kriging} untersucht, 
 ob sich diese Indizien auch in der Vorhersagequalität des Kriging 
 widerspiegeln. Hierzu wurden anisotrope Kovarianz-Modelle konstruiert 
-und mittels einer Variante des Cross Validation bewertet.
+und mittels einer Variante der Cross-Validation bewertet.
 
 
 
