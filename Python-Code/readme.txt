@@ -1,4 +1,4 @@
-Um die Skripte zum Laufen zu bringen, müssen die folgenden frei verfügbaren Bibliotheken installiert sein:
+Um die Skripte zum Laufen zu bringen, müssen die folgenden, frei verfügbaren Bibliotheken installiert sein:
 1) numpy
 2) matplotlib
 3) scipy
