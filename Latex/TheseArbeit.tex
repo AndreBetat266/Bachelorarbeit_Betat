@@ -9,13 +9,11 @@
 \usepackage{ragged2e}
 \usepackage[dvipsnames]{xcolor}
 \usepackage{float}
-%\usepackage[round, comma]{natbib}
 \usepackage{multirow}
 \usepackage[ngerman]{babel}
 \usepackage{amsmath}
 \usepackage{amssymb}
 \usepackage{fancyhdr}
-\usepackage{datetime}
 \newcommand{\changefont}{\fontsize{8}{11}\selectfont}
 \usepackage{hyperref}
 \usepackage{enumitem}
@@ -29,25 +27,21 @@
 %\usepackage[backend=biber,style=alphabetic, ]{biblatex}
 \usepackage[backend=biber,style=authoryear]{biblatex}
 
-
 \bibliography{../Literaturverzeichnis/Literatur_01.bib}
 
 \newcommand{\attrib}[1]{%
 \nopagebreak{\raggedleft\footnotesize #1\par}}
 \newcommand{\PaperType}{Bachelorarbeit}
 \newcommand{\PaperTitle}{Räumliche Analyse von Feinstaubmessungen}
-%\newcommand{\PaperAuthor}{André Betat}
-\newcommand{\PaperAuthor}{Bruce Wayne}
+\newcommand{\PaperAuthor}{André Betat}
+%\newcommand{\PaperAuthor}{Bruce Wayne}
 \newcommand{\PaperInstitution}{Institut für Statistik}
-%\newcommand{\PaperSupervisor}{Prof.\,Dr.\,Volker Schmid}
-\newcommand{\PaperSupervisor}{Prof.\,Dr.\,Ludwig Fahrmeir}
+\newcommand{\PaperSupervisor}{Prof.\,Dr.\,Volker Schmid}
+%\newcommand{\PaperSupervisor}{Prof.\,Dr.\,Ludwig Fahrmeir}
 
 \pagestyle{fancy}
 \fancyhead{}
 \fancyhead[R]{\changefont{\PaperTitle}}
-%\fancyhead[L]{\changefont{\today\ \currenttime}}
-%\fancyfoot{}
-%\fancyfoot[R]{\thepage}
 
 \setlength{\headheight}{14.5pt}
 \setlength{\parindent}{0pt}
@@ -106,9 +100,9 @@ München, 30. Juli 2026}\\
 % CONTENTS ---------------------------------------------------------------------
 \pagenumbering{Roman}
 \newpage
-%\begin{abstract}
-%\input{Kapitel/Zusammenfassung}
-%\end{abstract}
+\begin{abstract}
+\input{Kapitel/BA_Zusammenfassung}
+\end{abstract}
 \newpage
 
 \tableofcontents
@@ -139,8 +133,8 @@ München, 30. Juli 2026}\\
 
 \section{Datenauswertung}
 \label{KapitelDatenauswertung}
-%\input{Kapitel/BA_Auswertung_Ergebnisse_Einleitung}
-%\input{Kapitel/BA_Auswertung_Ergebnisse_Variogramm}
+\input{Kapitel/BA_Auswertung_Ergebnisse_Einleitung}
+\input{Kapitel/BA_Auswertung_Ergebnisse_Variogramm}
 \input{Kapitel/BA_Auswertung_Ergebnisse_Kriging}
 \input{Kapitel/BA_Auswertung_VerwandteArbeiten}
 \newpage
@@ -203,14 +197,15 @@ of reproduction and usage, however, are not granted here. This paper was not
 previously presented to another examination board and has not been published.
 \\
 
-\vspace{0.5cm}
-\textcolor{orange}{Location, date} \\
+\vspace{2.0cm}
+\noindent\rule{0.5\textwidth}{0.4pt} \\
+\textcolor{black}{Location, date} \\
 
 \vspace{3cm}
 
 %\includegraphics[scale=0.85]{Signature_BETAT.jpg}
 \noindent\rule{0.5\textwidth}{0.4pt} \\
 
-\textcolor{orange}{Name}
+\textcolor{black}{Name}
 
 \end{document}
