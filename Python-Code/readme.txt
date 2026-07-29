@@ -18,3 +18,5 @@ Um die Skripte zum Laufen zu bringen, müssen die folgenden, frei verfügbaren B
 
 Die selbst verfassten Dateien sind durch die Endung *BA.py zu erkennen. Diese Dateien müssen über die Pfad-Variable der IDE 
 identifizierbar sein.
+
+Die high-level Auswertungen sind in ThesisAnalysis.py enthalten. ThesisStart.py demonstriert einige Aufrufe.
