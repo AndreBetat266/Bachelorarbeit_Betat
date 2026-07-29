@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# Version vom 21. Juli 2026
+# Version vom 29. Juli 2026
 
 import numpy as np
 import os
@@ -204,6 +204,36 @@ def ConvertNumericArray ( aArray, sTargetType ):
     
     
     return ( aArray )
+# ************* Berechnung des zentrierten, gleitenden Durchschnittes mit der Möglichkeit des Padding auf die ursprüngliche Länge **********
+#       Die Setzung tOrder = (0, n) führt zu einem vorausschauenden, die Setzung tOrder = (n, 0) zu einem rückblickenden Durchschnitt
+def CalcRollingMean ( aData, tDegree, sPadMode = "edge", uStatLength = None ):
+    CheckAssert ( bBool = ( sPadMode in [ "edge", "mean", "median", "symmetric", "none" ] ), sMsg = "Invalid Choice <sPadMode>!" )
+    if ( sPadMode in [ "mean", "median" ] ):
+        CheckAssert ( bBool = ( uStatLength is not None ), sMsg = "Invalid Value <uStatLength>!" )
+        
+    iLeft, iRight = tDegree[ 0 ], tDegree[ 1 ]
+    aRange = np.arange ( start = iLeft, stop = aData.shape[ 0 ] - iRight + 1 )
+    
+    tRollMeanValues = tuple ( map ( lambda ik: np.nanmean ( aData[ ik - iLeft : ik + iRight ] ), aRange ) )
+    aRollingMean = np.asarray ( tRollMeanValues, dtype = np.float64  )
+    
+    """
+    ListRollMeanValues1 = list ()
+    for ik in range ( iStart, aData.shape[ 0 ] - iEnd + 1 ):
+        fRollMeanValue = np.mean ( aData[ ik - iStart : ik + iEnd ] )
+        ListRollMeanValues1.append ( fRollMeanValue )
+        
+    aRollingMean1 = np.asarray ( ListRollMeanValues1, dtype = np.float64 )
+    print ( np.allclose ( aRollingMean1, aRollingMean ) )
+    """
+    
+    if ( sPadMode in [ "mean", "median" ] ):
+        aRollingMean = np.pad ( array = aRollingMean, pad_width = ( tDegree[ 0 ], tDegree[ 1 ] - 1 ), mode = sPadMode, 
+                                stat_length = uStatLength )
+    elif ( sPadMode in [ "edge", "symmetric" ] ):
+        aRollingMean = np.pad ( array = aRollingMean, pad_width = ( tDegree[ 0 ], tDegree[ 1 ] - 1 ), mode = sPadMode )
+        
+    return ( aRollingMean )
 # +++++++++++++++++++++++++++++++++++++++++++++++++ Struktur Analyse einer Daten-Datei +++++++++++++++++++++++++++++++++++++++++++++++++++++
 def AnalyzeDataStructure ( sDataFileName, tIgnoreColumn = None, tGermanFormatColumn = None, sComments = "#", sDelimiter = "\t", 
                            bAddSummary = True, bAddInfoNA = True, bReturnCheckList = False ):
@@ -300,3 +330,163 @@ def AnalyzeDataStructure ( sDataFileName, tIgnoreColumn = None, tGermanFormatCol
         return ( aDescriptions, ListCheck, ListData )
     else:
         return ( aDescriptions, ListData )
+# ********************************* Detektion von Auffälligkeiten in einer Zeit abhängien Datenreihe ***************************************
+def ScreenDataSeriesAbnormality ( aData, aDateTime = None, aReferenceData = None, fToleranceValue = None, iOutlierNumNeighbours = None, fThreshold = None ):
+    if ( aDateTime is not None ):
+        CheckAssert ( bBool = ( ( aDateTime.shape == aData.shape ) ), sMsg ="Inconsistent Shape of <aDateTime> and <aData>" )
+        CheckAssert ( bBool = ( isinstance ( aDateTime[ -1 ], np.datetime64 ) ), sMsg = "Invalid Type <aDateTime>!" )
+    
+    if ( aReferenceData is not None ):
+        CheckAssert ( bBool = ( ( aData.shape == aReferenceData.shape ) ), sMsg ="Inconsistent Shape of <aData> and <aReferenceData>!" )
+
+    CheckAssert ( bBool = ( isinstance ( aData[ -1 ], ( np.int_, np.float32, np.float64 ) ) ), sMsg = "Invalid Type <aData>!" )
+    
+    #print ( ">> Shape Data: %s" % ( str ( aData.shape ) ) )
+    
+    DictResult = dict ()
+    
+    #### Anzahl der np.nan Werte  
+    DictResult[ "NumberNA" ] = np.count_nonzero ( np.isnan ( aData ) )
+    
+    ### Anzahl der verschiedenen Werte
+    aValues = np.unique ( ar = aData, return_counts = False )
+    DictResult[ "NumberDifferentValues" ] = aValues.shape[ 0 ]
+    
+    #### Analyse der Zeitintervalle der aDateTimes
+    if ( aDateTime is not None ):
+        ListTimeDeltaSeconds = list ()
+        for ik in range ( 1, aDateTime.shape[ 0 ] ):
+            fTimeDelta = np.datetime64 ( aDateTime[ ik ] ) - np.datetime64 ( aDateTime[ ik - 1 ] )
+            ListTimeDeltaSeconds.append ( fTimeDelta / np.timedelta64 ( 1, "s" ) )
+    
+        aTimeDeltaDiff = np.asarray ( ListTimeDeltaSeconds, dtype = np.float64 )
+        aTimeDeltaQuartiles = CalcQuartiles ( aData = aTimeDeltaDiff, iAxis = 0, sInterpolationType = "linear" )
+        DictResult[ "TimeDeltaQuartiles" ] = aTimeDeltaQuartiles 
+
+    ### Zusammenhängende Plateaus von Werte oberhalb eines Schwellwerts werden verworfen
+    if ( fThreshold is not None ):
+        aThresholdIndices = np.arange ( start = 0, stop = aData.shape[ 0 ] )[ aData > fThreshold ]
+        ## m benachbarte Indizes ( z.B. [ 12, 13, 14, 15 ] ) werden durch die Differenzbildung zu einer Sequenz von (m - 1) Einsen
+        aCheck = np.diff ( a = aThresholdIndices, n = 1 ) 
+        aThresholdSequenceLength = FindSequenceLength ( aArray = aCheck, iNumber = 1, bInfo = False )
+        DictResult[ "IndicesThreshold" ] = aThresholdIndices
+        DictResult[ "SequenceLengthThreshold" ] = aThresholdSequenceLength
+    
+    ### Bestimmung der Ausreißer als diejenigen Werte, die außerhalb des Bereiches [ aReferenz +/- fToleranzWert ] liegen
+    if ( ( aReferenceData is not None ) and ( fToleranceValue is not None )  ):
+        aOutlierSelect = np.logical_or ( aData < aReferenceData - fToleranceValue, aData > aReferenceData + fToleranceValue )
+        aOutlierIndices = np.arange ( start = 0, stop = aData.shape[ 0 ] )[ aOutlierSelect ]
+
+        if ( iOutlierNumNeighbours > 0 ):
+            aOutlierSelect_extd = np.copy ( aOutlierSelect )
+            for ik in range ( iOutlierNumNeighbours, aOutlierSelect.shape[ 0 ] - iOutlierNumNeighbours ):
+                if ( aOutlierSelect[ ik ] == True ):
+                    aOutlierSelect_extd[ ik - iOutlierNumNeighbours : ik + iOutlierNumNeighbours + 1 ] =  aOutlierSelect[ ik ]
+
+            aOutlierIndices = np.arange ( start = 0, stop = aData.shape[ 0 ] )[ aOutlierSelect_extd ]
+        
+        aCheck = np.diff ( a = aOutlierIndices, n = 1 ) 
+        aOutlierSequenceLength = FindSequenceLength ( aArray = aCheck, iNumber = 1, bInfo = False )
+        DictResult[ "IndicesOutlier" ] = aOutlierIndices
+        DictResult[ "SequenceLengthOutlier" ] = aOutlierSequenceLength
+        
+    return ( DictResult )
+# ************************************************** Berechnung der Perzentile von Stichproben *********************************************
+def CalcQuantiles ( aData, Quantiles, iAxis = 0, bRescale = True, sInterpolationType = "linear" ):
+    CheckAssert ( bBool = ( isinstance ( Quantiles, ( tuple, list, np.ndarray, float ) ) ), sMsg = "Wrong Parameter Type!" )
+        
+    if ( bRescale == True ):     
+        aData = RescaleData ( aData = aData, sType = "STANDARD", bReturnFullList = False )
+        
+    ## geändert 08. März 2026: if else Klausel herausgenommen
+    #if ( aData.ndim == 1 ):
+    aQ_obs = np.quantile ( a = aData, q = Quantiles, axis = iAxis, method = sInterpolationType )
+    #else:
+        # Vorsicht! Funktioniert nur mit Transposition 
+        #aQ_obs = np.quantile ( a = aData, q = Quantiles, axis = iAxis, interpolation = sInterpolationType )
+        #Q_obs1 = np.zeros ( ( Data.shape[ 1 ], len ( Quantiles ) ) )
+        #for j in range ( 0, Data.shape[ 1 ] ):
+         #   Q_obs[ j ] = np.quantile ( a = Data[ :, j ], q = Quantiles, interpolation = InterpolationType )
+            
+    return ( aQ_obs.T )
+# **************************************************** Berechnung der Quartile von Stichproben *********************************************
+def CalcQuartiles ( aData, iAxis = 0, sInterpolationType = "linear" ):
+    aQuantiles = [ 0.0, 0.25, 0.5, 0.75, 1.0 ]
+    
+    aQ = CalcQuantiles ( aData = aData, Quantiles = aQuantiles, iAxis = iAxis, bRescale = False, sInterpolationType = sInterpolationType )
+        
+    return ( aQ )
+# ********************************************************* Daten Reskalierung *************************************************************
+# each row/line of matrix Data is a sample/observation and each column is a variable/feature 
+def RescaleData ( aData, iAxis = 0, sType = "STANDARD", bReturnFullList = False ):
+    sType = sType.upper ()
+    CheckAssert ( bBool = ( sType in [ "CENTER_MEAN", "UNITY", "CENTER_MATCH_ZERO", "CENTER_ZERO", "STANDARD", "DIVIDE_STD" ] ),
+                  sMsg = "Wrong Input Type!" )
+    
+    if ( iAxis is not None ):
+        print ( ">> RescaleData > Using axis = %d for calculation!" % ( iAxis ) )
+    else:
+        print ( ">> RescaleData > Using flattened array for calculation!" )
+        
+    aMeanData = np.mean ( aData, axis = iAxis )
+    aStdDevData = np.std ( aData, axis = iAxis )
+    aMaxData = np.amax ( aData, axis = iAxis )
+    aMinData = np.amin ( aData, axis = iAxis )
+
+    aData_scaled = np.zeros ( shape = aData.shape, dtype = np.float64 )
+    
+    if ( sType == "CENTER_MEAN" ):
+        aData_scaled = ( aData - aMeanData )
+    # Bildet auf eine Teilmenge des Intervalls [-1, 1] ab, # wobei die 0 auf die 0 abgebildet wird
+    elif ( sType == "CENTER_MATCH_ZERO" ): 
+        print ( aMinData, aMaxData )
+        aWidth = 2.0 * max ( np.abs ( aMaxData ), np.abs ( aMinData ) )
+        aData_scaled = aData / aWidth 
+    elif ( sType in [ "UNITY", "CENTER_ZERO" ] ):
+        aWidth = ( aMaxData - aMinData )
+        if ( np.any ( a = ( aWidth == 0.0 ) ) ):
+        #if ( ( aWidth == 0.0 ).any () ):
+            print ( "RescaleData > Adjusting [(Max - Min) == 0.0] Values!" )
+            aWidth[ aWidth == 0.0 ] = 1.0 
+        aData_scaled = ( aData - aMinData ) / aWidth 
+        if ( sType == "CENTER_ZERO" ):
+            aData_scaled -= 0.5
+    elif ( sType in [ "STANDARD", "DIVIDE_STD" ] ):
+        #if ( ( aStdDevData == 0.0 ).any () ):
+        if ( np.any ( a = ( aStdDevData == 0.0 ) ) ):
+            print ( "RescaleData > Adjusting [StdDev == 0.0] Values!" )
+            aStdDevData[ aStdDevData == 0.0 ] = 1.0
+        if ( sType == "STANDARD" ):
+            aData_scaled = ( aData - aMeanData ) / aStdDevData
+        else:
+            aData_scaled = aData / aStdDevData
+            
+    if ( bReturnFullList == True ):
+        return ( aData_scaled, aMeanData, aStdDevData, aMaxData, aMinData )
+    else:    
+        return ( aData_scaled )
+# ************************* Detektion der Längen von Sequenzen ( m_1, m_2, m_3, ..., m_n) einer Zahl m in eimem Array ********************** 
+def FindSequenceLength ( aArray, iNumber, bInfo = True ):
+    ListGroupLength = list ()
+    ListGroupElement = list ()
+        
+    for iKey, CGroup in groupby ( aArray ):
+        ListGroupLength.append ( len ( list ( CGroup ) ) )
+        ListGroupElement.append ( iKey )
+            
+    aGroupLength = np.asarray ( ListGroupLength, dtype = np.int16 )
+    aGroupElement = np.asarray ( ListGroupElement, dtype =  np.int32 )
+    
+    if ( iNumber in aGroupElement ):
+        aIndices = ( aGroupElement == iNumber )
+        aResult = -1 * np.sort ( -aGroupLength[ aIndices ] )
+        if ( bInfo == True ):
+            print ( ">> FindSequenceLength > Found Sequence Length for Number %d" % ( iNumber ) )
+            print ( aResult ) 
+    else:
+        aResult = None
+        if ( bInfo == True ):
+            print ( ">> FindSequenceLength > Number %d is not in Array!" % ( iNumber ) )
+        
+    return ( aResult )
+

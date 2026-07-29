@@ -1,16 +1,15 @@
 # -*- coding: utf-8 -*-
-# Version vom 21. Juli 2026
+# Version vom 29. Juli 2026
 
 import numpy as np
 import matplotlib.pyplot as plt 
 import PlotBA as pl
-import Statistic as st
 import GeodataAnalysisBA as ga
 import SpatialAnalysisBA as sa
 import DataImportSensorBA as ds
 from cartopy import crs
 from scipy.interpolate import CubicSpline
-from UtilitiesBA import CheckAssert, SortDict
+from UtilitiesBA import CheckAssert, SortDict, CalcRollingMean, ScreenDataSeriesAbnormality
 
 
 fLon_ref, fLat_ref = ds.GDictConfig.get ( "CentralLocation" )
@@ -21,8 +20,9 @@ CCRS_azmequi = crs.AzimuthalEquidistant ( central_longitude = fLon_ref, central_
 def RunAnisotropicCrossValidation ( sModel, tParameterLambda, tParameterVar, iNumStepsTheta, sDate, sSubFolderMonthYear, 
                                     sDataSelection, fVar_fix = 4.0, fLambda_fix = 4.0, sAverageParameter = "median" ):
     
-    tSettings =  ( 40.0, 0.8, 3.5 )
-    CheckAssert ( bBool = ( len ( tParameterLambda ) == 3 and tParameterLambda[ - 1 ] == 3 ), sMsg = "Invalid Format <tParameterLambda>!" )
+    iSampleRun = 34
+    fDegTheta_fix =  60.0
+    CheckAssert ( bBool = ( len ( tParameterLambda ) == 3 and tParameterLambda[ - 1 ] == 4 ), sMsg = "Invalid Format <tParameterLambda>!" )
     CheckAssert ( bBool = ( len ( tParameterVar ) == 3 and tParameterVar[ - 1 ] == 3 ), sMsg = "Invalid Format <tParameterVar>!" )
     
     fLenScaleX = 21300.0
@@ -31,10 +31,12 @@ def RunAnisotropicCrossValidation ( sModel, tParameterLambda, tParameterVar, iNu
 
     aRawData, DictStatistic = ds.LoadDataStatisticMonth ( sDataType = sDataType, sSubFolderMonthYear = sSubFolderMonthYear, 
                                                           sAverageParameter = sAverageParameter )
-    
+    """
     ga.ShowDataSnapShotwGraph ( aRawData = aRawData, sDate = sDate, sDataSelection = sDataSelection, CProjCRS = CCRS_azmequi, 
                                 bShowDistribution = False )
-    
+    ga.ShowDataSnapshotwBorder ( aRawData = aRawData, sDataSelection = sDataSelection, sDate = sDate, CProjCRS = CCRS_azmequi, 
+                                 tStyleRectangle = None, bShowDistribution = False )
+    """
     aData = np.asarray ( aRawData[ :, aSelectIndices ], dtype = np.float64 )
     
     fMinX, fMaxX = np.amin ( aData[ :, 0 ] ), np.amax ( aData[ :, 0 ] )
@@ -45,16 +47,13 @@ def RunAnisotropicCrossValidation ( sModel, tParameterLambda, tParameterVar, iNu
     DictStatistic_inv = { tTupel[ 0 ][ 0 ]: sKey for sKey, tTupel in DictStatistic.items () }
     sSensorID_max = DictStatistic_inv.get ( aDataID[ iArgMax ] )
     print ( ">> EstimateDirectionalVariogram > Max: %.2f (ID: %s)" % ( aData[ iArgMax][ 2 ], sSensorID_max ) )
-    ShowDataSingleID ( sSensorID = "45768", tSequence = ( "2025-11-01", "2025-11-02" ), sDataSelection = sDataSelection, 
-                       sSubFolderMonthYear = sSubFolderMonthYear )
-    
-    iArgMax = np.argmax ( aData[ :, 2 ] )
-    
-    print ( iArgMax )
-    
+    #ShowDataSingleID ( sSensorID = sSensorID_max, tSequence = ( "2025-11-01", "2025-11-02" ), sDataSelection = sDataSelection, 
+    #                   sSubFolderMonthYear = sSubFolderMonthYear )
+
     #ga.ShowDistributionMeasurements ( aData = aData[ :, 2 ], sTitleStartText = sDate, sDescription = tLabel[ 2 ], sUnit = tLabel[ 3 ], 
      #                                iNumBins = 50 )
-
+     
+     
     fLambdaStart, fLambdaEnd, iNumStepsLambda = tParameterLambda
     fVarStart, fVarEnd, iNumStepsVar = tParameterVar
     
@@ -65,7 +64,6 @@ def RunAnisotropicCrossValidation ( sModel, tParameterLambda, tParameterVar, iNu
     
     aDegTheta = np.rad2deg ( aRadTheta )
     ListCV = list ()
-    
     ListMSE = list ()
 
     for fVar in aVar:
@@ -76,28 +74,38 @@ def RunAnisotropicCrossValidation ( sModel, tParameterLambda, tParameterVar, iNu
                                                      fRescale = 1.0, fAngle = fRadTheta, fShape = 2.0, bInfo = False )
                 CKrige = sa.COrdKrigingGsT ( CCovarianceModel = CCovModel, uDataObserved = np.transpose ( aData ), bFitVariogram = False )
                 
-                if ( ( fDegTheta == tSettings[ 0 ] ) and ( fVar == tSettings[ 1 ] ) and ( fLambda == tSettings[ 2 ] ) ):
+                if ( ( np.allclose ( fDegTheta, fDegTheta_fix ) ) and ( fVar == fVar_fix ) and ( fLambda == fLambda_fix ) ):
                     ### warum muss hier der Winkel um 90 Grad gedreht werden ?? Wegen der Transposition der Daten ??
-                    fRadTheta_corrected = fRadTheta - np.pi / 2.0
+                    fRadTheta_corrected = fRadTheta #- np.pi / 2.0
                     CCovModel2 = sa.CCovarianceModelGsT ( sModel = sModel, fVar = fVar, uLenScale = uLenScale, fNugget = fNugget, 
                                                          fRescale = 1.0, fAngle = fRadTheta_corrected, fShape = 2.0, bInfo = False )
                     CKrige2 = sa.COrdKrigingGsT ( CCovarianceModel = CCovModel2, uDataObserved = np.transpose ( aData ), bFitVariogram = False )
                     
-                    CKrige2.Interpolate ( tDimX = ( fMinX, fMaxX, 400 ), tDimY = ( fMinY, fMaxY, 400 ), tLimX = ( 300, 300 ), tLimY = ( 300, 300 ), 
-                                         iNumLevel = 40, sColorMap = "RdYlBu_r" )
+                    CKrige2.Interpolate ( tDimX = ( fMinX, fMaxX, 800 ), tDimY = ( fMinY, fMaxY, 800 ), tLimX = ( 300, 300 ), tLimY = ( 300, 300 ), 
+                                          iNumLevel = 80, sColorMap = "RdYlBu_r" )
                 
-                #fCV_MSE = CKrige.Predict ( uPos = [ aData[ 0, : ], aData[ 1, : ] ], aDataObserved = aData[ 2, : ] )
+                    #fCV_MSE = CKrige2.Predict ( uPos = [ aData[ 0, : ], aData[ 1, : ] ], aDataObserved = aData[ 2, : ] )
+                    #print ( "Fehler: %.3f" % ( fCV_MSE ) )
+                    
                 aCV_MSE = CKrige.RunCrossValidation ( iNumFolds = aData.shape[ 0 ], bShowInfo = False )
                 ListMSE.append ( aCV_MSE )
-                fStd = np.std ( aCV_MSE )
-                fMean =  np.mean ( aCV_MSE )
-                fMedian = np.median ( aCV_MSE )
-        
-                ListCV.append ( ( fVar, fLambda, fDegTheta, fStd, fMedian, fMean ) )
+                ListCV.append ( ( fVar, fLambda, fDegTheta, np.mean ( aCV_MSE ) ) )
 
     aResultCV = np.asarray ( ListCV )
-    aResultMSE = np.asarray ( ListMSE )
-    np.save ( file = "ResultMSE.npy", arr = aResultMSE )
+    aResultMSE = np.asarray ( ListMSE )    
+    
+    ### Ein beispielhfater Ausruck des Verlaufs für einen Durchgang mit Mittelwert und Standardabweichung
+    aCV_MSE_single = aResultMSE[ iSampleRun ]
+    CGraCon = pl.CGraphicConfig ( sTitle = "Beispiel eines LOO-CV Durchlaufs; %s" % ( sDate ), sLabelX = "Nummer des Sensors in der Test-Menge",
+                                 sLabelY = "$\log\,(e_j)$" )
+    
+    fLogMean = np.log ( np.mean ( aCV_MSE_single ) )
+    fLogStd = np.log ( np.std ( aCV_MSE_single ) )
+    CHLine1 = pl.CLine ( sLineColor = "o12", fLinePos = fLogStd, fLineWidth = 2.0, sLineStyle = "--", sLineLabel = "Stdabw. der $e_j$" )
+    CHLine2 = pl.CLine ( sLineColor = "r12", fLinePos = fLogMean, fLineWidth = 2.0, sLineStyle = "-.", sLineLabel = "Mittelwert der $e_j$" )
+    CGraCon.Set ( HLine1 = CHLine1, HLine2 = CHLine2 )
+    pl.PlotXY ( aX = np.arange ( start = 1, stop = aCV_MSE_single.shape[ 0 ] + 1 ), aY = np.log ( aCV_MSE_single ), 
+                tStyle = ( "b10", "o", 7.0, "--", 2.0, "" ), GraphicConfig = CGraCon )
     
     ListY = list ()
     ListLegend = list ()
@@ -111,33 +119,59 @@ def RunAnisotropicCrossValidation ( sModel, tParameterLambda, tParameterVar, iNu
         
     CGraCon = pl.CGraphicConfig ( sTitle = "LOO-CV Ergebnisse der %s Messungen von %s ($\\lambda=%.1f$)" % ( tLabel[ 2 ], sDate, fLambda_fix ), 
                                   sLabelX = "Rotationswinkel $\\vartheta$ (Grad)", sLabelY = "$e_{\mathrm{MSE}}$" )
-
+    
     pl.PlotX3Y ( aX = aResult[ :, 2 ], aY1 = ListY[ 0 ], aY2 = ListY[ 1 ], aY3 = ListY[ 2 ], 
                 tStyleY1 = ( "o10", "o", 8.0, "--", 2.0, ListLegend[ 0 ] ),
                 tStyleY2 = ( "b10", "o", 8.0, "--", 2.0, ListLegend[ 1 ] ),
                 tStyleY3 = ( "s10", "o", 8.0, "--", 2.0, ListLegend[ 2 ] ), GraphicConfig = CGraCon )   
-        
+
+
     ListY = list ()
     ListLegend = list ()
     for fLambda in aLambda:
-        sLambda = "$\\lambda: %.1f$" % ( fLambda )
+        if ( fLambda == 1.0 ):
+            sLambda = "isotrop"
+        else:
+            sLambda = "$\\lambda: %.1f$" % ( fLambda )
+
         ListLegend.append ( sLambda )
         aSelectIndices = np.logical_and ( aResultCV[ : , 0 ] == fVar_fix, aResultCV[ : , 1 ] == fLambda )
         aResult = aResultCV[ aSelectIndices ]
         ListY.append ( aResult[ :, -1 ] )
         
     CGraCon.Set ( sTitle = "LOO-CV Ergebnisse der %s Messungen von %s ($\mathrm{Sill}=%.1f$)" % ( tLabel[ 2 ], sDate, fVar_fix ) ) 
-    pl.PlotX3Y ( aX = aResult[ :, 2 ], aY1 = ListY[ 0 ], aY2 = ListY[ 1 ], aY3 = ListY[ 2 ], 
-                 tStyleY1 = ( "o10", "o", 8.0, "--", 2.0, ListLegend[ 0 ] ),
-                 tStyleY2 = ( "b10", "o", 8.0, "--", 2.0, ListLegend[ 1 ] ),
-                 tStyleY3 = ( "s10", "o", 8.0, "--", 2.0, ListLegend[ 2 ] ), GraphicConfig = CGraCon )   
+    pl.PlotX4Y ( aX = aResult[ :, 2 ], tY = ListY, 
+                 tStylesY = ( ( "g10", "o", 8.0, "-", 2.0, ListLegend[ 0 ] ),
+                             ( "o10", "o", 8.0, ":", 2.0, ListLegend[ 1 ] ),
+                             ( "b10", "o", 8.0, "--", 2.0, ListLegend[ 2 ] ), 
+                             ( "s10", "o", 8.0, "-.", 2.0, ListLegend[ 3 ] ) ), GraphicConfig = CGraCon )   
     
     
+    aSelectIndices = np.logical_and ( aResultCV[ : , 0 ] == fVar_fix, aResultCV[ : , 1 ] == 1.0 )
+    aResult_iso = aResultCV[ aSelectIndices ][ :, -1 ]
+    
+    ListD = list ()
+    for fLambda in aLambda[ 1 : ]:
+        aSelectIndices = np.logical_and ( aResultCV[ : , 0 ] == fVar_fix, aResultCV[ : , 1 ] == fLambda )
+        aResult_aniso = aResultCV[ aSelectIndices ][ :, -1 ]
+        ListD.append ( ( aResult_iso - aResult_aniso ) )
+        
+    aD = np.asarray ( ListD, dtype = np.float64 )
+    print ( aD.shape )
+    aMean_D = np.mean ( aD, axis = 1 )
+    aS_D = np.std ( aD, ddof = 1, axis = 1  )
+    print ( aMean_D )
+    print ( aS_D )
+    
+    print ( aMean_D / aS_D )
+
+    
+    """
     pl.PlotX2Y ( aX = aResultCV[ :, 2 ], aY1 = aResultCV[ :, 3 ], aY2 = aResultCV[ :, -1  ], 
                  tStyleY1 = ( "o10", "o", 8.0, "--", 2.0, "Std" ),
                  tStyleY2 = ( "b10", "o", 8.0, "--", 2.0, "Mean" ),
                  GraphicConfig = CGraCon )   
-    
+    """
     return
 
 # ******************************* Analyse der direktionalen Variogramm für verschiedenen Zeiträume *****************************************
@@ -297,10 +331,10 @@ def AnalyzeTimeAverageDataCV ( sDate, sSubFolderMonthYear, sDataSelection, tNumL
     fMinX, fMaxX = np.amin ( aData_sel[ :, 0 ] ), np.amax ( aData_sel[ :, 0 ] )
     fMinY, fMaxY = np.amin(  aData_sel[ :, 1 ] ), np.amax ( aData_sel[ :, 1 ] ) 
     
-    ga.ShowDataSnapshotwBorder ( aRawData = aRawData, sDataSelection = sDataSelection, sDate = sDate, CProjCRS = CCRS_azmequi, 
-                                 tStyleRectangle = tStyleRectangle, bShowDistribution = True )
+    #ga.ShowDataSnapshotwBorder ( aRawData = aRawData, sDataSelection = sDataSelection, sDate = sDate, CProjCRS = CCRS_azmequi, 
+    #                             tStyleRectangle = tStyleRectangle, bShowDistribution = True )
     
-    ga.ShowDataSnapShotwGraph ( aRawData = aRawData, sDate = sDate, sDataSelection = sDataSelection, CProjCRS = CCRS_azmequi, bShowDistribution = True )
+    #ga.ShowDataSnapShotwGraph ( aRawData = aRawData, sDate = sDate, sDataSelection = sDataSelection, CProjCRS = CCRS_azmequi, bShowDistribution = True )
     
     print ( ">> Shape Data_sel: %s" % ( str ( aData_sel.shape ) ) )
     
@@ -309,10 +343,10 @@ def AnalyzeTimeAverageDataCV ( sDate, sSubFolderMonthYear, sDataSelection, tNumL
     print ( ">> ShowDataTimeAverage > Max: %.2f (ID: %s)" % ( fMax, sSensorID_max ) )
     #ShowDataSingleID ( sSensorID = sSensorID_max, tSequence = ( "2026-04-01", "2026-04-30" ), sDataSelection = sDataSelection )
     
-    ga.ShowDistributionDistances ( aData = aData_sel, sDescription = tLabel[ 2 ], sUnit = tLabel[ 3 ] )
-    CVario = sa.CVariogramSkG ( aData = aData_sel, sEstimator = "cressie", bUseNugget = True, iNumLags = 15, sColorMap = None )
+    #ga.ShowDistributionDistances ( aData = aData_sel, sDescription = tLabel[ 2 ], sUnit = tLabel[ 3 ] )
+    CVario = sa.CVariogramSkG ( aData = aData_sel, sEstimator = "cressie", bUseNugget = True, iNumLags = 9, sColorMap = None )
 
-    ## ListVariogramEstimation = sModel, sEstimator, iNumLags, uMaxLag, fRange, fSill, fNugget, fMSE
+    #ListVariogramEstimation = sModel, sEstimator, iNumLags, uMaxLag, fRange, fSill, fNugget, fMSE
     ListVariogramEstimation = CVario.ScreenEstimationParameter ( tNumLags = tNumLags, tMaxLags = tMaxLags, tModels = tModels, 
                                                                  iShowEachFit = 500 )
     ### für Debugging genutzt
@@ -323,10 +357,13 @@ def AnalyzeTimeAverageDataCV ( sDate, sSubFolderMonthYear, sDataSelection, tNumL
     # iNumLag, MaxLag, Range, Sill, Nugget, mean(MSE)
     tBestResults = RunIsotropicCrossValidation ( aData = aData_sel, ListVariogramEstimation = ListVariogramEstimation, 
                                         fLowerFitBoundRange = CVario.ListFitBounds[ 0 ][ 0 ], sDate = sDate, 
-                                         sDescription = tLabel[ 2 ], bShowPlot = True )
+                                        sDescription = tLabel[ 2 ], bShowPlot = True )
     
-    CVario.ShowVariogramEstimation ( tParameterEstimator = ( ( "cressie", int ( tBestResults[ 0 ] ), tBestResults[ 1 ] ) ) )                                                      
+    CVario.ShowVariogramEstimation ( tParameterEstimator = ( ( "cressie", int ( tBestResults[ 0 ] ), tBestResults[ 1 ] ) ) )      
+    #CVario.ShowVariogramEstimation ( tParameterEstimator = ( ( "matheron", 9, 20000 ), ( "cressie", 9, 20000 ) ) )       
+
     
+
     ## aRank = fMSE, fVar, fLenScale, fNugget, fRescale, fShape
     aRank, ListRankModel = CVario.CompareCovModel4 ()
     print ( aRank )
@@ -574,14 +611,14 @@ def ScreenData ( sDate, sDataSelection, sSubFolderMonthYear, tSetSensorID = None
         
         iNumAcceptedOutlier = int ( float ( aData.shape[ 0 ] ) * fAcceptedOutlierRatio )
         fStd, fMax = np.nanstd ( aData ), np.nanmax ( aData )
-        aRollMean = st.CalcRollingMean ( aData = aData, tDegree = tDegreeRollMean, sPadMode = "median", uStatLength = ( 5, 5 ) )
+        aRollMean = CalcRollingMean ( aData = aData, tDegree = tDegreeRollMean, sPadMode = "median", uStatLength = ( 5, 5 ) )
         
         sTitleTextStart = "Sensor-ID %s [%d]: " % ( sSensorID, iCountID )
         #sTitleTextStart = "Sensor-ID %s (%s): " % ( DictID.get ( iCountID )[ 0 ], sDate )
         ListMarker = list ()
         aData_imp = np.copy ( aData )
         
-        DictResult = st.ScreenDataSeriesAbnormality ( aDateTime = aDateTime, aData = aData, aReferenceData = aRollMean, 
+        DictResult = ScreenDataSeriesAbnormality ( aDateTime = aDateTime, aData = aData, aReferenceData = aRollMean, 
                                                       fToleranceValue = fToleranceFactor * fStd, iOutlierNumNeighbours = 0, fThreshold = fThreshold )
         
         iNumNA = DictResult.get ( "NumberNA" )
