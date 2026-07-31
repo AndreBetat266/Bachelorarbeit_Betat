@@ -728,7 +728,7 @@ class CCovarianceModelGsT ( object ):
         else:
             print ( "failure" )
             
-        self.sDescription_long, self.sDescription, self.sDescription_short, self.sDescription_compact = GetDescription ( self.CCovModel_gst ) 
+        self.sDescription_long, self.sDescription, self.sDescription_short, self.sDescription_compact = GetDescription ( self.CCovModel_gst, sType = "rho" ) 
         self.fVar = fVar
         self.fNugget = fNugget
         if ( bInfo == True ):
@@ -900,11 +900,11 @@ class CRandomFieldGsT ( object ):
     ListVarioStyleFit : list = [ "o12", "", 0.0, "-.", 3.0, "$f_x$" ] 
     aRandomField : np.ndarray = None
     
-    def __init__ ( self, tDim, sModel, fVar = 1.0, uLenScale = 1.0, fShape = None, fNu = None, fAngles = 0.0, fNugget = 0.0, 
+    def __init__ ( self, tDim, sModel, fVar = 1.0, uLenScale = 1.0, fShape = None, fNu = None, fAngle = 0.0, fNugget = 0.0, 
                    fMean = 0.0, iRandSeed = GiRandSeed ):
         CheckAssert ( bBool = ( len ( tDim ) == 2 ), sMsg = "Invalid Shape <tDim>!" )
         self.CCovModel = CCovarianceModelGsT ( sModel = sModel, fVar = fVar, uLenScale = uLenScale, fShape = fShape, 
-                                               fAngles = fAngles, fNugget = fNugget )
+                                               fAngle = fAngle, fNugget = fNugget )
         self.fMean = fMean
         self.iDimX = tDim[ 0 ]
         self.iDimY = tDim[ 1 ]
@@ -913,7 +913,7 @@ class CRandomFieldGsT ( object ):
         CSRF = SRF ( model = self.CCovModel.CCovModel_gst, mean = self.fMean, seed = iRandSeed )
         self.aRandomField = CSRF ( ( self.aX_rf, self.aY_rf ), mesh_type = "structured" )
     
-        self.sDescription = "$\mathcal{GRF}\,[$" + self.CCovModel.sDescription_compact + "]"
+        self.sDescription = "Gauss ZF für " + self.CCovModel.sDescription_short
         
         return
     
